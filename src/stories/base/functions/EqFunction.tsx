@@ -21,6 +21,7 @@ export const EqFunction = ({ func_id }: EqFunctionProps) => {
     const [loadedFuncParameters, setLoadedFuncParameters] = useState<boolean>(false);
     const [parameters, setParameters] = useState<FunctionParameter[]>([]);
 
+    // Trying to get function data from server, this is just a mockup
     useEffect(() => {
         const fndata = mockup_get_func_parameters(func_id);
         setLoadedFuncParameters(true);

@@ -28,6 +28,7 @@ const borderColors = {
 };
 const fakeColumns = ['Homework', 'Participation', 'Midterm Exam', 'Final Exam'];
 
+// When the user input custom number or text, this function receives outside click event and let it finish editing
 function ClickAwayListener(inputEl: RefObject<HTMLInputElement>) {
     const [clickedAway, setClickedAway] = useState(false)
     useEffect(() => {
@@ -71,6 +72,7 @@ export const EqVariable = ({
     const isText = type === 'text';
     const isDate = type === 'date';
 
+    // Event handler when user enter custom number
     const onEnterCustomNumber = () => {
         setEditing(true);
         setEditingValue('');
@@ -79,12 +81,14 @@ export const EqVariable = ({
         }, 10);
     };
 
+    // Finish editing variable number or text
     const finishEditing = () => {
         setEditing(false);
         if (editingValue != '')
             setDisplayValue(editingValue);
     };
 
+    // Event handler when user enter custom data
     const onInputKeydown = (e: KeyboardEvent) => {
 
         let regex = /[a-zA-Z]|[^$,\.\d]/;
@@ -100,6 +104,7 @@ export const EqVariable = ({
         }
     };
 
+    // When the user set data and time value
     const setDateAndTime = () => {
         setIsDatePickerModalOpen(false);
         setDisplayValue(dateVal.getDate() + '/' + dateVal.getMonth() + '/' + dateVal.getFullYear());
@@ -110,6 +115,7 @@ export const EqVariable = ({
 
     return (
         <>
+            {/* Editing mode */}
             {editing && <>
                 <div className={tt}>
                     <span className='invisible min-h-5'>{editingValue == '' ? '1' : editingValue}</span>
@@ -124,7 +130,6 @@ export const EqVariable = ({
                     />
 
                     <Transition
-                        // as={Fragment}
                         show={inputKeyError}
                         enter="transition duration-100 ease-out"
                         enterFrom="transform scale-95 opacity-0"
@@ -139,6 +144,8 @@ export const EqVariable = ({
                     </Transition>
                 </div>
             </>}
+
+            {/* Normal mode */}
             {!editing && <Popover className="relative inline-block mr-1">
                 <Popover.Button className={tt}>
 
@@ -174,6 +181,7 @@ export const EqVariable = ({
                                     />
                                 </li>
 
+                                {/* Show normal dropdown menu */}
                                 {searchString == '' && <>
 
                                     {/* Other */}
@@ -241,6 +249,7 @@ export const EqVariable = ({
                 </Transition>
             </Popover>}
 
+            {/* If it is a date variable, it appends date & time selection modal */}
             {isDate &&
                 <Transition appear show={isDatePickerModalOpen} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={() => setIsDatePickerModalOpen(false)}>

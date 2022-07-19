@@ -56,16 +56,19 @@ interface EqIfProps {
     removeSentence: (id: number) => void;
 }
 
+// Block consists of conditions
 const EqIf = ({ isFirst = false, isLast = false, addSentence, removeSentence, st_index }: EqIfProps) => {
 
     const [conditions, setConditions] = useState(['', '']);
     const ifType = isFirst ? 'IF' : (isLast ? 'ELSE' : 'ELSE IF');
     const topLineStyle = isFirst ? 'left-[50%] w-1/2' : (isLast ? 'left-0 w-1/2' : 'left-0 w-full');
 
+    // Add a condition
     const addCondition = () => {
         setConditions([...conditions, '']);
     };
 
+    // Remove a condition at `index` position
     const removeCondition = (index: number) => {
         setConditions([
             ...conditions.slice(0, index),
@@ -73,6 +76,7 @@ const EqIf = ({ isFirst = false, isLast = false, addSentence, removeSentence, st
         ])
     };
 
+    // Inform parent to remove me
     const dropMe = () => {
         if (!isFirst && !isLast)
             removeSentence(st_index);
@@ -144,6 +148,7 @@ export const EqIfThenElse = ({
 
     const [sentences, setSentences] = useState(['', '']);
 
+    // Add sentence(group of conditions)
     const addSentence = () => {
         setSentences([
             sentences[0],
@@ -151,6 +156,8 @@ export const EqIfThenElse = ({
             ...sentences.slice(1, sentences.length)
         ]);
     };
+
+    // Remove a sentence
     const removeSentence = (index: number) => {
         console.log(index);
         setSentences([

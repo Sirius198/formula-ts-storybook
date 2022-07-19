@@ -7,6 +7,7 @@ import { ReactComponent as FuncSvg } from '../assets/icons/fx.svg';
 
 interface EqToolbarProps { }
 
+// Toolbar with buttons that create formulas
 export const EqToolbar = ({ }: EqToolbarProps) => {
     return (
         <div className="inline-block p-3 bg-white rounded-full">

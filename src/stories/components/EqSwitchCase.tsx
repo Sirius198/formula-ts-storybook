@@ -11,7 +11,7 @@ interface EqCaseProps {
     index: number;
 }
 
-// Single 
+// Single case with 2 variables, comparision operator and result
 const EqCase = ({ onRemove, index }: EqCaseProps) => {
 
     return (
@@ -37,10 +37,12 @@ export const EqSwitchCase = ({ }: EqSwitchCaseProps) => {
     // Set cases at State
     const [cases, setCases] = useState(['a', 'b']);
 
+    // Add Case
     const addCase = () => {
         setCases([...cases, '']);
     };
 
+    // Remove case
     const removeCase = (index: number) => {
         setCases([
             ...cases.slice(0, index),

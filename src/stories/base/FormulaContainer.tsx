@@ -30,6 +30,7 @@ const colors = {
     },
 }
 
+// When editing title of formula, this function receives the outside click event and let it finish editing
 function ClickAwayListener(inputEl: RefObject<HTMLInputElement>) {
     const [clickedAway, setClickedAway] = useState(false)
     useEffect(() => {
