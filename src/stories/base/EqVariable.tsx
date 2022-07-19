@@ -59,6 +59,7 @@ export const EqVariable = ({
     const [isDatePickerModalOpen, setIsDatePickerModalOpen] = useState<boolean>(false);
     const [dateVal, setDateVal] = useState<Date>(new Date());
     const [timeVal, setTimeVal] = useState<Date>(new Date());
+    const [inputKeyError, setInputKeyError] = useState<boolean>(false);
     const inputEl = useRef<HTMLInputElement>(null);
 
     const clicked = ClickAwayListener(inputEl);
@@ -87,8 +88,13 @@ export const EqVariable = ({
     const onInputKeydown = (e: KeyboardEvent) => {
 
         let regex = /[a-zA-Z]|[^$,\.\d]/;
-        if (isNumeric && e.key.length == 1 && regex.test(e.key))
+        if (isNumeric && e.key.length == 1 && regex.test(e.key)) {
+            setInputKeyError(true);
+            setTimeout(() => {
+                setInputKeyError(false);
+            }, 500)
             e.preventDefault();
+        }
         if (e.key == 'Enter') {
             finishEditing();
         }
@@ -116,6 +122,21 @@ export const EqVariable = ({
                         onChange={(e) => { setEditingValue(e.target.value); }}
                         onKeyDown={onInputKeydown}
                     />
+
+                    <Transition
+                        // as={Fragment}
+                        show={inputKeyError}
+                        enter="transition duration-100 ease-out"
+                        enterFrom="transform scale-95 opacity-0"
+                        enterTo="transform scale-100 opacity-100"
+                        leave="transition duration-75 ease-out"
+                        leaveFrom="transform scale-100 opacity-100"
+                        leaveTo="transform scale-95 opacity-0"
+                    >
+                        <span className='absolute top-[100%] mt-1 bg-white p-1 w-[max-content]'>
+                            Please input number
+                        </span>
+                    </Transition>
                 </div>
             </>}
             {!editing && <Popover className="relative inline-block mr-1">

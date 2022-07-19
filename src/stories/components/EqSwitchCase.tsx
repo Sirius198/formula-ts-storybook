@@ -49,7 +49,7 @@ export const EqSwitchCase = ({ }: EqSwitchCaseProps) => {
 
     return (
         <FormulaContainer name={'title'} color='gray' backgroundColor='bg-white'>
-            <div className='inline-block bg-whie'>
+            <div className='inline-block bg-white'>
                 {cases.map((ec, index) => (
                     <EqCase onRemove={removeCase} key={index} index={index} />
                 ))}

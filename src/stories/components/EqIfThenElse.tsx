@@ -82,6 +82,8 @@ const EqIf = ({ isFirst = false, isLast = false, addSentence, removeSentence, st
         <div className={`relative px-4 h-[fit-content] ${!isLast ? 'min-w-[350px]' : 'min-w-[100px]'}`}>
             <div className={`absolute top-2.5 ${topLineStyle} h-0.5 bg-zinc-500 z-1`}></div>
             <div className='absolute left-[50%] top-1 bottom-0 w-0.5 bg-zinc-500'></div>
+
+            {/* Shows plus button if it is a first if_case */}
             {isFirst &&
                 <button className='absolute bg-cyan-300 rounded-full w-5 h-5 right-0' onClick={addSentence}>
                     <PlusIcon className='w-4 h-4 mt-[2px]' />
@@ -95,6 +97,7 @@ const EqIf = ({ isFirst = false, isLast = false, addSentence, removeSentence, st
                 </button>
             </div>
 
+            {/* If it is not last element, show cases */}
             {!isLast && <>
                 <div className='rounded-[20px] bg-stone-300 p-1 relative'>
                     <div className='p-2.5 text-sm text-zinc-700'><CondDropdown /> of the following conditions are met</div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, KeyboardEvent } from 'react';
+import React, { useRef, useState, useEffect, KeyboardEvent, RefObject } from 'react';
 import { DotsVerticalIcon, CheckIcon, XIcon } from '@heroicons/react/solid';
 import { Popover } from '@headlessui/react';
 import { ReactComponent as Trash0Icon } from '../assets/icons/trash0.svg';
@@ -29,6 +29,24 @@ const colors = {
         background: 'bg-fuchsia-200',
     },
 }
+
+function ClickAwayListener(inputEl: RefObject<HTMLInputElement>) {
+    const [clickedAway, setClickedAway] = useState(false)
+    useEffect(() => {
+        function handleClickOutside({ target }: MouseEvent) {
+            if (inputEl.current && !inputEl.current.contains(target as Node)) {
+                setClickedAway(true)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener('mouseup', () => { setClickedAway(false) })
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    return clickedAway;
+}
 /*
     This is all formula container with title and border.
 */
@@ -46,18 +64,10 @@ export const FormulaContainer = ({
     const [isFinalFormula, setIsFinalFormula] = useState<boolean>(false);
 
     // This is outside click listener and finish editing when the user click outside of <input />
+    const clicked = ClickAwayListener(inputEl);
     useEffect(() => {
-        function handleClickOutside(event: any) {
-            if (inputEl.current && !inputEl.current.contains(event.target)) {
-                finishEditing();
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [inputEl]);
+        clicked && finishEditing()
+    }, [clicked]);
 
     const liStyle = 'px-4 py-2 hover:bg-teal-50 hover:cursor-pointer';
 
