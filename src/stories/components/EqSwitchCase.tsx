@@ -11,6 +11,7 @@ interface EqCaseProps {
     index: number;
 }
 
+// Single 
 const EqCase = ({ onRemove, index }: EqCaseProps) => {
 
     return (
@@ -49,7 +50,7 @@ export const EqSwitchCase = ({ }: EqSwitchCaseProps) => {
 
     return (
         <FormulaContainer name={'title'} color='gray' backgroundColor='bg-white'>
-            <div className='inline-block bg-white'>
+            <div className='inline-block'>
                 {cases.map((ec, index) => (
                     <EqCase onRemove={removeCase} key={index} index={index} />
                 ))}
