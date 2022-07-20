@@ -42,34 +42,34 @@ export const fnTree: FunctionTree[] = [
 export const fnItems: FunctionItem[] = [
     {
         id: 1, name: 'ACOS', desc: 'Inverse Cosine', pid: 13, params: [
-            { name: '', type: 'number' },
-            { name: '', type: 'date' },
-            { name: '', type: 'text' },
-            { name: '', type: 'boolean' },
+            { name: 'N1', type: 'number' },
+            { name: 'D1', type: 'date' },
+            { name: 'T1', type: 'text' },
+            { name: 'B1', type: 'boolean' },
         ]
     },
     {
-        id: 1, name: 'ACOSH', desc: 'Inverse Hyperbolic Cosine', pid: 13, params: [
-            { name: '', type: 'number' },
-            { name: '', type: 'date' },
-            { name: '', type: 'text' },
-            { name: '', type: 'boolean' },
+        id: 2, name: 'ACOSH', desc: 'Inverse Hyperbolic Cosine', pid: 13, params: [
+            { name: 'N2', type: 'number' },
+            { name: 'D2', type: 'number' },
+            { name: 'T2', type: 'text' },
+            { name: 'B2', type: 'boolean' },
         ]
     },
     {
-        id: 1, name: 'COS', desc: 'Cosine of an Angle', pid: 13, params: [
-            { name: '', type: 'number' },
-            { name: '', type: 'date' },
-            { name: '', type: 'text' },
-            { name: '', type: 'boolean' },
+        id: 3, name: 'COS', desc: 'Cosine of an Angle', pid: 13, params: [
+            { name: 'N3', type: 'number' },
+            { name: 'D3', type: 'date' },
+            { name: 'T3', type: 'date' },
+            { name: 'B3', type: 'boolean' },
         ]
     },
     {
-        id: 1, name: 'COSH', desc: 'Hyperbolic cosine', pid: 13, params: [
-            { name: '', type: 'number' },
-            { name: '', type: 'date' },
-            { name: '', type: 'text' },
-            { name: '', type: 'boolean' },
+        id: 4, name: 'COSH', desc: 'Hyperbolic cosine', pid: 13, params: [
+            { name: 'N4', type: 'number' },
+            { name: 'D4', type: 'date' },
+            { name: 'T4', type: 'text' },
+            { name: 'B4', type: 'text' },
         ]
     },
 ];

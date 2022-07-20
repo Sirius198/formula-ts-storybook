@@ -4,7 +4,7 @@ import { TrashIcon, PlusIcon } from '@heroicons/react/solid';
 import ComparisionOperator from '../base/operator/ComparisionOperator';
 import { ReactComponent as Trash0Icon } from '../assets/icons/trash0.svg';
 import EqVariable from '../base/EqVariable';
-import { FormulaContainer } from '../base/FormulaContainer';
+import { FormulaContainer, FormulaProps } from '../base/FormulaContainer';
 
 interface EqCaseProps {
     onRemove: (index: number) => void;
@@ -30,16 +30,20 @@ const EqCase = ({ onRemove, index }: EqCaseProps) => {
     )
 };
 
-interface EqSwitchCaseProps { }
+interface EqSwitchCaseProps extends FormulaProps {
+    // title?: string;
+}
 
-export const EqSwitchCase = ({ }: EqSwitchCaseProps) => {
+export const EqSwitchCase = ({
+    name = 'switch_case#1'
+}: EqSwitchCaseProps) => {
 
     // Set cases at State
     const [cases, setCases] = useState(['a', 'b']);
 
     // Add Case
     const addCase = () => {
-        setCases([...cases, '']);
+        setCases([...cases, '' + cases.length]);
     };
 
     // Remove case
@@ -51,7 +55,7 @@ export const EqSwitchCase = ({ }: EqSwitchCaseProps) => {
     };
 
     return (
-        <FormulaContainer name={'title'} color='gray' backgroundColor='bg-white'>
+        <FormulaContainer name={name} color='gray' backgroundColor='bg-white'>
             <div className='inline-block'>
                 {cases.map((ec, index) => (
                     <EqCase onRemove={removeCase} key={index} index={index} />

@@ -4,11 +4,12 @@ import { Popover } from '@headlessui/react';
 import { ReactComponent as Trash0Icon } from '../assets/icons/trash0.svg';
 import { ReactComponent as PencilIcon } from '../assets/icons/pencil-edit.svg';
 
-interface FormulaProps {
+export interface FormulaProps {
     backgroundColor?: string;
     name: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     color?: "blue" | "gray" | "orange" | "pink"
+    onDelete? : () => void;
 }
 
 const colors = {
@@ -56,6 +57,7 @@ export const FormulaContainer = ({
     name,
     children,
     color = 'blue',
+    onDelete,
 }: FormulaProps) => {
 
     const [editing, setEditing] = useState<boolean>(false);
@@ -97,7 +99,9 @@ export const FormulaContainer = ({
         setIsFinalFormula(!isFinalFormula);
     };
 
-    const onDeleteFormula = () => { };
+    const onDeleteFormula = () => {
+        onDelete && onDelete();
+    };
 
     return (
         <>

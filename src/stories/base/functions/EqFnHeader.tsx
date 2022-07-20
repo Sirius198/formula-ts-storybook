@@ -9,9 +9,10 @@ import { fnItems, fnTree, FunctionItem, FunctionTree } from '../../../utils/func
 
 interface EqFnDropdownProps {
     cat: FunctionTree;
+    onSwitch: (id: number) => void;
 }
 
-const EqFnDropdown = ({ cat }: EqFnDropdownProps) => {
+const EqFnDropdown = ({ cat, onSwitch }: EqFnDropdownProps) => {
 
     const subItems = fnTree.filter(t => t.parent == cat.id);
     // let leaves: FunctionItem[] = [];
@@ -27,9 +28,9 @@ const EqFnDropdown = ({ cat }: EqFnDropdownProps) => {
                     <ul className='absolute -right-[2px] top-0 min-w-[150px] transition border-2 border-zinc-600 rounded-md bg-zinc-600'>
                         {leaves.map((value, index) => (
                             <li className='relative bg-zinc-600 hover:bg-zinc-700 px-4 py-2 text-[13px]' key={index}>
-                                <button className='text-left w-[max-content] border-0'>
+                                <Listbox.Option value='1' className='text-left w-[max-content] border-0' onClick={() => onSwitch(value.id)}>
                                     {value.name} <br /> {value.desc}
-                                </button>
+                                </Listbox.Option>
                             </li>
                         ))}
                     </ul>
@@ -50,7 +51,7 @@ const EqFnDropdown = ({ cat }: EqFnDropdownProps) => {
                 <ul className='absolute -right-[2px] top-0 min-w-[150px] transition border-2 border-zinc-600 rounded-md bg-zinc-600'>
                     {subItems.map((value, index) => (
                         <li className='relative bg-zinc-600 hover:bg-zinc-700 px-4 py-2 text-[13px]' key={index}>
-                            <EqFnDropdown cat={value} />
+                            <EqFnDropdown cat={value} onSwitch={onSwitch} />
                         </li>
                     ))}
                 </ul>
@@ -83,9 +84,11 @@ const HighlightSpan = ({ text, filter }: HighlightSpanProps) => {
 
 interface EqFnHeaderProps {
     name: string;
+    onChange: (id: number) => void;
 }
 
-export const EqFnHeader = ({ name }: EqFnHeaderProps) => {
+// Displays a menu of functions and change formula if you click a function
+export const EqFnHeader = ({ name, onChange }: EqFnHeaderProps) => {
 
     const [searchStr, setSearchStr] = useState<string>('');
 
@@ -95,12 +98,17 @@ export const EqFnHeader = ({ name }: EqFnHeaderProps) => {
         return false;
     };
 
+    const switchFunc = (fid: number) => {
+        onChange(fid);
+        setSearchStr('');
+    };
+
     return (
         <Listbox value='1' onChange={() => { }}>
             <span className="relative fxmenu">
-                <Listbox.Button className='bg-zinc-600 rounded-full p-2 text-white relative text-sm'>
+                <Listbox.Button className='bg-zinc-600 rounded-full px-2 py-[5px] text-white relative text-sm'>
                     <FxSvg className='w-4 h-4 mr-1 mt-0.5 fill-white' />
-                    <span>{name}</span>
+                    <span className='text-xs'>{name}</span>
                     <ChevronDownIcon className='w-3 h-3 ml-1 mt-1' />
                 </Listbox.Button>
 
@@ -119,17 +127,17 @@ export const EqFnHeader = ({ name }: EqFnHeaderProps) => {
                         {/* If search string is empty, just show all functions in a tree */}
                         {searchStr == '' && fnTree.filter((t) => t.parent == 0).map((value, index) => (
                             <li key={index} className='relative bg-zinc-600 hover:bg-zinc-700 px-4 py-2 text-white z-10 text-[13px]'>
-                                <EqFnDropdown cat={value} />
+                                <EqFnDropdown cat={value} onSwitch={switchFunc} />
                             </li>
                         ))}
 
                         {/* Filter only functions(not category) with name and description  */}
                         {searchStr != '' && fnItems.filter(t => filterFn(t)).map((leaf, index) => (
                             <li key={index} className='bg-zinc-600 hover:bg-zinc-700 px-4 py-2 text-white z-10 text-[13px]'>
-                                <button className='text-left w-[max-content]'>
+                                <Listbox.Option value='1' className='text-left w-[max-content]' onClick={() => switchFunc(leaf.id)}>
                                     <HighlightSpan text={leaf.name} filter={searchStr} /><br />
                                     <HighlightSpan text={leaf.desc} filter={searchStr} />
-                                </button>
+                                </Listbox.Option>
                             </li>
                         ))}
                     </Listbox.Options>

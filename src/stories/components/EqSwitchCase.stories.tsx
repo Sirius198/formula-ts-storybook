@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof EqSwitchCase> = (args) => <EqSwitchCase {.
 
 export const Primary = Template.bind({});
 Primary.args = {
-    title: 'Hello'
+    name: 'Hello'
 };

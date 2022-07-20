@@ -5,16 +5,17 @@ import { PlusIcon } from '@heroicons/react/solid';
 import ArithmeticOperator from '../base/operator/ArithmeticOperator';
 import { EqVariable } from '../base/EqVariable';
 import { Formula } from '../base/Formula';
-import { FormulaContainer } from '../base/FormulaContainer';
+import { FormulaContainer, FormulaProps } from '../base/FormulaContainer';
 
-interface EqExpressionProps {
+interface EqExpressionProps extends FormulaProps {
     // Name of formula
-    title: string;
+    // title: string;
+    onDelete?: () => void;
 }
 
 // This is a normal expression with operators.
 
-export const EqExpression = ({ title = 'midterm_w' }: EqExpressionProps) => {
+export const EqExpression = ({ name = 'midterm_w', onDelete }: EqExpressionProps) => {
 
     const [terms, setTerms] = useState<(string | string[])[]>([
         ['Projects', 'homework_w'], '+', ['0.30', '0.50', '0.25']
@@ -28,7 +29,7 @@ export const EqExpression = ({ title = 'midterm_w' }: EqExpressionProps) => {
     };
 
     return (
-        <FormulaContainer name={title}>
+        <FormulaContainer name={name}>
             <div className='inline-flex items-center'>
                 {terms.map((term, index) => {
                     return (typeof term === 'string') ? <ArithmeticOperator key={index} /> : <EqVariable key={index} />

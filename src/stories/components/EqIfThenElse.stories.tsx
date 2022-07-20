@@ -14,5 +14,5 @@ const Template: ComponentStory<typeof EqIfThenElse> = (args) => <EqIfThenElse {.
 
 export const Primary = Template.bind({});
 Primary.args = {
-    title: 'Hello'
+    name: 'Hello'
 };

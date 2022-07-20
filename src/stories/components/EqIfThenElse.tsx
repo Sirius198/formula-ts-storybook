@@ -6,7 +6,7 @@ import ComparisionOperator from '../base/operator/ComparisionOperator';
 import { ReactComponent as Trash0Icon } from '../assets/icons/trash0.svg';
 import EqVariable from '../base/EqVariable';
 import { Formula } from '../base/Formula';
-import { FormulaContainer } from '../base/FormulaContainer';
+import { FormulaContainer, FormulaProps } from '../base/FormulaContainer';
 
 // ANY/ALL condition
 const CondDropdown = () => {
@@ -138,12 +138,12 @@ const EqIf = ({ isFirst = false, isLast = false, addSentence, removeSentence, st
     )
 };
 
-interface EqIfThenElseProps {
-    title?: string
+interface EqIfThenElseProps extends FormulaProps {
+    // title?: string
 };
 
 export const EqIfThenElse = ({
-    title = 'if_then_else#1'
+    name = 'if_then_else#1'
 }: EqIfThenElseProps) => {
 
     const [sentences, setSentences] = useState(['', '']);
@@ -167,7 +167,7 @@ export const EqIfThenElse = ({
     };
 
     return (
-        <FormulaContainer name={title} color='gray'>
+        <FormulaContainer name={name} color='gray'>
             {sentences.map((value, index) => (
                 <EqIf isFirst={index == 0} isLast={index == sentences.length - 1}
                     st_index={index} key={index}

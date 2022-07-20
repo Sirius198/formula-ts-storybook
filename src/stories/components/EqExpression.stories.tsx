@@ -14,5 +14,5 @@ const Template: ComponentStory<typeof EqExpression> = (args) => <EqExpression {.
 
 export const Primary = Template.bind({});
 Primary.args = {
-    title: 'Hello'
+    name: 'Hello'
 };
