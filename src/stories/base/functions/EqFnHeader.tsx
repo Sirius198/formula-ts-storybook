@@ -17,7 +17,7 @@ const EqFnDropdown = ({ cat, onSwitch }: EqFnDropdownProps) => {
     const subItems = fnTree.filter(t => t.parent == cat.id);
     // let leaves: FunctionItem[] = [];
     if (subItems.length == 0) {
-        const leaves = fnItems.filter(t => t.pid === cat.id);
+        const leaves = fnItems.filter(t => t.parent === cat.id);
         return (
             <>
                 <button className='text-left w-[max-content] border-0'>

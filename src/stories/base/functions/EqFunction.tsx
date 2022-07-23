@@ -21,6 +21,7 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
     const [loadedFuncParameters, setLoadedFuncParameters] = useState<boolean>(false);
     const [parameters, setParameters] = useState<FunctionParameter[]>([]);
     const [fnName, setFnName] = useState<string>('');
+    const [formulaColor, setFormulaColor] = useState('blue');
 
     // Trying to get function data from server, this is just a mockup
     useEffect(() => {
@@ -34,22 +35,29 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
         const fx = fnItems.find(t => t.id === fid)!;
         setParameters(fx.params);
         setFnName(fx.name);
+        setFormulaColor(
+            fx.return == 'Text' ? 'pink' :
+            fx.return == 'Number' ? 'blue' :
+            fx.return == 'Date' ? 'orange' :
+            fx.return == 'Boolean' ? 'gray' :
+            'teal'
+        );
     };
 
     if (!loadedFuncParameters) return (<div>Loading...</div>);
 
     return (
         <>
-            <FormulaContainer name={name}>
+            <FormulaContainer name={name} color={formulaColor as any}>
                 <div className="inline-block">
                     <EqFnHeader name={fnName} onChange={loadFunction} />
 
                     {/* Map according to parameter type */}
                     {parameters.map((param, index) => {
-                        if (param.type === 'text') return <EqFnText key={index} />
-                        if (param.type === 'number') return <EqFnNumber key={index} />
-                        if (param.type === 'boolean') return <EqFnBool key={index} />
-                        if (param.type === 'date') return <EqFnDate key={index} />
+                        if (param.type === 'String') return <EqFnText key={index} />
+                        if (param.type === 'Number') return <EqFnNumber key={index} />
+                        if (param.type === 'Boolean') return <EqFnBool key={index} />
+                        if (param.type === 'Date') return <EqFnDate key={index} />
                     })}
                 </div>
             </FormulaContainer>

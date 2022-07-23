@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useRef, KeyboardEvent, useEffect, RefObject } from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, Transition, Popover } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import { ChevronDownIcon, SearchIcon } from '@heroicons/react/solid';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -15,6 +15,7 @@ import { ReactComponent as NumberColumnSvg } from '../assets/icons/number-column
 import { ReactComponent as TextColumnSvg } from '../assets/icons/text-column0.svg';
 import { ReactComponent as DateColumnSvg } from '../assets/icons/date-column.svg';
 import { StaticTimePicker } from '@mui/x-date-pickers';
+import { Dropdown, Modal } from '@restart/ui';
 
 interface EqVariableProps {
     type?: string;
@@ -146,172 +147,231 @@ export const EqVariable = ({
             </>}
 
             {/* Normal mode */}
-            {!editing && <Popover className="relative inline-block mr-1">
-                <Popover.Button className={tt}>
+            {!editing &&
+                <span className="relative inline-block mr-1">
+                    <Dropdown>
+                        <Dropdown.Toggle>
+                            {(props) => (
+                                <button {...props} className={tt}>
+                                    <span className='text-zinc-700'>{displayValue}</span>
+                                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <ChevronDownIcon
+                                            className="h-5 w-5 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                    </span>
+                                </button>
+                            )}
+                        </Dropdown.Toggle>
 
-                    <span className='text-zinc-700'>{displayValue}</span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <ChevronDownIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                        />
-                    </span>
-                </Popover.Button>
+                        <Dropdown.Menu flip offset={[0, 8]}>
+                            {(menuProps, meta) => (
+                                <ul
+                                    {...menuProps}
+                                    className="absolute z-10 top-8 bg-white shadow-lg w-[max-content] max-w-100 text-left"
+                                    style={{
+                                        transition: "visibility 500ms, opacity 500ms",
+                                        visibility: meta.show ? "visible" : "hidden",
+                                        opacity: meta.show ? "1" : "0",
+                                    }}
+                                >
+                                    <li className='px-4 py-2 font-bold text-xs'>Select Data</li>
+                                    <li className='px-4 py-2 font-bold text-xs border-y-[1px] border-y-zinc-200'>
+                                        <MyZoomIcon className='w-3 h-4' />
+                                        <input
+                                            type='text'
+                                            className='outline-0 pl-2 font-light'
+                                            placeholder='Search'
+                                            value={searchString} onChange={(e) => setSearchString(e.target.value)}
+                                        />
+                                    </li>
 
-                <Transition
-                    as={Fragment}
-                    enter="transition duration-100 ease-out"
-                    enterFrom="transform scale-95 opacity-0"
-                    enterTo="transform scale-100 opacity-100"
-                    leave="transition duration-75 ease-out"
-                    leaveFrom="transform scale-100 opacity-100"
-                    leaveTo="transform scale-95 opacity-0"
-                >
-                    <Popover.Panel className="absolute z-10 top-8 bg-white shadow-lg w-[max-content] max-w-100 text-left">
-                        {({ close }) => (
-                            <ul>
-                                <li className='px-4 py-2 font-bold text-xs'>Select Data</li>
-                                <li className='px-4 py-2 font-bold text-xs border-y-[1px] border-y-zinc-200'>
-                                    <MyZoomIcon className='w-3 h-4' />
-                                    <input
-                                        type='text'
-                                        className='outline-0 pl-2 font-light'
-                                        placeholder='Search'
-                                        value={searchString} onChange={(e) => setSearchString(e.target.value)}
-                                    />
-                                </li>
+                                    {/* Show normal dropdown menu */}
+                                    {searchString == '' && <>
 
-                                {/* Show normal dropdown menu */}
-                                {searchString == '' && <>
+                                        {/* Other */}
+                                        <li className='pl-4 py-1 text-xs text-zinc-400'>Other</li>
 
-                                    {/* Other */}
-                                    <li className='pl-4 py-1 text-xs text-zinc-400'>Other</li>
+                                        {isNumeric && <>
+                                            <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                onClick={() => { onEnterCustomNumber(); close(); }}
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    <EnterCustomNumberSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />Enter Custom Number
+                                                </Dropdown.Item>
+                                            </li>
+                                        </>}
 
-                                    {isNumeric && <>
-                                        <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                            onClick={() => { onEnterCustomNumber(); close(); }}
-                                        >
-                                            <EnterCustomNumberSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />Enter Custom Number
-                                        </li>
+                                        {isText && <>
+                                            <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                onClick={() => { onEnterCustomNumber(); close(); }}
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
+                                                </Dropdown.Item>
+                                            </li>
+                                        </>}
+
+                                        {isDate && <>
+                                            <li
+                                                className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                onClick={() => { setIsDatePickerModalOpen(true); close(); }}
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    <EnterCustomDateSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />Select Date
+                                                </Dropdown.Item>
+                                            </li>
+                                        </>}
+
+                                        {/* Columns */}
+                                        {columns.map((value, index) => (
+                                            <li
+                                                key={index}
+                                                className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
+                                                onClick={() => { setDisplayValue(value); close(); }}
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
+                                                    {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                    {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                    {value}
+                                                </Dropdown.Item>
+                                            </li>
+                                        ))}
+
                                     </>}
 
-                                    {isText && <>
-                                        <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                            onClick={() => { onEnterCustomNumber(); close(); }}
-                                        >
-                                            <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
-                                        </li>
+                                    {/* Show filtered columns */}
+                                    {searchString != '' && <>
+                                        {columns.filter(col => col.toLocaleLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
+                                            <li
+                                                key={index}
+                                                className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
+                                                onClick={() => { setDisplayValue(value); close(); }}
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    {isNumeric && <NumberColumnSvg className='w-5.5 h-5.5 mr-2' />}
+                                                    {isText && <TextColumnSvg className='w-5.5 h-5.5 mr-2' />}
+                                                    {isDate && <DateColumnSvg className='w-5.5 h-5.5 mr-2' />}
+                                                    {value}
+                                                </Dropdown.Item>
+                                            </li>
+                                        ))}
                                     </>}
-
-                                    {isDate && <>
-                                        <li
-                                            className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                            onClick={() => { setIsDatePickerModalOpen(true); close(); }}
-                                        >
-                                            <EnterCustomDateSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />Select Date
-                                        </li>
-                                    </>}
-
-                                    {/* Columns */}
-                                    {columns.map((value, index) => (
-                                        <li
-                                            key={index}
-                                            className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                            onClick={() => { setDisplayValue(value); close(); }}
-                                        >
-                                            {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                            {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
-                                            {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
-                                            {value}
-                                        </li>
-                                    ))}
-
-                                </>}
-
-                                {/* Show filtered columns */}
-                                {searchString != '' && <>
-                                    {columns.filter(col => col.toLocaleLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
-                                        <li
-                                            key={index}
-                                            className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                            onClick={() => { setDisplayValue(value); close(); }}
-                                        >
-                                            {isNumeric && <NumberColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                            {isText && <TextColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                            {isDate && <DateColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                            {value}
-                                        </li>
-                                    ))}
-                                </>}
-                            </ul>
-                        )}
-                    </Popover.Panel>
-                </Transition>
-            </Popover>}
+                                </ul>
+                            )}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </span>
+            }
 
             {/* If it is a date variable, it appends date & time selection modal */}
             {isDate &&
-                <Transition appear show={isDatePickerModalOpen} as={Fragment}>
-                    <Dialog as="div" className="relative z-10" onClose={() => setIsDatePickerModalOpen(false)}>
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
-                        </Transition.Child>
+                <Modal
+                    show={isDatePickerModalOpen}
+                    aria-labelledby="modal-1-label"
+                    onHide={() => setIsDatePickerModalOpen(false)}
+                    renderBackdrop={(props) => (
+                        <div
+                            {...props}
+                            className="fixed inset-0 bg-black/30 z-[300]"
+                        />
+                    )}
+                    className="fixed z-[301] top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white shadow-lg p-5 min-w-[800px]"
+                >
+                    <div>
+                        <div className='grid grid-cols-2'>
 
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md min-w-[650px] transform overflow-hidden bg-white p-0 text-left align-middle shadow-xl transition-all">
-                                        <div className='grid grid-cols-2'>
+                            {/* DatePicker */}
+                            <div className='border-r-[1px] border-r-zinc-200'>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <StaticDatePicker
+                                        onChange={(v) => setDateVal(v!)}
+                                        value={dateVal}
+                                        displayStaticWrapperAs="desktop"
+                                        renderInput={() => (<></>)}
+                                    />
+                                </LocalizationProvider>
+                            </div>
 
-                                            {/* DatePicker */}
-                                            <div className='border-r-[1px] border-r-zinc-200'>
-                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                    <StaticDatePicker
-                                                        onChange={(v) => setDateVal(v!)}
-                                                        value={dateVal}
-                                                        displayStaticWrapperAs="desktop"
-                                                        renderInput={() => (<></>)}
-                                                    />
-                                                </LocalizationProvider>
-                                            </div>
-
-                                            {/* TimePicker */}
-                                            <div className='border-r-[1px] border-r-zinc-200'>
-                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                    <StaticTimePicker
-                                                        onChange={(v: Date | null) => setTimeVal(v!)}
-                                                        value={timeVal}
-                                                        displayStaticWrapperAs="mobile"
-                                                        renderInput={() => (<></>)}
-                                                    />
-                                                </LocalizationProvider>
-                                            </div>
-                                        </div>
-                                        <div className='p-2 border-t-[1px] border-t-zinc-200 text-right'>
-                                            <button onClick={() => setDateAndTime()} className='p-2 bg-teal-700 text-white text-xs rounded-sm'>Set Date & Time</button>
-                                        </div>
-                                    </Dialog.Panel>
-                                </Transition.Child>
+                            {/* TimePicker */}
+                            <div className='border-r-[1px] border-r-zinc-200'>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <StaticTimePicker
+                                        onChange={(v: Date | null) => setTimeVal(v!)}
+                                        value={timeVal}
+                                        displayStaticWrapperAs="mobile"
+                                        renderInput={() => (<></>)}
+                                    />
+                                </LocalizationProvider>
                             </div>
                         </div>
-                    </Dialog>
-                </Transition>
+                        <div className='p-2 border-t-[1px] border-t-zinc-200 text-right'>
+                            <button onClick={() => setDateAndTime()} className='p-2 bg-teal-700 text-white text-xs rounded-sm'>Set Date & Time</button>
+                        </div>
+                    </div>
+                </Modal>
+                // <Transition appear show={isDatePickerModalOpen} as={Fragment}>
+                //     <Dialog as="div" className="relative z-10" onClose={() => setIsDatePickerModalOpen(false)}>
+                //         <Transition.Child
+                //             as={Fragment}
+                //             enter="ease-out duration-300"
+                //             enterFrom="opacity-0"
+                //             enterTo="opacity-100"
+                //             leave="ease-in duration-200"
+                //             leaveFrom="opacity-100"
+                //             leaveTo="opacity-0"
+                //         >
+                //             <div className="fixed inset-0 bg-black bg-opacity-25" />
+                //         </Transition.Child>
+
+                //         <div className="fixed inset-0 overflow-y-auto">
+                //             <div className="flex min-h-full items-center justify-center p-4 text-center">
+                //                 <Transition.Child
+                //                     as={Fragment}
+                //                     enter="ease-out duration-300"
+                //                     enterFrom="opacity-0 scale-95"
+                //                     enterTo="opacity-100 scale-100"
+                //                     leave="ease-in duration-200"
+                //                     leaveFrom="opacity-100 scale-100"
+                //                     leaveTo="opacity-0 scale-95"
+                //                 >
+                //                     <Dialog.Panel className="w-full max-w-md min-w-[650px] transform overflow-hidden bg-white p-0 text-left align-middle shadow-xl transition-all">
+                //                         <div className='grid grid-cols-2'>
+
+                //                             {/* DatePicker */}
+                //                             <div className='border-r-[1px] border-r-zinc-200'>
+                //                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
+                //                                     <StaticDatePicker
+                //                                         onChange={(v) => setDateVal(v!)}
+                //                                         value={dateVal}
+                //                                         displayStaticWrapperAs="desktop"
+                //                                         renderInput={() => (<></>)}
+                //                                     />
+                //                                 </LocalizationProvider>
+                //                             </div>
+
+                //                             {/* TimePicker */}
+                //                             <div className='border-r-[1px] border-r-zinc-200'>
+                //                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
+                //                                     <StaticTimePicker
+                //                                         onChange={(v: Date | null) => setTimeVal(v!)}
+                //                                         value={timeVal}
+                //                                         displayStaticWrapperAs="mobile"
+                //                                         renderInput={() => (<></>)}
+                //                                     />
+                //                                 </LocalizationProvider>
+                //                             </div>
+                //                         </div>
+                //                         <div className='p-2 border-t-[1px] border-t-zinc-200 text-right'>
+                //                             <button onClick={() => setDateAndTime()} className='p-2 bg-teal-700 text-white text-xs rounded-sm'>Set Date & Time</button>
+                //                         </div>
+                //                     </Dialog.Panel>
+                //                 </Transition.Child>
+                //             </div>
+                //         </div>
+                //     </Dialog>
+                // </Transition>
             }
         </>
     );

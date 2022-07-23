@@ -3,13 +3,14 @@ import { DotsVerticalIcon, CheckIcon, XIcon } from '@heroicons/react/solid';
 import { Popover } from '@headlessui/react';
 import { ReactComponent as Trash0Icon } from '../assets/icons/trash0.svg';
 import { ReactComponent as PencilIcon } from '../assets/icons/pencil-edit.svg';
+import { Dropdown } from '@restart/ui';
 
 export interface FormulaProps {
     backgroundColor?: string;
     name: string;
     children?: React.ReactNode;
-    color?: "blue" | "gray" | "orange" | "pink"
-    onDelete? : () => void;
+    color?: "blue" | "gray" | "orange" | "pink" | "teal"
+    onDelete?: () => void;
 }
 
 const colors = {
@@ -28,6 +29,10 @@ const colors = {
     pink: {
         border: 'border-fuchsia-200',
         background: 'bg-fuchsia-200',
+    },
+    teal: {
+        border: 'border-teal-200',
+        background: 'bg-teal-200',
     },
 }
 
@@ -72,7 +77,7 @@ export const FormulaContainer = ({
         clicked && finishEditing()
     }, [clicked]);
 
-    const liStyle = 'px-4 py-2 hover:bg-teal-50 hover:cursor-pointer';
+    const liStyle = 'px-4 py-2 hover:bg-teal-50 hover:cursor-pointer text-left m-0';
 
     // on click "Rename" menu, enable edit mode
     const onRename = () => {
@@ -118,7 +123,44 @@ export const FormulaContainer = ({
                     />
                 }
 
-                <Popover className={`relative inline-block ${editing ? 'invisible' : ''}`}>
+                <Dropdown>
+                    <Dropdown.Toggle>
+                        {(props) => (
+                            <button {...props} className='focus:outline-0'>
+                                <DotsVerticalIcon className='w-3 h-3 mt-0.5 ml-2' />
+                            </button>
+                        )}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu flip offset={[0, 8]}>
+                        {(menuProps, meta) => (
+                            <ul
+                                {...menuProps}
+                                className="absolute z-10 w-[max-content] bg-white flex flex-col left-[90%] top-0"
+                                style={{
+                                    transition: "visibility 500ms, opacity 500ms",
+                                    visibility: meta.show ? "visible" : "hidden",
+                                    opacity: meta.show ? "1" : "0",
+                                }}
+                            >
+                                <Dropdown.Item className={liStyle} onClick={() => { onRename(); }}><PencilIcon className='w-4 h-4 mr-2' />Rename</Dropdown.Item>
+
+                                <Dropdown.Item className={liStyle}
+                                    onClick={() => { onToggleFinalFormula(); }}
+                                >
+
+                                    {isFinalFormula ?
+                                        <><XIcon className='w-4 h-4 mr-2' /> Unselect as final formula</>
+                                        :
+                                        <><CheckIcon className='w-4 h-4 mr-2' /> Select as final formula</>}
+                                </Dropdown.Item>
+
+                                <Dropdown.Item className={liStyle} onClick={() => onDeleteFormula()}><Trash0Icon className='w-4 h-4 mr-2' />Delete</Dropdown.Item>
+                            </ul>
+                        )}
+                    </Dropdown.Menu>
+                </Dropdown>
+
+                {/* <Popover className={`relative inline-block ${editing ? 'invisible' : ''}`}>
                     <Popover.Button className='focus:outline-0'><DotsVerticalIcon className='w-3 h-3 mt-0.5 ml-2' /></Popover.Button>
 
                     <Popover.Panel className="absolute z-10">
@@ -144,7 +186,7 @@ export const FormulaContainer = ({
                         )}
                     </Popover.Panel>
 
-                </Popover>
+                </Popover> */}
             </span>
             <br />
             <div className={`relative inline-flex border-[3px] rounded-[30px] ${colors[color].border} ${backgroundColor} p-1.5`}>
