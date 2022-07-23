@@ -79,7 +79,7 @@ export const ArithmeticOperator = ({ op = '+' }: ArithmeticOperatorProps) => {
                     >
                         {OPERATORS.map((value, index) => (
                             <Dropdown.Item key={index} className='bg-[#A78BFA] hover:bg-[#8B5CF6] text-white border-0 outline-0 w-6 h-6 rounded-full pt-[2px]'
-                                onClick={() => { close(); setOperator(value); }}>
+                                onClick={() => { setOperator(value); }}>
                                 <HeroOperatorIcon op={value} />
                             </Dropdown.Item>
                         ))}

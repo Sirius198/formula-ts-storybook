@@ -194,7 +194,7 @@ export const EqVariable = ({
 
                                         {isNumeric && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber(); close(); }}
+                                                onClick={() => { onEnterCustomNumber(); }}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     <EnterCustomNumberSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />Enter Custom Number
@@ -204,7 +204,7 @@ export const EqVariable = ({
 
                                         {isText && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber(); close(); }}
+                                                onClick={() => { onEnterCustomNumber();}}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
@@ -215,7 +215,7 @@ export const EqVariable = ({
                                         {isDate && <>
                                             <li
                                                 className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { setIsDatePickerModalOpen(true); close(); }}
+                                                onClick={() => { setIsDatePickerModalOpen(true); }}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     <EnterCustomDateSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />Select Date
@@ -228,7 +228,7 @@ export const EqVariable = ({
                                             <li
                                                 key={index}
                                                 className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { setDisplayValue(value); close(); }}
+                                                onClick={() => { setDisplayValue(value); }}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
@@ -247,7 +247,7 @@ export const EqVariable = ({
                                             <li
                                                 key={index}
                                                 className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { setDisplayValue(value); close(); }}
+                                                onClick={() => { setDisplayValue(value); }}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     {isNumeric && <NumberColumnSvg className='w-5.5 h-5.5 mr-2' />}
