@@ -1033,6 +1033,10 @@ video {
   --tw-border-opacity: 1;
   border-color: rgb(153 246 228 / var(--tw-border-opacity));
 }
+.border-amber-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(253 230 138 / var(--tw-border-opacity));
+}
 .border-zinc-800 {
   --tw-border-opacity: 1;
   border-color: rgb(39 39 42 / var(--tw-border-opacity));
@@ -1118,6 +1122,10 @@ video {
 .bg-teal-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(153 246 228 / var(--tw-bg-opacity));
+}
+.bg-amber-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity));
 }
 .bg-\[\#71717A\] {
   --tw-bg-opacity: 1;
@@ -1694,4 +1702,4 @@ section .tip-wrapper svg path {
 }
 
 
-/*# sourceMappingURL=main.d3c5c23b.css.map*/
+/*# sourceMappingURL=main.406f55d9.css.map*/

@@ -39,7 +39,7 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
             fx.return == 'Text' ? 'pink' :
             fx.return == 'Number' ? 'blue' :
             fx.return == 'Date' ? 'orange' :
-            fx.return == 'Boolean' ? 'gray' :
+            fx.return == 'Boolean' ? 'amber' :
             'teal'
         );
     };

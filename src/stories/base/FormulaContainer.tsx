@@ -9,7 +9,7 @@ export interface FormulaProps {
     backgroundColor?: string;
     name: string;
     children?: React.ReactNode;
-    color?: "blue" | "gray" | "orange" | "pink" | "teal"
+    color?: "blue" | "gray" | "orange" | "pink" | "teal" | "amber"
     onDelete?: () => void;
 }
 
@@ -34,6 +34,10 @@ const colors = {
         border: 'border-teal-200',
         background: 'bg-teal-200',
     },
+    amber: {
+      border: 'border-amber-200',
+      background: 'bg-amber-200',
+    }
 }
 
 // When editing title of formula, this function receives the outside click event and let it finish editing

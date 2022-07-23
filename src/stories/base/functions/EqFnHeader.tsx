@@ -12,10 +12,13 @@ interface EqFnDropdownProps {
     onSwitch: (id: number) => void;
 }
 
+// Use recursive function to implment tree structure of function category
 const EqFnDropdown = ({ cat, onSwitch }: EqFnDropdownProps) => {
 
     const subItems = fnTree.filter(t => t.parent == cat.id);
     // let leaves: FunctionItem[] = [];
+
+    // Leaves
     if (subItems.length == 0) {
         const leaves = fnItems.filter(t => t.parent === cat.id);
         return (
@@ -24,11 +27,12 @@ const EqFnDropdown = ({ cat, onSwitch }: EqFnDropdownProps) => {
                     {cat.name}
                     {leaves.length != 0 && <ChevronRightIcon className='w-4 h-4 mt-1 absolute right-2' />}
                 </button>
+                {/* Shows buttons which transform function */}
                 {leaves.length != 0 &&
                     <ul className='absolute -right-[2px] top-0 min-w-[150px] transition border-2 border-zinc-600 rounded-md bg-zinc-600'>
                         {leaves.map((value, index) => (
                             <li className='relative bg-zinc-600 hover:bg-zinc-700 px-4 py-2 text-[13px]' key={index}>
-                                <Listbox.Option value='1' className='text-left w-[max-content] border-0' onClick={() => onSwitch(value.id)}>
+                                <Listbox.Option value='1' className='text-left w-[max-content] border-0 hover:cursor-pointer' onClick={() => onSwitch(value.id)}>
                                     {value.name} <br /> {value.desc}
                                 </Listbox.Option>
                             </li>
@@ -39,10 +43,12 @@ const EqFnDropdown = ({ cat, onSwitch }: EqFnDropdownProps) => {
         )
     }
 
+    // Used EqFnDropdown component again when it is a subcategory
     return (
         <>
             <button className='text-left w-[max-content] border-0'>
                 {cat.name}
+                {/* Shows caret when it has submenus */}
                 {(subItems.length != 0) &&
                     <><ChevronRightIcon className='w-4 h-4 mt-1 absolute right-2' /></>
                 }
