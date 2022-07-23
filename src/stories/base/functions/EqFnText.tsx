@@ -11,7 +11,7 @@ export const EqFnText = ({ paramName = 'TEXT' }: EqFnTextProps) => {
         <span className="pl-3 bg-fuchsia-200 rounded-full inline-block mx-1">
             <span className='mr-2 text-xs'>{paramName}</span>
 
-            <EqVariable type='text' className='mr-0 border-r-0' />
+            <EqVariable type='text' className='border-r-0' />
         </span>
     );
 };

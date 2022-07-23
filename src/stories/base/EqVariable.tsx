@@ -111,8 +111,10 @@ export const EqVariable = ({
         setDisplayValue(dateVal.getDate() + '/' + dateVal.getMonth() + '/' + dateVal.getFullYear());
     };
 
-    let tt = className + ' inline-block relative rounded-full bg-white text-xs px-2 py-1 pr-8 mr-1 border-3 ';
+    let tt = className + ' inline-block relative rounded-full bg-white text-xs px-2 py-1 pr-8 border-3 ';
     tt += borderColors[type as keyof typeof borderColors];
+    let normalStateStyle = tt;
+    tt += ' mr-1';
 
     return (
         <>
@@ -152,7 +154,7 @@ export const EqVariable = ({
                     <Dropdown>
                         <Dropdown.Toggle>
                             {(props) => (
-                                <button {...props} className={tt}>
+                                <button {...props} className={normalStateStyle}>
                                     <span className='text-zinc-700'>{displayValue}</span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronDownIcon
