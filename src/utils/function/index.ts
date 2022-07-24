@@ -8,7 +8,7 @@ export interface FunctionTree {
 export interface FunctionParameter {
     name: string;
     type: "Number" | "Date" | "String" | "Boolean" | "Array";
-    optional: string;  // determine whether parameter is optional or not.
+    optional?: string;  // determine whether parameter is optional or not.
 }
 
 export interface FunctionItem {
@@ -79,7 +79,7 @@ export const fnTree: FunctionTree[] = [
     { id: 77, name: 'Return', parent: 7 },
     { id: 77, name: 'Round', parent: 7 },
     { id: 77, name: 'Sum', parent: 7 },
-    // __Sub-categories of Angle
+    //   Sub-categories of Angle
     { id: 710, name: 'Cosecant', parent: 71 },
     { id: 711, name: 'Cosine', parent: 71 },
     { id: 712, name: 'Cotangent', parent: 71 },
@@ -117,75 +117,75 @@ export const fnItems: FunctionItem[] = [
 
     // Case
     { id: 110, name: 'LOWER', parent: 11, desc: 'Convert a specified string to lowercase', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
       { id: 111, name: 'PROPER', parent: 11, desc: 'Capitalizes each word in a specified string', return: 'Text', params: [
-        {name: 'text_to_capitalize', type: 'String', optional: "false"}
+        {name: 'text to capitalize', type: 'String'}
       ]},
       { id: 112, name: 'UPPER', parent: 11, desc: 'Uppercase', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
       { id: 113, name: 'TRUECASE', parent: 11, desc: 'Truecasing is proper capitalization of words', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
   
       // Format
       { id: 120, name: 'FIXED', parent: 12, desc: 'Formats a number with a fixed number of decimal places.', return: 'Number', params: [
-        {name: 'number', type: 'Number', optional: "false"},
-        {name: 'number_of_places', type: 'Number', optional: "false"},
-        {name: 'suppress_separator', type: 'Boolean', optional: "true" }
+        {name: 'number', type: 'Number'},
+        {name: 'number of places', type: 'Number'},
+        {name: 'suppress separator', type: 'Boolean', optional: "true" }
       ]},
   
       // Math
       { id: 130, name: 'DECIMAL', parent: 13, desc: 'Convert the text representation of a number in another base, to base 10 (decimal)', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
-        {name: 'base', type: 'Number', optional: "false"}
+        {name: 'value', type: 'Number'},
+        {name: 'base', type: 'Number'}
       ]},
       { id: 131, name: 'DEGREES', parent: 13, desc: 'Converts an angle value in radians to degrees', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"}
+        {name: 'angle', type: 'Number'}
       ]},
       { id: 132, name: 'RADIANS', parent: 13, desc: 'Convert an angle value in degrees to radians', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"}
+        {name: 'angle', type: 'Number'}
       ]},
       { id: 133, name: 'BASE', parent: 13, desc: 'Convert a number into a text representation in another base', return: 'Text', params: [
-        {name: 'value', type: 'Number', optional: "false"},
-        {name: 'base', type: 'Number', optional: "false"},
-        {name: 'min_length', type: 'Number', optional: "true"},
+        {name: 'value', type: 'Number'},
+        {name: 'base', type: 'Number'},
+        {name: 'min length', type: 'Number', optional: "true"},
       ]},
   
       // Return
       { id: 140, name: 'CODE', parent: 14, desc: 'Returns the numeric Unicode map value of the first character in the string provided', return: 'Number', params: [
-        {name: 'string', type: 'String', optional: "false"}
+        {name: 'string', type: 'String'}
       ]},
   
       // Type
       { id: 150, name: 'CHAR', parent: 15, desc: 'Convert a number into a character according to the current Unicode table', return: 'Text', params: [
-        {name: 'table_number', type: 'Number', optional: "false"}
+        {name: 'table number', type: 'Number'}
       ]},
       { id: 151, name: 'CONVERT', parent: 15, desc: 'Convert a numeric value to a different unit of measure', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
-        {name: 'start_unit', type: 'Number', optional: "false"},
-        {name: 'end_unit', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
+        {name: 'start unit', type: 'Number'},
+        {name: 'end unit', type: 'Number'},
       ]},
       { id: 152, name: 'ROMAN', parent: 15, desc: 'Formats a number in Roman numerals', return: 'Text', params: [
-        {name: 'number', type: 'Number', optional: "false"},
-        {name: 'rule_relaxation', type: 'Number', optional: "true"}
+        {name: 'number', type: 'Number'},
+        {name: 'rule relaxation', type: 'Number', optional: "true"}
       ]},
-      { id: 153, name: 'TO_DATE', parent: 15, desc: 'Convert a provided number to a date', return: 'Date', params: [
-        {name: 'value', type: 'Number', optional: "false"}
+      { id: 153, name: 'TO DATE', parent: 15, desc: 'Convert a provided number to a date', return: 'Date', params: [
+        {name: 'value', type: 'Number'}
       ]},
-      { id: 154, name: 'TO_PURE_NUMBER', parent: 15, desc: 'Converts a provided date/time, percentage, currency or other formatted numeric value to a pure number without formatting', return:'Number', params: [
-        {name: 'value', type: 'String', optional: "false"}
+      { id: 154, name: 'TO PURE NUMBER', parent: 15, desc: 'Converts a provided date/time, percentage, currency or other formatted numeric value to a pure number without formatting', return:'Number', params: [
+        {name: 'value', type: 'String'}
       ]},
-      { id: 155, name: 'TO_TEXT', parent: 15, desc: 'Converts a provided numeric value to a text value', return: 'Text', params: [
-        {name: 'value', type: 'Number', optional: "false"}
+      { id: 155, name: 'TO TEXT', parent: 15, desc: 'Converts a provided numeric value to a text value', return: 'Text', params: [
+        {name: 'value', type: 'Number'}
       ]},
       { id: 156, name: 'TEXT', parent: 15, desc: 'Converts a number into text according to a specified format', return: 'Text', params: [
-        {name: 'number', type: 'Number', optional: "false"},
-        {name: 'format', type: 'String', optional: "false"},
+        {name: 'number', type: 'Number'},
+        {name: 'format', type: 'String'},
       ]},
       { id: 157, name: 'VALUE', parent: 15, desc: 'Converts a string in any of the date, time or number formats that Google Sheets understands into a number', return: 'Number', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
   
       /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,100 +194,100 @@ export const fnItems: FunctionItem[] = [
   
       // Date
       { id: 210, name: 'DATE', parent: 21, desc: 'Converts a provided year, month, and day into a date', return: 'Date', params: [
-        {name: 'year', type: 'Number', optional: "false"},
-        {name: 'month', type: 'Number', optional: "false"},
-        {name: 'day', type: 'Number', optional: "false"},
+        {name: 'year', type: 'Number'},
+        {name: 'month', type: 'Number'},
+        {name: 'day', type: 'Number'},
       ]},
       { id: 211, name: 'DATEDIF', parent: 21, desc: 'Calculates the number of days, months, or years between two dates', return: 'Number', params: [
-        {name: 'start_date', type: 'Date', optional: "false"},
-        {name: 'end_date', type: 'Date', optional: "false"},
-        {name: 'unit', type: 'String', optional: "false"},
+        {name: 'start date', type: 'Date'},
+        {name: 'end date', type: 'Date'},
+        {name: 'unit', type: 'String'},
       ]},
       { id: 212, name: 'DATEVALUE', parent: 21, desc: 'Converts a provided date string in a known format to a date value', return: 'Date', params: [
-        {name: 'date_string', type: 'String', optional: "false"},
+        {name: 'date string', type: 'String'},
       ]},
       { id: 213, name: 'EDATE', parent: 21, desc: 'Returns a date a specified number of months before or after another date', return: 'Date', params: [
-        {name: 'start_date', type: 'Date', optional: "false"},
-        {name: 'months', type: 'Number', optional: "false"},
+        {name: 'start date', type: 'Date'},
+        {name: 'months', type: 'Number'},
       ]},
   
       // Day
       { id: 220, name: 'DAY', parent: 22, desc: 'Returns the day of the month that a specific date falls on, in numeric format', return: 'Number', params: [
-        {name: 'date', type: 'Date', optional: "false"},
+        {name: 'date', type: 'Date'},
       ]},
       { id: 221, name: 'DAYS', parent: 22, desc: 'Returns the number of days between two dates', return:'Number', params: [
-        {name: 'end_date', type: 'Date', optional: "false"},
-        {name: 'start_date', type: 'Date', optional: "false"},
+        {name: 'end date', type: 'Date'},
+        {name: 'start date', type: 'Date'},
       ]},
       { id: 222, name: 'NETWORKDAYS', parent: 22, desc: 'Returns the number of net working days between two provided days', return: 'Number', params: [
-        {name: 'start_date', type: 'Date', optional: "false"},
-        {name: 'end_date', type: 'Date', optional: "false"},
+        {name: 'start date', type: 'Date'},
+        {name: 'end date', type: 'Date'},
         {name: 'holidays', type: 'Array', optional: "true"}
       ]},
       { id: 223, name: 'WORKDAY', parent: 22, desc: 'End Date After X Working Days', return: 'Date', params: [
-        {name: 'start_date', type: 'Date', optional: "false"},
-        {name: 'num_days', type: 'Number', optional: "false"},
+        {name: 'start date', type: 'Date'},
+        {name: 'num days', type: 'Number'},
         {name: 'holidays', type: 'Array', optional: "true"},
       ]},
   
       // Week
       { id: 230, name: 'WEEKDAY', parent: 23, desc: 'Returns a number representing the day of the week of the date provided', return: 'Number', params: [
-        {name: 'date', type: 'Date', optional: "false"},
-        {name: 'type', type: 'Number', optional: "false"},
+        {name: 'date', type: 'Date'},
+        {name: 'type', type: 'Number'},
       ]},
       { id: 231, name: 'WEEKNUM', parent: 23, desc: 'Returns a number representing the week of the year where the provided date falls', return: 'Number', params: [
-        {name: 'date', type: 'Date', optional: "false"},
+        {name: 'date', type: 'Date'},
         {name: 'type', type: 'Number', optional: "true"},
       ]},
   
       // Month
       { id: 240, name: 'EOMONTH', parent: 24, desc: 'Returns a date representing the last day of a month which falls a specified number of months before or after another date', return: 'Date', params: [
-        {name: 'start_date', type: 'Date', optional: "false"},
-        {name: 'months', type: 'Number', optional: "false"},
+        {name: 'start date', type: 'Date'},
+        {name: 'months', type: 'Number'},
       ]},
   
       // Year
       { id: 250, name: 'Year', parent: 25, desc: '	Returns the year specified by a given date', return: 'Number', params: [
-        {name: 'date', type: 'Date', optional: "false"},
+        {name: 'date', type: 'Date'},
       ]}, 
   
       // Time
       { id: 260, name: 'HOUR', parent: 26, desc: 'Returns the hour component of a specific time, in numeric format', return: 'Number', params: [
-        {name: 'time', type: 'Date', optional: "false"},
+        {name: 'time', type: 'Date'},
       ]},
       { id: 261, name: 'MINUTE', parent: 26, desc: 'Returns the minute component of a specific time, in numeric format', return: 'Number', params: [
-        {name: 'time', type: 'Date', optional: "false"},
+        {name: 'time', type: 'Date'},
       ]},
       { id: 262, name: 'MONTH', parent: 26, desc: 'Returns the month of the year a specific date falls in, in numeric format', return: 'Number', params: [
-        {name: 'time', type: 'Date', optional: "false"},
+        {name: 'time', type: 'Date'},
       ]},
       { id: 263, name: 'SECOND', parent: 26, desc: 'Returns the second component of a specific time, in numeric format', return: 'Number', params: [
-        {name: 'time', type: 'Date', optional: "false"},
+        {name: 'time', type: 'Date'},
       ]},
       { id: 264, name: 'TIME', parent: 26, desc: 'Convert Numbers Into Time', return: 'Date', params: [
-        {name: 'hour', type: 'Number', optional: "false"},
-        {name: 'minute', type: 'Number', optional: "false"},
-        {name: 'second', type: 'Number', optional: "false"},
+        {name: 'hour', type: 'Number'},
+        {name: 'minute', type: 'Number'},
+        {name: 'second', type: 'Number'},
       ]},
       { id: 265, name: 'TIMEVALUE', parent: 26, desc: 'Returns the fraction of a 24-hour day the time represents', return: 'Date', params: [
-        {name: 'time_string', type: 'Date', optional: "false"},
+        {name: 'time string', type: 'Date'},
       ]},
   
       // Value
       { id: 270, name: 'NOW', parent: 27, desc: 'Returns the current date and time as a date value', return: 'Date', params: []},
       { id: 271, name: 'TODAY', parent: 27, desc: 'Returns the current date as a date value', return: 'Date', params: []},
       { id: 272, name: 'LATEST', parent: 27, desc: 'Latest Date & Time', return: 'Date', params: [
-        {name: 'date', type: 'Date', optional: "false"},
+        {name: 'date', type: 'Date'},
       ]},
       { id: 273, name: 'RELATIVE', parent: 27, desc: 'Returns the relative time since a given date/time. Ie: 5 hours ago', return: 'Text', params: [
-        {name: 'value', type: 'Date', optional: "false"},
-        {name: 'unit', type: 'Number', optional: "false"}
+        {name: 'value', type: 'Date'},
+        {name: 'unit', type: 'Number'}
       ]},
       { id: 274, name: 'EARLIEST', parent: 27, desc: 'Earliest Date & Time', return: 'Date', params: [
-        {name: 'date', type: 'Date', optional: "false"},
+        {name: 'date', type: 'Date'},
       ]},
       { id: 275, name: 'VALUE', parent: 27, desc: 'Date to Number', return: 'Number', params: [
-        {name: 'text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
       ]},
   
       /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,13 +304,13 @@ export const fnItems: FunctionItem[] = [
       // Sort
       // { id: 320, name: 'SORT', parent: 32, desc: 'Sort', return: 'Array', params: [
       //   {name: 'range', type: 'Array'},
-      //   {name: 'sort_column', type: 'Number'},
-      //   {name: 'is_ascending', type: 'Boolean'},
+      //   {name: 'sort column', type: 'Number'},
+      //   {name: 'is ascending', type: 'Boolean'},
       // ]},
       // { id: 321, name: 'SORTN', parent: 32, desc: 'Sort N', return: 'Array', params: [
       //   {name: 'range', type: 'Array'},
       //   {name: 'n', type: 'Number'},
-      //   {name: 'display_ties_mode', type: 'Number'},
+      //   {name: 'display ties mode', type: 'Number'},
       // ]},
   
       // Unique
@@ -324,43 +324,43 @@ export const fnItems: FunctionItem[] = [
   
       // Is
       { id: 410, name: 'ISBLANK', parent: 41, desc: 'Is Value Empty', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 411, name: 'ISDATE', parent: 41, desc: 'Is Value a Date', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 412, name: 'ISEMAIL', parent: 41, desc: 'Is Value an Email', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 413, name: 'ISLOGICAL', parent: 41, desc: 'Is Value TRUE or FALSE', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 414, name: 'ISNA', parent: 41, desc: 'Checks whether a value is the error `#N/A`', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 415, name: 'ISNONTEXT', parent: 41, desc: 'Checks whether a value is non-textual', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 416, name: 'ISNUMBER', parent: 41, desc: 'Checks whether a value is a number', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 417, name: 'ISTEXT', parent: 41, desc: '', return: 'Boolean', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 418, name: 'ISEVEN', parent: 41, desc: 'Is Even', return: 'Boolean', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 419, name: 'ISODD', parent: 41, desc: 'Checks whether the provided value is odd', return: 'Boolean', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Data
       { id: 420, name: 'TYPE', parent: 42, desc: 'Data Type', return: 'Number', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 421, name: 'FILESIZE', parent: 42, desc: 'Returns file size', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
-        {name: 'unit', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
+        {name: 'unit', type: 'Number'},
       ]},
       { id: 422, name: 'NA', parent: 42, desc: 'Return N/A', return: 'Text', params: []},
       // { id: 423, name: 'SPARKLINE', parent: 42, desc: 'Miniature Chart', return: 'Sparklink', params: [
@@ -374,7 +374,7 @@ export const fnItems: FunctionItem[] = [
   
       // if
       { id: 510, name: 'IF', parent: 51, desc: 'Returns value based on logic', return: 'Boolean', params: [
-        {name: 'logical_expression', type: 'Boolean', optional: "false"},
+        {name: 'logical expression', type: 'Boolean'},
       ]},
       // { id: 511, name: 'IFS', parent: 51, desc: 'Evaluates multiple conditions', return: '', params: [
       //   {name: 'values', type: 'Array'},
@@ -384,50 +384,50 @@ export const fnItems: FunctionItem[] = [
       //   {name: 'value', type: 'Number'},
       // ]},
       { id: 513, name: 'IFERROR', parent: 51, desc: 'If Error', return: '', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       { id: 514, name: 'IFNA', parent: 51, desc: 'If N/A', return: 'Text', params: [
-        {name: 'value', type: 'String', optional: "false"},
+        {name: 'value', type: 'String'},
       ]},
       
       // Operator
       { id: 520, name: 'AND', parent: 52, desc: 'If all the provided arguments are logically true, returns true, otherwise returns false', return: 'Boolean', params: [
-        {name: 'logical_expression1', type: 'Boolean', optional: "false"},
-        {name: 'logical_expression2', type: 'Boolean', optional: "true"}
+        {name: 'logical expression1', type: 'Boolean'},
+        {name: 'logical expression2', type: 'Boolean', optional: "true"}
       ]},
       { id: 521, name: 'NOT', parent: 52, desc: 'Returns the opposite of a logical value - `NOT(TRUE)` returns `FALSE`; `NOT(FALSE)` returns `TRUE`', return: 'Boolean', params: [
-        {name: 'logical_expression', type: 'Boolean', optional: "false"},
+        {name: 'logical expression', type: 'Boolean'},
       ]},
       { id: 522, name: 'OR', parent: 52, desc: 'Returns true if any of the provided arguments are logically true, and false if all of the provided arguments are logically false', return: 'Boolean', params: [
-        {name: 'logical_expression1', type: 'Boolean', optional: "false"},
-        {name: 'logical_expression2', type: 'Boolean', optional: "true"},
+        {name: 'logical expression1', type: 'Boolean'},
+        {name: 'logical expression2', type: 'Boolean', optional: "true"},
       ]},
       { id: 523, name: 'XOR', parent: 52, desc: 'Xor Logical Operator', return: 'Boolean', params: [
-        {name: 'logical_expression1', type: 'Boolean', optional: "false"},
-        {name: 'logical_expression2', type: 'Boolean', optional: "true"},
+        {name: 'logical expression1', type: 'Boolean'},
+        {name: 'logical expression2', type: 'Boolean', optional: "true"},
       ]},
   
       // Compare
       { id: 530, name: 'DELTA', parent: 53, desc: 'Compare 2 Numbers', return: 'Boolean', params: [
-        {name: 'number1', type: 'Number', optional: "false"},
-        {name: 'number2', type: 'Number', optional: "false"},
+        {name: 'number1', type: 'Number'},
+        {name: 'number2', type: 'Number'},
       ]},
       { id: 531, name: 'EXACT', parent: 53, desc: 'Compate Two Strings', return: 'Boolean', params: [
-        {name: 'value1', type: 'String', optional: "false"},
+        {name: 'value1', type: 'String'},
         {name: 'value2', type: 'String', optional: "true"},
       ]},
       { id: 532, name: 'REGEXMATCH', parent: 53, desc: 'Matches Regular Expression?', return: 'Boolean', params: [
-        {name: 'text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
       ]},
   
       // Return
       { id: 540, name: 'TRUE', parent: 54, desc: 'Returns the logical value `TRUE`', return: 'Boolean', params: []},
       { id: 541, name: 'FALSE', parent: 54, desc: 'Returns the logical value `FALSE`', return: 'Boolean', params: []},
       { id: 542, name: 'DETECTLANGUAGE', parent: 54, desc: 'Identifies the language used in text within the specified range', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
       ]},
       { id: 543, name: 'SIGN', parent: 54, desc: 'Negative Or Positive', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -436,44 +436,44 @@ export const fnItems: FunctionItem[] = [
      
       // Lookup
       // { id: 610, name: 'LOOKUP', parent: 61, desc: 'Lookup', return: '', params: [
-      //   {name: 'search_key', type: 'String'},
-      //   {name: 'search_range', type: 'Array'},
-      //   {name: 'result_range', type: 'Array'},
+      //   {name: 'search key', type: 'String'},
+      //   {name: 'search range', type: 'Array'},
+      //   {name: 'result range', type: 'Array'},
       // ]},
       // { id: 611, name: 'HLOOKUP', parent: 61, desc: 'Horizontal Lookup', return: '', params: [
-      //   {name: 'search_key', type: 'String'},
-      //   {name: 'search_range', type: 'Array'},
-      //   {name: 'is_sorted', type: 'Boolean'},
+      //   {name: 'search key', type: 'String'},
+      //   {name: 'search range', type: 'Array'},
+      //   {name: 'is sorted', type: 'Boolean'},
       // ]},
       { id: 612, name: 'VLOOKUP', parent: 61, desc: 'Vertical Lookup', return: 'Text', params: [
-        {name: 'search_key', type: 'String', optional: "false"},
-        {name: 'search_range', type: 'Array', optional: "false"},
-        {name: 'is_sorted', type: 'Boolean', optional: "true"},
+        {name: 'search key', type: 'String'},
+        {name: 'search range', type: 'Array'},
+        {name: 'is sorted', type: 'Boolean', optional: "true"},
       ]},
       // { id: 613, name: 'OFFSET', parent: 61, desc: 'Returns a range reference shifted a specified number of rows and columns from a starting cell reference', return: '', params: [
-      //   {name: 'cell_reference', type: 'Number'},
-      //   {name: 'offset_rows', type: 'Number'},
-      //   {name: 'offset_columns', type: 'Number'},
+      //   {name: 'cell reference', type: 'Number'},
+      //   {name: 'offset rows', type: 'Number'},
+      //   {name: 'offset columns', type: 'Number'},
       //   {name: 'height', type: 'Number'},
       //   {name: 'width', type: 'Number'},
       // ]},
   
       // Return
       { id: 620, name: 'INDEX', parent: 62, desc: 'Content', return: 'Number', params: [
-        {name: 'reference', type: 'Array', optional: "false"},
+        {name: 'reference', type: 'Array'},
         {name: 'row', type: 'Number', optional: "true"},
         {name: 'column', type: 'Number', optional: "true"},
       ]},
       { id: 621, name: 'ROW', parent: 62, desc: 'Row', return: 'Number', params: [
-        {name: 'row_reference', type: 'Number', optional: "false"},
+        {name: 'row reference', type: 'Number'},
       ]},
       { id: 622, name: 'ROWS', parent: 62, desc: 'Number of Rows', return: 'Number', params: [
-        {name: 'range', type: 'Array', optional: "false"},
+        {name: 'range', type: 'Array'},
       ]},
       { id: 623, name: 'MATCH', parent: 62, desc: 'Returns the relative position of an item in a range that matches a specified value', return: 'Number', params: [
-        {name: 'search_key', type: 'String', optional: "false"},
-        {name: 'range', type: 'Array', optional: "false"},
-        {name: 'search_type', type: 'Number', optional: "true"},
+        {name: 'search key', type: 'String'},
+        {name: 'range', type: 'Array'},
+        {name: 'search type', type: 'Number', optional: "true"},
       ]},
   
       /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,133 +482,133 @@ export const fnItems: FunctionItem[] = [
   
       // Angle / Cosecant
       { id: 7100, name: 'CSC', parent: 710, desc: 'Returns the cosecant of an angle provided in radians', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"},
+        {name: 'angle', type: 'Number'},
       ]},
       { id: 7101, name: 'CSCH', parent: 710, desc: 'The CSCH function returns the hyperbolic cosecant of any real number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Angle / Cosine
       { id: 7110, name: 'ACOS', parent: 711, desc: 'Inverse Cosine', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7111, name: 'ACOSH', parent: 711, desc: 'Inverse Hyperbolic Cosine', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7112, name: 'COS', parent: 711, desc: 'Cosine of An Angle', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"},
+        {name: 'angle', type: 'Number'},
       ]},
       { id: 7113, name: 'COSH', parent: 711, desc: 'Hyperbolic Cosine', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Angle / Cotangent
       { id: 7120, name: 'ACOT', parent: 712, desc: 'Inverse cotangent of a value, in radians', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7121, name: 'ACOTH', parent: 712, desc: 'Inverse hyperbolic cotangent of a value, in radians. Must not be between -1 and 1, inclusive', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7122, name: 'COT', parent: 712, desc: 'Cotangent of An Angle', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"},
+        {name: 'angle', type: 'Number'},
       ]},
       { id: 7123, name: 'COTH', parent: 712, desc: 'Hyperbolic Cotangent', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Angle / Secant
       { id: 7130, name: 'SEC', parent: 713, desc: 'The SEC function returns the secant of an angle, measured in radians', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7131, name: 'SECH', parent: 713, desc: 'The SECH function returns the hyperbolic secant of an angle', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Angle / Sine
       { id: 7140, name: 'SIN', parent: 714, desc: 'Returns the sine of an angle provided in radians', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"},
+        {name: 'angle', type: 'Number'},
       ]},
       { id: 7141, name: 'SINH', parent: 714, desc: 'Returns the hyperbolic sine of any real number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7142, name: 'ASIN', parent: 714, desc: 'Inverse sine of a value, in radians', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7143, name: 'ASINH', parent: 714, desc: 'Inverse hyperbolic sine of a number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Angle / Tangent
       { id: 7150, name: 'TAN', parent: 715, desc: 'Returns the tangent of an angle provided in radians', return: 'Number', params: [
-        {name: 'angle', type: 'Number', optional: "false"},
+        {name: 'angle', type: 'Number'},
       ]},
       { id: 7151, name: 'TANH', parent: 715, desc: 'Returns the hyperbolic tangent of any real number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7152, name: 'ATAN', parent: 715, desc: 'Inverse tangent of a value, in radians', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 7153, name: 'ATAN2', parent: 715, desc: 'Angle between x-axis and line segment from origin (0,0) to a specified coordinate pair (`x`,`y`), in radians', return: 'Number', params: [
-        {name: 'x', type: 'Number', optional: "false"},
-        {name: 'y', type: 'Number', optional: "false"},
+        {name: 'x', type: 'Number'},
+        {name: 'y', type: 'Number'},
       ]},
       { id: 7154, name: 'ATANH', parent: 715, desc: 'Inverse hyperbolic tangent of a number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Map
       { id: 720, name: 'DISTANCE', parent: 72, desc: 'Returns the distance in selected unit between two locations', return: 'Number', params: [
-        {name: 'origin_address', type: 'Number', optional: "false"},
-        {name: 'destination_address', type: 'Number', optional: "false"},
+        {name: 'origin address', type: 'Number'},
+        {name: 'destination address', type: 'Number'},
       ]},
       { id: 721, name: 'TRAVELTIME', parent: 72, desc: 'Travel time between two points', return: 'Number', params: [
-        {name: 'origin_address', type: 'Number', optional: "false"},
-        {name: 'destination_address', type: 'Number', optional: "false"},
-        {name: 'travel_mode', type: 'Number', optional: "false"},
+        {name: 'origin address', type: 'Number'},
+        {name: 'destination address', type: 'Number'},
+        {name: 'travel mode', type: 'Number'},
         {name: 'unit', type: 'Number', optional: "true"},
       ]},
   
       // Odd/Even
       { id: 730, name: 'EVEN', parent: 73, desc: 'Rounds a number up to the nearest even integer', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 731, name: 'ISEVEN', parent: 73, desc: 'Checks whether the provided value is even', return: 'Boolean', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 732, name: 'ISODD', parent: 73, desc: 'Checks whether the provided value is odd', return: 'Boolean', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 733, name: 'ODD', parent: 73, desc: 'Round to Odd', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Operator
       { id: 740, name: 'AND', parent: 74, desc: 'If all the provided arguments are logically true, returns true, otherwise returns false', return: 'Boolean', params: [
-        {name: 'logical_expression1', type: 'Boolean', optional: "false"},
-        {name: 'logical_expression2', type: 'Boolean', optional: "true"}
+        {name: 'logical expression1', type: 'Boolean'},
+        {name: 'logical expression2', type: 'Boolean', optional: "true"}
       ]},
       { id: 741, name: 'DIVIDE', parent: 74, desc: 'Returns one number divided by another. Equivalent to the `/` operator', return: 'Number', params: [
-        {name: 'dividend', type: 'Number', optional: "false"},
-        {name: 'divisor', type: 'Number', optional: "false"},
+        {name: 'dividend', type: 'Number'},
+        {name: 'divisor', type: 'Number'},
       ]},
       { id: 742, name: 'POWER', parent: 74, desc: 'Returns a number raised to a power', return: 'Number', params: [
-        {name: 'base', type: 'Number', optional: "false"},
-        {name: 'exponent', type: 'Number', optional: "false"},
+        {name: 'base', type: 'Number'},
+        {name: 'exponent', type: 'Number'},
       ]},
       { id: 743, name: 'PRODUCT', parent: 74, desc: 'Returns the numerical average value in a dataset, ignoring text', return: 'Number', params: [
-        {name: 'factor', type: 'Array', optional: "false"},
+        {name: 'factor', type: 'Array'},
       ]},
       { id: 744, name: 'QUOTIENT', parent: 74, desc: 'Returns one number divided by another', return: 'Number', params: [
-        {name: 'dividend', type: 'Number', optional: "false"},
-        {name: 'divisor', type: 'Number', optional: "false"},
+        {name: 'dividend', type: 'Number'},
+        {name: 'divisor', type: 'Number'},
       ]},
   
       // Positive Square Root 
       { id: 750, name: 'SQRT', parent: 75, desc: 'Returns the positive square root of a positive number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 751, name: 'SQRTPI', parent: 75, desc: 'Returns the positive square root of the product of Pi and the given positive number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Random
@@ -618,101 +618,101 @@ export const fnItems: FunctionItem[] = [
       //   {name: 'columns', type: 'Number'},
       // ]},
       { id: 762, name: 'RANDBETWEEN', parent: 76, desc: 'Returns a uniformly random integer between two values, inclusive', return: 'Number', params: [
-        {name: 'low', type: 'Number', optional: "false"},
-        {name: 'high', type: 'Number', optional: "false"},
+        {name: 'low', type: 'Number'},
+        {name: 'high', type: 'Number'},
       ]},
   
       // Return
       { id: 770, name: 'ABS', parent: 77, desc: 'Absolute value of a number', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 771, name: 'BASE', parent: 77, desc: 'Convert a number into a text representation in another base', return: 'Text', params: [
-        {name: 'value', type: 'Number', optional: "false"},
-        {name: 'base', type: 'Number', optional: "false"},
-        {name: 'min_length', type: 'Number', optional: "true"},
+        {name: 'value', type: 'Number'},
+        {name: 'base', type: 'Number'},
+        {name: 'min length', type: 'Number', optional: "true"},
       ]},
       { id: 772, name: 'EXP', parent: 77, desc: 'Returns Euler\'s number, e (~2.718) raised to a power', return: 'Number', params: [
-        {name: 'exponent', type: 'Number', optional: "false"},
+        {name: 'exponent', type: 'Number'},
       ]},
       { id: 773, name: 'IMPOWER', parent: 77, desc: 'Returns a complex number raised to a power', return: 'Number', params: [
-        {name: 'complex_base', type: 'String', optional: "false"},
-        {name: 'exponent', type: 'Number', optional: "false"},
+        {name: 'complex base', type: 'String'},
+        {name: 'exponent', type: 'Number'},
       ]},
       { id: 774, name: 'IMSQRT', parent: 77, desc: 'Computes the square root of a complex number', return: 'Number', params: [
-        {name: 'complex_number', type: 'Number', optional: "false"},
+        {name: 'complex number', type: 'Number'},
       ]},
       { id: 775, name: 'LCM', parent: 77, desc: 'Returns the least common multiple of one or more integers', return: 'Number', params: [
-        {name: 'value1', type: 'Number', optional: "false"},
+        {name: 'value1', type: 'Number'},
         {name: 'value2', type: 'Number', optional: "true"},
       ]},
       { id: 776, name: 'MOD', parent: 77, desc: 'Returns the result of the modulo operator, the remainder after a division operation', return: 'Number', params: [
-        {name: 'dividend', type: 'Number', optional: "false"},
-        {name: 'divisor', type: 'Number', optional: "false"},
+        {name: 'dividend', type: 'Number'},
+        {name: 'divisor', type: 'Number'},
       ]},
       { id: 777, name: 'MUNIT', parent: 77, desc: 'Returns a unit matrix of size dimension x dimension', return: 'Number', params: [
-        {name: 'dimension', type: 'Number', optional: "false"},
+        {name: 'dimension', type: 'Number'},
       ]},
       { id: 778, name: 'PI', parent: 77, desc: 'Returns the value of Pi to 14 decimal places', return: 'Number', params: []},
       { id: 779, name: 'SEQUENCE', parent: 77, desc: 'Returns an array of sequential numbers, such as 1, 2, 3, 4', return: 'Number', params: [
-        {name: 'rows', type: 'Number', optional: "false"},
-        {name: 'columns', type: 'Number', optional: "false"},
-        {name: 'start', type: 'Number', optional: "false"},
-        {name: 'step', type: 'Number', optional: "false"},
+        {name: 'rows', type: 'Number'},
+        {name: 'columns', type: 'Number'},
+        {name: 'start', type: 'Number'},
+        {name: 'step', type: 'Number'},
       ]},
   
       // Round
       { id: 780, name: 'INT', parent: 78, desc: 'Rounds a number down to the nearest integer that is less than or equal to it', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
       { id: 781, name: 'MROUND', parent: 78, desc: 'Nearest Integer Multiple', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
-        {name: 'factor', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
+        {name: 'factor', type: 'Number'},
       ]},
       { id: 782, name: 'ROUND', parent: 78, desc: 'Rounds a number to a certain number of decimal places according to standard rules', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
         {name: 'places', type: 'Number', optional: "true"},
       ]},
       { id: 783, name: 'ROUNDDOWN', parent: 78, desc: 'Rounds a number to a certain number of decimal places, always rounding down to the next valid increment', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
         {name: 'places', type: 'Number', optional: "true"},
       ]},
       { id: 784, name: 'ROUNDUP', parent: 78, desc: 'Rounds a number to a certain number of decimal places, always rounding up to the next valid increment', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
         {name: 'places', type: 'Number', optional: "true"},
       ]},
   
       // Sum
       { id: 790, name: 'SUM', parent: 79, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
-        {name: 'value1', type: 'Number', optional: "false"},
+        {name: 'value1', type: 'Number'},
         {name: 'value2', type: 'Number', optional: "true"},
       ]},
       { id: 791, name: 'SUMIF', parent: 79, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
-        {name: 'range', type: 'Array', optional: "false"},
-        {name: 'criterion', type: 'String', optional: "false"},
-        {name: 'sum_range', type: 'Array', optional: "false"},
+        {name: 'range', type: 'Array'},
+        {name: 'criterion', type: 'String'},
+        {name: 'sum range', type: 'Array'},
       ]},
       // { id: 792, name: 'SUMIFS', parent: 79, desc: 'Returns the sum of a range depending on multiple criteria', return: 'Number', params: [
-      //   {name: 'sum_range', type: 'Array'},
-      //   {name: 'criteria_range1', type: 'Array'},
+      //   {name: 'sum range', type: 'Array'},
+      //   {name: 'criteria range1', type: 'Array'},
       //   {name: 'criterion1', type: 'String'},
       // ]},
       { id: 793, name: 'SUMSQ', parent: 79, desc: 'Returns the sum of the squares of a series of numbers and/or cells', return: 'Number', params: [
-        {name: 'value', type: 'Array', optional: "false"},
+        {name: 'value', type: 'Array'},
       ]},
       { id: 794, name: 'SUMX2MY2', parent: 79, desc: 'Calculates the sum of the differences of the squares of values in two arrays', return: 'Number', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 795, name: 'SUMX2PY2', parent: 79, desc: 'Calculates the sum of the sums of the squares of values in two arrays', return: 'Number', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 796, name: 'SUMXMY2', parent: 79, desc: 'Calculates the sum of the squares of differences of values in two arrays', return: 'Number', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 797, name: 'MULTINOMIAL', parent: 79, desc: 'Returns the factorial of the sum of values divided by the product of the values\' factorials', return: 'Number', params: [
-        {name: 'value', type: 'Array', optional: "false"},
+        {name: 'value', type: 'Array'},
       ]},
       // { id: 798, name: 'SERIESSUM', parent: 79, desc: 'Given parameters x, n, m, and a, returns the power series sum', return: 'Number', params: [
       //   {name: 'x', type: 'Number'},
@@ -721,8 +721,8 @@ export const fnItems: FunctionItem[] = [
       //   {name: 'a', type: 'Array'},
       // ]},
       { id: 799, name: 'SUBTOTAL', parent: 79, desc: 'Returns a subtotal for a vertical range of cells using a specified aggregation function', return: 'Number', params: [
-        {name: 'function_code', type: 'Number', optional: "false"},
-        {name: 'range1', type: 'Array', optional: "false"},
+        {name: 'function code', type: 'Number'},
+        {name: 'range1', type: 'Array'},
         {name: 'range2', type: 'Array', optional: "true"},
       ]},
   
@@ -732,11 +732,11 @@ export const fnItems: FunctionItem[] = [
   
       // Average
       { id: 810, name: 'AVEDEV', parent: 81, desc: 'Calculates the average of the magnitudes of deviations of data from a dataset\'s mean', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       { id: 811, name: 'AVERAGE', parent: 81, desc: 'Average', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       // { id: 812, name: 'AVERAGE.WEIGHTED', parent: 81, desc: 'Weighted Average', return: 'Number', params: [
@@ -744,77 +744,77 @@ export const fnItems: FunctionItem[] = [
       //   {name: 'weights', type: 'Array'},
       // ]},
       { id: 813, name: 'AVERAGEA', parent: 81, desc: 'Average Value In Dataset', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       // { id: 814, name: 'AVERAGEIF', parent: 81, desc: 'Average, Single criteria', return: 'Number', params: [
-      //   {name: 'criteria_range', type: 'Array'},
+      //   {name: 'criteria range', type: 'Array'},
       //   {name: 'criterion', type: 'String'},
-      //   {name: 'average_range', type: 'Array'},
+      //   {name: 'average range', type: 'Array'},
       // ]},
       // { id: 815, name: 'AVERAGEIFS', parent: 81, desc: 'Average, Multiple criteria', return: 'Number', params: [
-      //   {name: 'average_range', type: 'Array'},
-      //   {name: 'criteria_range1', type: 'Array'},
+      //   {name: 'average range', type: 'Array'},
+      //   {name: 'criteria range1', type: 'Array'},
       //   {name: 'criterion1', type: 'String'},
       // ]},
   
       // Count
       { id: 820, name: 'COUNTTRUE', parent: 82, desc: 'Count all TRUE values', return: 'Boolean', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 821, name: 'COUNTFALSE', parent: 82, desc: 'Count all FALSE values', return: 'Boolean', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 822, name: 'COUNTBLANK', parent: 82, desc: 'Count Empty Cells', return: 'Number', params: [
-        {name: 'range', type: 'Array', optional: "false"},
+        {name: 'range', type: 'Array'},
       ]},
       { id: 823, name: 'COUNTIF', parent: 82, desc: 'Count, Single criteria', return: 'Number', params: [
-        {name: 'range', type: 'Array', optional: "false"},
-        {name: 'criterion', type: 'String', optional: "false"},
+        {name: 'range', type: 'Array'},
+        {name: 'criterion', type: 'String'},
       ]},
       // { id: 824, name: 'COUNTIFS', parent: 82, desc: 'Count, Multiple criteria', return: 'Number', params: [
-      //   {name: 'criteria_range', type: 'Array'},
+      //   {name: 'criteria range', type: 'Array'},
       //   {name: 'criterion', type: 'String'},
-      //   {name: 'average_range', type: 'Array'},
+      //   {name: 'average range', type: 'Array'},
       // ]},
       { id: 825, name: 'COUNTUNIQUE', parent: 82, desc: 'Number of Unique Values', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
       ]},
   
       // Sum
       { id: 830, name: 'SUM', parent: 83, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
-        {name: 'value1', type: 'Number', optional: "false"},
+        {name: 'value1', type: 'Number'},
         {name: 'value2', type: 'Number', optional: "true"},
       ]},
       { id: 831, name: 'SUMIF', parent: 83, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
-        {name: 'range', type: 'Array', optional: "false"},
-        {name: 'criterion', type: 'String', optional: "false"},
-        {name: 'sum_range', type: 'Array', optional: "false"},
+        {name: 'range', type: 'Array'},
+        {name: 'criterion', type: 'String'},
+        {name: 'sum range', type: 'Array'},
       ]},
       // { id: 832, name: 'SUMIFS', parent: 83, desc: 'Returns the sum of a range depending on multiple criteria', return: 'Number', params: [
-      //   {name: 'sum_range', type: 'Array'},
-      //   {name: 'criteria_range1', type: 'Array'},
+      //   {name: 'sum range', type: 'Array'},
+      //   {name: 'criteria range1', type: 'Array'},
       //   {name: 'criterion1', type: 'String'},
       // ]},
       { id: 833, name: 'SUMSQ', parent: 83, desc: 'Returns the sum of the squares of a series of numbers and/or cells', return: 'Number', params: [
-        {name: 'value', type: 'Array', optional: "false"},
+        {name: 'value', type: 'Array'},
       ]},
       { id: 834, name: 'SUMX2MY2', parent: 83, desc: 'Calculates the sum of the differences of the squares of values in two arrays', return: 'Number', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 835, name: 'SUMX2PY2', parent: 83, desc: 'Calculates the sum of the sums of the squares of values in two arrays', return: 'Number', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 836, name: 'SUMXMY2', parent: 83, desc: 'Calculates the sum of the squares of differences of values in two arrays', return: 'Number', params: [
-        {name: 'array_x', type: 'Array', optional: "false"},
-        {name: 'array_y', type: 'Array', optional: "false"},
+        {name: 'array x', type: 'Array'},
+        {name: 'array y', type: 'Array'},
       ]},
       { id: 837, name: 'MULTINOMIAL', parent: 83, desc: 'Returns the factorial of the sum of values divided by the product of the values\' factorials', return: 'Number', params: [
-        {name: 'value', type: 'Array', optional: "false"},
+        {name: 'value', type: 'Array'},
       ]},
       // { id: 838, name: 'SERIESSUM', parent: 83, desc: 'Given parameters x, n, m, and a, returns the power series sum', return: 'Number', params: [
       //   {name: 'x', type: 'Number'},
@@ -823,8 +823,8 @@ export const fnItems: FunctionItem[] = [
       //   {name: 'a', type: 'Array'},
       // ]},
       { id: 839, name: 'SUBTOTAL', parent: 83, desc: 'Returns a subtotal for a vertical range of cells using a specified aggregation function', return: 'Number', params: [
-        {name: 'function_code', type: 'Number', optional: "false"},
-        {name: 'range1', type: 'Array', optional: "false"},
+        {name: 'function code', type: 'Number'},
+        {name: 'range1', type: 'Array'},
         {name: 'range2', type: 'Array', optional: "true"},
       ]},
   
@@ -834,11 +834,11 @@ export const fnItems: FunctionItem[] = [
   
       // Average
       { id: 910, name: 'AVEDEV', parent: 91, desc: 'Calculates the average of the magnitudes of deviations of data from a dataset\'s mean', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       { id: 911, name: 'AVERAGE', parent: 91, desc: 'Average', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       // { id: 912, name: 'AVERAGE.WEIGHTED', parent: 91, desc: 'Weighted Average', return: 'Number', params: [
@@ -846,49 +846,49 @@ export const fnItems: FunctionItem[] = [
       //   {name: 'weights', type: 'Array'},
       // ]},
       { id: 913, name: 'AVERAGEA', parent: 91, desc: 'Average Value In Dataset', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       // { id: 914, name: 'AVERAGEIF', parent: 91, desc: 'Average, Single criteria', return: 'Number', params: [
-      //   {name: 'criteria_range', type: 'Array'},
+      //   {name: 'criteria range', type: 'Array'},
       //   {name: 'criterion', type: 'String'},
-      //   {name: 'average_range', type: 'Array'},
+      //   {name: 'average range', type: 'Array'},
       // ]},
       // { id: 915, name: 'AVERAGEIFS', parent: 91, desc: 'Average, Multiple criteria', return: 'Number', params: [
-      //   {name: 'average_range', type: 'Array'},
-      //   {name: 'criteria_range1', type: 'Array'},
+      //   {name: 'average range', type: 'Array'},
+      //   {name: 'criteria range1', type: 'Array'},
       //   {name: 'criterion1', type: 'String'},
       // ]},
   
       // Min 
       { id: 920, name: 'MIN', parent: 92, desc: 'Minimum value', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       // { id: 921, name: 'MINIFS', parent: 92, desc: 'Minimum value with criteria', return: 'Number', params: [
       //   {name: 'range', type: 'Array'},
-      //   {name: 'criteria_range1', type: 'Array'},
+      //   {name: 'criteria range1', type: 'Array'},
       //   {name: 'criterion1', type: 'String'},
       // ]},
   
       // Max 
       { id: 930, name: 'MAX', parent: 93, desc: 'Maximum value in a numeric dataset', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       // { id: 931, name: 'MAXIFS', parent: 93, desc: 'Maximum value with criteria', return: 'Number', params: [
       //   {name: 'range', type: 'Array'},
-      //   {name: 'criteria_range1', type: 'Array'},
+      //   {name: 'criteria range1', type: 'Array'},
       //   {name: 'criterion1', type: 'String'},
       // ]},
   
       // Value 
       { id: 940, name: 'MODE', parent: 94, desc: 'Most commonly occurring value', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
       { id: 941, name: 'MEDIAN', parent: 94, desc: 'Median value', return: 'Number', params: [
-        {name: 'value1', type: 'Array', optional: "false"},
+        {name: 'value1', type: 'Array'},
         {name: 'value2', type: 'Array', optional: "true"},
       ]},
   
@@ -898,120 +898,120 @@ export const fnItems: FunctionItem[] = [
   
       // Case
       { id: 1010, name: 'LOWER', parent: 101, desc: 'Convert a specified string to lowercase', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
       { id: 1011, name: 'PROPER', parent: 101, desc: 'Capitalizes each word in a specified string', return: 'Text', params: [
-        {name: 'text_to_capitalize', type: 'String', optional: "false"}
+        {name: 'text to capitalize', type: 'String'}
       ]},
       { id: 1012, name: 'TRUECASE', parent: 101, desc: 'Truecasing is proper capitalization of words', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
       { id: 1013, name: 'UPPER', parent: 101, desc: 'Uppercase', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"}
+        {name: 'text', type: 'String'}
       ]},
   
       // Convert
       { id: 1020, name: 'CHAR', parent: 102, desc: 'Convert a number into a character according to the current Unicode table', return: 'Text', params: [
-        {name: 'table_number', type: 'Number', optional: "false"},
+        {name: 'table number', type: 'Number'},
       ]},
       { id: 1021, name: 'CODE', parent: 102, desc: 'Returns the numeric Unicode map value of the first character in the string provided', return: 'Number', params: [
-        {name: 'string', type: 'String', optional: "false"},
+        {name: 'string', type: 'String'},
       ]},
       { id: 1022, name: 'ROMAN', parent: 102, desc: 'Formats a number in Roman numerals', return: 'Text', params: [
-        {name: 'number', type: 'Number', optional: "false"},
+        {name: 'number', type: 'Number'},
       ]},
       { id: 1023, name: 'TEXT', parent: 102, desc: 'Convert a number into text according to a specified format', return: 'Text', params: [
-        {name: 'number', type: 'Number', optional: "false"},
-        {name: 'format', type: 'String', optional: "false"},
+        {name: 'number', type: 'Number'},
+        {name: 'format', type: 'String'},
       ]},
   
       // Info
       { id: 1030, name: 'LEN', parent: 103, desc: 'Returns the length of a string', return: 'Number', params: [
-        {name: 'text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
       ]},
       { id: 1031, name: 'WORDCOUNT', parent: 103, desc: 'Returns the amount of words or charachers in a string', return: 'Number', params: [
-        {name: 'value', type: 'Number', optional: "false"},
+        {name: 'value', type: 'Number'},
       ]},
   
       // Find
       { id: 1040, name: 'FIND', parent: 104, desc: 'Find', return: 'Number', params: [
-        {name: 'search_for', type: 'String', optional: "false"},
-        {name: 'text_to_search', type: 'String', optional: "false"},
-        {name: 'starting_at', type: 'Number', optional: "true"},
+        {name: 'search for', type: 'String'},
+        {name: 'text to search', type: 'String'},
+        {name: 'starting at', type: 'Number', optional: "true"},
       ]},
       { id: 1041, name: 'SEARCH', parent: 104, desc: 'Search', return: 'Number', params: [
-        {name: 'search_for', type: 'String', optional: "false"},
-        {name: 'text_to_search', type: 'String', optional: "false"},
-        {name: 'starting_at', type: 'Number', optional: "true"},
+        {name: 'search for', type: 'String'},
+        {name: 'text to search', type: 'String'},
+        {name: 'starting at', type: 'Number', optional: "true"},
       ]},
   
       // Join
       { id: 1050, name: 'JOIN', parent: 105, desc: 'Join', return: 'Text', params: [
-        {name: 'delimiter', type: 'String', optional: "false"},
-        {name: 'value_or_array1', type: 'Array', optional: "false"},
-        {name: 'value_or_array2', type: 'Array', optional: "true"},
+        {name: 'delimiter', type: 'String'},
+        {name: 'value or array1', type: 'Array'},
+        {name: 'value or array2', type: 'Array', optional: "true"},
       ]},
       { id: 1051, name: 'TEXTJOIN', parent: 105, desc: 'Join Text', return: 'Text', params: [
-        {name: 'delimiter', type: 'String', optional: "false"},
-        {name: 'ignore_empty', type: 'Boolean', optional: "false"},
-        {name: 'text1', type: 'Array', optional: "false"},
+        {name: 'delimiter', type: 'String'},
+        {name: 'ignore empty', type: 'Boolean'},
+        {name: 'text1', type: 'Array'},
         {name: 'text2', type: 'Array', optional: "true"},
       ]},
       { id: 1052, name: 'CONCATENATE', parent: 105, desc: 'Combine', return: 'Text', params: [
-        {name: 'string1', type: 'String', optional: "false"},
+        {name: 'string1', type: 'String'},
         {name: 'string2', type: 'String', optional: "true"},
       ]},
   
       // Replace
       { id: 1060, name: 'TEMPLATE', parent: 106, desc: 'Template with variables', return: 'Text', params: []},
       { id: 1061, name: 'REPLACE', parent: 106, desc: 'Replace', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
-        {name: 'position', type: 'Number', optional: "false"},
-        {name: 'length', type: 'Number', optional: "false"},
-        {name: 'new_text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
+        {name: 'position', type: 'Number'},
+        {name: 'length', type: 'Number'},
+        {name: 'new text', type: 'String'},
       ]},
       { id: 1062, name: 'SUBSTITUTE', parent: 106, desc: 'Substitute', return: 'Text', params: [
-        {name: 'text_to_search', type: 'String', optional: "false"},
-        {name: 'search_for', type: 'String', optional: "false"},
-        {name: 'replace_with', type: 'String', optional: "false"},
-        {name: 'occurrence_number', type: 'Number', optional: "true"},
+        {name: 'text to search', type: 'String'},
+        {name: 'search for', type: 'String'},
+        {name: 'replace with', type: 'String'},
+        {name: 'occurrence number', type: 'Number', optional: "true"},
       ]},
       { id: 1063, name: 'REGEXEXTRACT', parent: 106, desc: 'Extract Regular Expression', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
-        {name: 'regular_expression', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
+        {name: 'regular expression', type: 'String'},
       ]},
       { id: 1064, name: 'REGEXREPLACE', parent: 106, desc: 'Replace Regular Expression', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
-        {name: 'regular_expression', type: 'String', optional: "false"},
-        {name: 'replacement', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
+        {name: 'regular expression', type: 'String'},
+        {name: 'replacement', type: 'String'},
       ]},
   
       // Substring
       { id: 1070, name: 'LEFT', parent: 107, desc: 'Extract Left Part', return: 'Text', params: [
-        {name: 'string', type: 'String', optional: "false"},
-        {name: 'number_of_characters', type: 'Number', optional: "true"},
+        {name: 'string', type: 'String'},
+        {name: 'number of characters', type: 'Number', optional: "true"},
       ]},
       { id: 1071, name: 'MID', parent: 107, desc: 'String Sagment', return: 'Text', params: [
-        {name: 'string', type: 'String', optional: "false"},
-        {name: 'starting_at', type: 'Number', optional: "false"},
-        {name: 'extract_length', type: 'Number', optional: "false"},
+        {name: 'string', type: 'String'},
+        {name: 'starting at', type: 'Number'},
+        {name: 'extract length', type: 'Number'},
       ]},
       { id: 1072, name: 'RIGHT', parent: 107, desc: 'Extract Right Part', return: 'Text', params: [
-        {name: 'string', type: 'String', optional: "false"},
-        {name: 'number_of_characters', type: 'Number', optional: "true"},
+        {name: 'string', type: 'String'},
+        {name: 'number of characters', type: 'Number', optional: "true"},
       ]},
       { id: 1073, name: 'SPLIT', parent: 107, desc: 'Divides text around a specified character or string, and puts each fragment into a separate cell in the row', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
-        {name: 'delimiter', type: 'String', optional: "false"},
-        {name: 'split_by_each', type: 'Boolean', optional: "false"},
-        {name: 'remove_empty_text', type: 'Boolean', optional: "true"},
+        {name: 'text', type: 'String'},
+        {name: 'delimiter', type: 'String'},
+        {name: 'split by each', type: 'Boolean'},
+        {name: 'remove empty text', type: 'Boolean', optional: "true"},
       ]},
   
       // Trim
       { id: 1080, name: 'CLEAN', parent: 108, desc: 'Returns the text with the non-printable ASCII characters removed', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
       ]},
       { id: 1081, name: 'TRIM', parent: 108, desc: 'Removes leading and trailing spaces in a specified string', return: 'Text', params: [
-        {name: 'text', type: 'String', optional: "false"},
+        {name: 'text', type: 'String'},
       ]},
 ];
