@@ -24,7 +24,7 @@ export const fnTree: FunctionTree[] = [
     // Level 1
     { id: 1, name: 'Convert', parent: 0 },
     { id: 2, name: 'Date & Time', parent: 0 },
-    { id: 3, name: 'Filter', parent: 0 },
+    // { id: 3, name: 'Filter', parent: 0 },
     { id: 4, name: 'Info', parent: 0 },
     { id: 5, name: 'Logical', parent: 0 },
     { id: 6, name: 'Lookup', parent: 0 },
@@ -51,9 +51,9 @@ export const fnTree: FunctionTree[] = [
     { id: 27, name: 'Value', parent: 2 },
 
     // Sub-categories in Filter
-    // { id: 31, name: 'Filter', parent: 3 },
-    // { id: 32, name: 'Sort', parent: 3 },
-    // { id: 33, name: 'Unique', parent: 3 },
+    { id: 31, name: 'Filter', parent: 3 },
+    { id: 32, name: 'Sort', parent: 3 },
+    { id: 33, name: 'Unique', parent: 3 },
 
     // Sub-categories in Info
     { id: 41, name: 'Is', parent: 4 },
