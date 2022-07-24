@@ -7,6 +7,7 @@ import EqFnDate from "./EqFnDate";
 import EqFnHeader from "./EqFnHeader";
 import EqFnNumber from "./EqFnNumber";
 import EqFnText from "./EqFnText";
+import EqFnArray from "./EqFnArray";
 
 interface EqFunctionProps extends FormulaProps {
     func_id: number;
@@ -54,10 +55,12 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
 
                     {/* Map according to parameter type */}
                     {parameters.map((param, index) => {
-                        if (param.type === 'String') return <EqFnText key={index} />
-                        if (param.type === 'Number') return <EqFnNumber key={index} />
-                        if (param.type === 'Boolean') return <EqFnBool key={index} />
-                        if (param.type === 'Date') return <EqFnDate key={index} />
+                      
+                        if (param.type === 'String') return <EqFnText key={index} paramName={param.name} paramOptional={param.optional} />
+                        if (param.type === 'Number') return <EqFnNumber key={index}  paramName={param.name} paramOptional={param.optional} />
+                        if (param.type === 'Boolean') return <EqFnBool key={index}  paramName={param.name} paramOptional={param.optional} />
+                        if (param.type === 'Date') return <EqFnDate key={index}  paramName={param.name} paramOptional={param.optional} />
+                        if (param.type === 'Array') return <EqFnArray key={index} paramName={param.name} paramOptional={param.optional} />
                     })}
                 </div>
             </FormulaContainer>

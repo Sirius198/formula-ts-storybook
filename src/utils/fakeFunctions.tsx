@@ -113,7 +113,7 @@ export const fxContent = [
     { id: 120, name: 'FIXED', parent: 12, desc: 'Formats a number with a fixed number of decimal places.', return: 'Number', params: [
       {name: 'number', type: 'Number'},
       {name: 'number_of_places', type: 'Number'},
-      {name: 'suppress_separator', type: 'Number'}
+      {name: 'suppress_separator', type: 'Boolean'}
     ]},
 
     // Math

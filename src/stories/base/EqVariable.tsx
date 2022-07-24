@@ -9,11 +9,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { ReactComponent as EnterCustomNumberSvg } from '../assets/icons/enter-custom-data.svg';
 import { ReactComponent as EnterCustomTextSvg } from '../assets/icons/enter-custom-text.svg';
+import { ReactComponent as EnterCustomArraySvg } from '../assets/icons/enter-custom-text.svg';
 import { ReactComponent as EnterCustomDateSvg } from '../assets/icons/enter-date.svg';
 import { ReactComponent as MyZoomIcon } from '../assets/icons/zoom.svg';
 import { ReactComponent as NumberColumnSvg } from '../assets/icons/number-column.svg';
 import { ReactComponent as TextColumnSvg } from '../assets/icons/text-column0.svg';
 import { ReactComponent as DateColumnSvg } from '../assets/icons/date-column.svg';
+import { ReactComponent as ArrayColumnSvg } from '../assets/icons/text-column0.svg';
 import { StaticTimePicker } from '@mui/x-date-pickers';
 import { Dropdown, Modal } from '@restart/ui';
 
@@ -26,6 +28,7 @@ const borderColors = {
     'numeric': 'border-blue-200',
     'text': 'border-fuchsia-200',
     'date': 'border-orange-200',
+    'array': 'border-teal-200',
 };
 const fakeColumns = ['Homework', 'Participation', 'Midterm Exam', 'Final Exam'];
 
@@ -72,6 +75,7 @@ export const EqVariable = ({
     const isNumeric = type === 'numeric';
     const isText = type === 'text';
     const isDate = type === 'date';
+    const isArray = type === 'array';
 
     // Event handler when user enter custom number
     const onEnterCustomNumber = () => {
@@ -213,6 +217,17 @@ export const EqVariable = ({
                                                 </Dropdown.Item>
                                             </li>
                                         </>}
+                                        
+                                        {/* Custom Array */}
+                                        {isArray && <>
+                                            <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                onClick={() => { onEnterCustomNumber();}}
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    <EnterCustomArraySvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />Enter Custom Text
+                                                </Dropdown.Item>
+                                            </li>
+                                        </>}
 
                                         {isDate && <>
                                             <li
@@ -236,6 +251,7 @@ export const EqVariable = ({
                                                     {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
                                                     {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                     {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                    {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                     {value}
                                                 </Dropdown.Item>
                                             </li>
@@ -255,6 +271,7 @@ export const EqVariable = ({
                                                     {isNumeric && <NumberColumnSvg className='w-5.5 h-5.5 mr-2' />}
                                                     {isText && <TextColumnSvg className='w-5.5 h-5.5 mr-2' />}
                                                     {isDate && <DateColumnSvg className='w-5.5 h-5.5 mr-2' />}
+                                                    {isArray && <ArrayColumnSvg className='w-5.5 h-5.5 mr-2' />}
                                                     {value}
                                                 </Dropdown.Item>
                                             </li>

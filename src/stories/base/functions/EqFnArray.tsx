@@ -2,17 +2,17 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import EqVariable from '../EqVariable';
 
-interface EqFnNumberProps {
+interface EqFnArrayProps {
     paramName?: string;
     paramOptional?: string;
 }
 
-export const EqFnNumber = ({ paramName = 'VALUE', paramOptional = '' }: EqFnNumberProps) => {
+export const EqFnArray = ({ paramName = 'VALUE', paramOptional = '' }: EqFnArrayProps) => {
     const fakeColumns = ['Homework', 'Participation', 'Midterm Exam', 'Final Exam'];
     const [selected, setSelected] = useState(0);
 
     return (
-        <span className="pl-3 bg-blue-200 rounded-full inline-block mx-1">
+        <span className="pl-3 bg-teal-200 rounded-full inline-block mx-1">
             {/* <span className='mr-2 text-xs'>{paramName}</span> */}
             {paramOptional==='true'?
               <span className="relative">
@@ -22,9 +22,9 @@ export const EqFnNumber = ({ paramName = 'VALUE', paramOptional = '' }: EqFnNumb
               <span className='text-xs'>{paramName}</span>
             }
 
-            <EqVariable type='numeric' className='border-r-0 ml-2' />
+            <EqVariable type='array' className='border-r-0 ml-2' />
         </span>
     );
 };
 
-export default EqFnNumber;
+export default EqFnArray;
