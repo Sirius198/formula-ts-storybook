@@ -1,13 +1,15 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import EqVariable from '../EqVariable';
+import { OptionalParamRemoveButton } from './OptionalParamRemoveButton';
 
 interface EqFnNumberProps {
     paramName?: string;
     paramOptional?: string;
+    onRemove?: () => void;
 }
 
-export const EqFnNumber = ({ paramName = 'VALUE', paramOptional = '' }: EqFnNumberProps) => {
+export const EqFnNumber = ({ paramName = 'VALUE', paramOptional = '', onRemove }: EqFnNumberProps) => {
     const fakeColumns = ['Homework', 'Participation', 'Midterm Exam', 'Final Exam'];
     const [selected, setSelected] = useState(0);
 
@@ -23,6 +25,7 @@ export const EqFnNumber = ({ paramName = 'VALUE', paramOptional = '' }: EqFnNumb
             }
 
             <EqVariable type='numeric' className='border-r-0 ml-2' />
+            {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />}
         </span>
     );
 };

@@ -1,12 +1,14 @@
 import React, { useState, Fragment } from 'react';
 import EqVariable from '../EqVariable';
+import { OptionalParamRemoveButton } from './OptionalParamRemoveButton';
 
 interface EqFnDateProps {
     paramName?: string;
     paramOptional?: string;
+    onRemove?: () => void;
 }
 
-export const EqFnDate = ({ paramName = 'START DATE', paramOptional = '' }: EqFnDateProps) => {
+export const EqFnDate = ({ paramName = 'START DATE', paramOptional = '', onRemove }: EqFnDateProps) => {
     const fakeColumns = ['Exam Date', 'Start Date', 'End Date'];
 
     return (
@@ -21,6 +23,7 @@ export const EqFnDate = ({ paramName = 'START DATE', paramOptional = '' }: EqFnD
             }
 
             <EqVariable type='date' className='border-r-0 ml-2' />
+            {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />}
         </span>
     );
 };

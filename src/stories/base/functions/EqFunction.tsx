@@ -34,15 +34,22 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
 
     const loadFunction = (fid: number) => {
         const fx = fnItems.find(t => t.id === fid)!;
-        setParameters(fx.params);
+        setParameters([...fx.params]);
         setFnName(fx.name);
         setFormulaColor(
             fx.return == 'Text' ? 'pink' :
-            fx.return == 'Number' ? 'blue' :
-            fx.return == 'Date' ? 'orange' :
-            fx.return == 'Boolean' ? 'amber' :
-            'teal'
+                fx.return == 'Number' ? 'blue' :
+                    fx.return == 'Date' ? 'orange' :
+                        fx.return == 'Boolean' ? 'amber' :
+                            'teal'
         );
+    };
+
+    const removeParam = (index: number) => {
+        setParameters([
+            ...parameters.slice(0, index),
+            ...parameters.slice(index + 1, parameters.length)
+        ]);
     };
 
     if (!loadedFuncParameters) return (<div>Loading...</div>);
@@ -55,12 +62,12 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
 
                     {/* Map according to parameter type */}
                     {parameters.map((param, index) => {
-                      
-                        if (param.type === 'String') return <EqFnText key={index} paramName={param.name} paramOptional={param.optional} />
-                        if (param.type === 'Number') return <EqFnNumber key={index}  paramName={param.name} paramOptional={param.optional} />
-                        if (param.type === 'Boolean') return <EqFnBool key={index}  paramName={param.name} paramOptional={param.optional} />
-                        if (param.type === 'Date') return <EqFnDate key={index}  paramName={param.name} paramOptional={param.optional} />
-                        if (param.type === 'Array') return <EqFnArray key={index} paramName={param.name} paramOptional={param.optional} />
+
+                        if (param.type === 'String') return <EqFnText key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                        if (param.type === 'Number') return <EqFnNumber key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                        if (param.type === 'Boolean') return <EqFnBool key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                        if (param.type === 'Date') return <EqFnDate key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                        if (param.type === 'Array') return <EqFnArray key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
                     })}
                 </div>
             </FormulaContainer>

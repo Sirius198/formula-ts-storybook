@@ -1,12 +1,14 @@
 import React, { useState, Fragment } from 'react';
 import { Listbox, Transition, Switch } from '@headlessui/react';
+import { OptionalParamRemoveButton } from './OptionalParamRemoveButton';
 
 interface EqFnBoolProps {
     paramName?: string;
     paramOptional?: string;
+    onRemove?: () => void;
 }
 
-export const EqFnBool = ({ paramName = 'BY EACH', paramOptional = '' }: EqFnBoolProps) => {
+export const EqFnBool = ({ paramName = 'BY EACH', paramOptional = '', onRemove }: EqFnBoolProps) => {
 
     const [isChecked, setChecked] = useState(false);
 
@@ -32,6 +34,7 @@ export const EqFnBool = ({ paramName = 'BY EACH', paramOptional = '' }: EqFnBool
                     className={`${isChecked ? 'translate-x-3' : 'translate-x-0'} pointer-events-none inline-block h-[12px] w-[12px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                 />
             </Switch>
+            {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />}
         </span>
     );
 };
