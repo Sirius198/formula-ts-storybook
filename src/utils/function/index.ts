@@ -5,6 +5,28 @@ export interface FunctionTree {
 	parent: number;
 }
 
+export interface ColumnType {
+	name: string;
+	action?: string;
+}
+
+export interface FunctionType {
+	func_id: number;
+	func_name?: string;
+}
+export interface ValidateType {
+	integer?: boolean;
+	min?: number;
+}
+
+export const testVariableValidation = (value: number, validate: ValidateType): boolean => {
+	if (validate.min && value < validate.min)
+		return false;
+	if (validate.integer == true && value % 1 != 0)
+		return false;
+	return true;
+}
+
 export interface FunctionParameter {
 	name: string;
 	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "All";
@@ -12,9 +34,13 @@ export interface FunctionParameter {
 	default?: number | boolean;
 	min?: number; // for numeric
 	max?: number; // for numeric
-	values?: string[];
+	values?: string[] | number[];
 	variable?: boolean; // The number of this parameter can be increased or decreased
 	hideCol?: boolean;
+	columns?: ColumnType[];
+	functions?: FunctionType[];
+	validate?: ValidateType;
+	toggleVisible?: boolean;
 }
 
 export interface FunctionItem {
@@ -480,7 +506,14 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 424, name: 'CELLVALUE', parent: 42, desc: 'Value of a specified cell', return: 'Text', params: [
 			{ name: 'column', type: 'All' },
-			{ name: 'row', type: 'Number' },
+			{
+				name: 'row', type: 'Number', columns: [
+					{ name: 'First' },
+					{ name: 'Last' },
+					{ name: 'x from first', action: 'edit' },
+					{ name: 'x from last', action: 'edit' },
+				]
+			},
 		]
 	},
 
@@ -623,7 +656,7 @@ export const fnItems: FunctionItem[] = [
 		id: 623, name: 'MATCH', parent: 62, desc: 'Returns the relative position of an item in a range that matches a specified value', return: 'Number', params: [
 			{ name: 'search key', type: 'String' },
 			{ name: 'range', type: 'Array' },
-			{ name: 'search type', type: 'Number', optional: "true" },
+			{ name: 'search type', type: 'Number', optional: "true", values: [1, 0, -1], default: 0 },
 		]
 	},
 
@@ -993,7 +1026,11 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 799, name: 'SUBTOTAL', parent: 79, desc: 'Returns a subtotal for a vertical range of cells using a specified aggregation function', return: 'Number', params: [
-			{ name: 'function code', type: 'Number' },
+			{
+				name: 'function code', type: 'Number', functions: [
+					{ func_id: 811 }, { func_id: 810 },
+				]
+			},
 			{ name: 'range1', type: 'Array' },
 			{ name: 'range2', type: 'Array', optional: "true" },
 		]
@@ -1269,14 +1306,23 @@ export const fnItems: FunctionItem[] = [
 		id: 1040, name: 'FIND', parent: 104, desc: 'Find', return: 'Number', params: [
 			{ name: 'search for', type: 'String' },
 			{ name: 'text to search', type: 'String' },
-			{ name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, min: 1 },
+			{
+				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, min: 1, validate: {
+					integer: true,
+					min: 1
+				}
+			},
 		]
 	},
 	{
 		id: 1041, name: 'SEARCH', parent: 104, desc: 'Search', return: 'Number', params: [
 			{ name: 'search for', type: 'String' },
 			{ name: 'text to search', type: 'String' },
-			{ name: 'starting at', type: 'Number', optional: "true" },
+			{
+				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, validate: {
+					integer: true, min: 1
+				}
+			},
 		]
 	},
 
@@ -1305,8 +1351,8 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1061, name: 'REPLACE', parent: 106, desc: 'Replace', return: 'Text', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'position', type: 'Number', hideCol: true },
-			{ name: 'length', type: 'Number', hideCol: true },
+			{ name: 'position', type: 'Number', hideCol: true, default: 1, validate: { integer: true, min: 1 } },
+			{ name: 'length', type: 'Number', hideCol: true, default: 1, validate: { integer: true, min: 1 } },
 			{ name: 'new text', type: 'String' },
 		]
 	},
@@ -1315,7 +1361,7 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'text to search', type: 'String' },
 			{ name: 'search for', type: 'String' },
 			{ name: 'replace with', type: 'String' },
-			{ name: 'occurrence number', type: 'Number', optional: "true" },
+			{ name: 'occurrence number', type: 'Number', optional: "true", toggleVisible: true },
 		]
 	},
 	{
@@ -1336,20 +1382,32 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1070, name: 'LEFT', parent: 107, desc: 'Extract Left Part', return: 'Text', params: [
 			{ name: 'string', type: 'String' },
-			{ name: 'number of characters', type: 'Number', optional: "true", default: 5 },
+			{
+				name: 'number of characters', type: 'Number', optional: "true", default: 5, hideCol: true, validate: {
+					integer: true, min: 1
+				}
+			},
 		]
 	},
 	{
 		id: 1071, name: 'MID', parent: 107, desc: 'String Sagment', return: 'Text', params: [
 			{ name: 'string', type: 'String' },
 			{ name: 'starting at', type: 'Number' },
-			{ name: 'extract length', type: 'Number' },
+			{
+				name: 'extract length', type: 'Number', default: 5, hideCol: true, validate: {
+					integer: true, min: 1
+				}
+			},
 		]
 	},
 	{
 		id: 1072, name: 'RIGHT', parent: 107, desc: 'Extract Right Part', return: 'Text', params: [
 			{ name: 'string', type: 'String' },
-			{ name: 'number of characters', type: 'Number', optional: "true" },
+			{
+				name: 'number of characters', type: 'Number', optional: "true", default: 5, hideCol: true, validate: {
+					integer: true, min: 1
+				}
+			},
 		]
 	},
 	{

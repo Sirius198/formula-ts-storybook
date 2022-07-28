@@ -19,11 +19,11 @@ code {
     monospace;
 }
 
-.fxmenu li>ul {
+.fxmenu li>ul, .eqv-fn>ul {
   transform: translatex(100%) scale(0);
 }
 
-.fxmenu li:hover>ul {
+.fxmenu li:hover>ul, .eqv-fn:hover>ul {
   transform: translatex(101%) scale(1);
 }
 

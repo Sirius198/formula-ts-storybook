@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useRef, KeyboardEvent, useEffect, RefObject } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react'
-import { ChevronDownIcon, SearchIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon, ChevronRightIcon, SearchIcon } from '@heroicons/react/solid';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
@@ -16,17 +16,20 @@ import { ReactComponent as NumberColumnSvg } from '../assets/icons/number-column
 import { ReactComponent as TextColumnSvg } from '../assets/icons/text-column0.svg';
 import { ReactComponent as DateColumnSvg } from '../assets/icons/date-column.svg';
 import { ReactComponent as ArrayColumnSvg } from '../assets/icons/text-column0.svg';
+import { ReactComponent as FxSvg } from '../assets/icons/fx.svg';
 import { StaticTimePicker } from '@mui/x-date-pickers';
 import { Dropdown, Modal } from '@restart/ui';
+import { ColumnType, fnItems, FunctionParameter, FunctionType, testVariableValidation } from '../../utils/function';
 
 interface EqVariableProps {
     type?: string;
     className?: string;
-    stringvalues?: string[];
+    values?: string[] | number[];
     numberfrom?: number;
     numberend?: number;
     defaultnumber?: number;
     hidecol?: boolean;
+    param?: FunctionParameter
 }
 
 const borderColors = {
@@ -35,7 +38,7 @@ const borderColors = {
     'Date': 'border-orange-200',
     'Array': 'border-teal-200',
 };
-const fakeColumns = ['Homework', 'Participation', 'Midterm Exam', 'Final Exam'];
+const fakeColumns: ColumnType[] = [{ name: 'Homework' }, { name: 'Participation' }, { name: 'Midterm Exam' }, { name: 'Final Exam' }];
 
 // When the user input custom number or text, this function receives outside click event and let it finish editing
 function ClickAwayListener(inputEl: RefObject<HTMLInputElement>) {
@@ -61,15 +64,16 @@ export const EqVariable = ({
     numberfrom,
     numberend,
     defaultnumber,
-    stringvalues,
-    hidecol
+    values,
+    hidecol,
+    param
 }: EqVariableProps) => {
 
     // let columns = fakeColumns;
 
     const [searchString, setSearchString] = useState<string>('');
     const [editing, setEditing] = useState<boolean>(false);
-    const [displayValue, setDisplayValue] = useState<string>(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0]);
+    const [displayValue, setDisplayValue] = useState<string>(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0].name);
     const [editingValue, setEditingValue] = useState<string>('');
     const [isDatePickerModalOpen, setIsDatePickerModalOpen] = useState<boolean>(false);
     const [dateVal, setDateVal] = useState<Date>(new Date());
@@ -77,6 +81,7 @@ export const EqVariable = ({
     const [inputKeyError, setInputKeyError] = useState<boolean>(false);
     const inputEl = useRef<HTMLInputElement>(null);
     const [columns, setColumns] = useState(hidecol == true ? [] : fakeColumns);
+    const [fnCols, setFunctionColumns] = useState<FunctionType[]>([]);
 
     const clicked = ClickAwayListener(inputEl);
     useEffect(() => {
@@ -91,22 +96,47 @@ export const EqVariable = ({
     useEffect(() => {
 
         // Make dropdown items
-        if (isNumeric) {
+        if (param?.columns != undefined) {
+            setColumns(param.columns);
+            setDisplayValue(param.columns[0].name)
+        }
+        else if (isNumeric) {
             if (numberfrom != undefined && numberend != undefined) {
                 var t = [];
                 for (var i = numberfrom; i <= numberend; i++)
-                    t.push(i.toString());
+                    t.push({ name: i.toString() });
+                setColumns(t);
+            }
+            else if (values != undefined) {
+                var t = [];
+                for (var i = 0; i < values.length; i++)
+                    t.push({ name: values[i].toString() });
                 setColumns(t);
             }
         }
         else if (isText) {
-            if (stringvalues != undefined) {
-                setColumns(stringvalues);
-                setDisplayValue(stringvalues[0]);
+            if (values != undefined) {
+                var t = [];
+                for (var i = 0; i < values.length; i++)
+                    t.push({ name: values[i].toString() });
+                setColumns(t);
+                setDisplayValue(values[0] as string);
             }
         }
-    }, []);
 
+        // Make function columns
+        if (param?.functions != undefined) {
+            var t = [];
+            for (var i = 0; i < param.functions.length; i++) {
+                const sf = fnItems.find(value => param.functions && value.id == param.functions[i].func_id);
+                if (sf != undefined) {
+                    t.push({ func_id: param.functions[i].func_id, func_name: sf.name });
+                }
+            }
+            setFunctionColumns(t);
+            console.log(t);
+        }
+    }, []);
 
     // Event handler when user enter custom number
     const onEnterCustomNumber = () => {
@@ -120,8 +150,11 @@ export const EqVariable = ({
     // Finish editing variable number or text
     const finishEditing = () => {
         setEditing(false);
-        if (editingValue != '')
-            setDisplayValue(editingValue);
+        if (editingValue != '') {
+
+            if (param?.validate && testVariableValidation(Number(editingValue), param.validate))
+                setDisplayValue(editingValue);
+        }
     };
 
     // Event handler when user enter custom data
@@ -144,6 +177,14 @@ export const EqVariable = ({
     const setDateAndTime = () => {
         setIsDatePickerModalOpen(false);
         setDisplayValue(dateVal.getDate() + '/' + dateVal.getMonth() + '/' + dateVal.getFullYear());
+    };
+
+    const onClickDropdownColumn = (col: ColumnType) => {
+        if (col.action == 'edit') {
+            onEnterCustomNumber();
+        }
+        else
+            setDisplayValue(col.name);
     };
 
     let tt = className + ' inline-block relative rounded-full bg-white text-xs px-2 py-1 pr-8 border-3 ';
@@ -229,7 +270,7 @@ export const EqVariable = ({
                                         {/* Other */}
                                         <li className='pl-4 py-1 text-xs text-zinc-400'>Other</li>
 
-                                        {isNumeric && <>
+                                        {(isNumeric && values == undefined) && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
                                                 onClick={() => { onEnterCustomNumber(); }}
                                             >
@@ -239,7 +280,7 @@ export const EqVariable = ({
                                             </li>
                                         </>}
 
-                                        {isText && <>
+                                        {(isText && values == undefined) && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
                                                 onClick={() => { onEnterCustomNumber(); }}
                                             >
@@ -271,19 +312,42 @@ export const EqVariable = ({
                                             </li>
                                         </>}
 
+                                        {fnCols.length > 0 && <>
+                                            <li
+                                                className='relative px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer eqv-fn'
+                                            // onClick={() => { setIsDatePickerModalOpen(true); }}
+                                            >
+                                                <div className='w-full text-left'>
+                                                    <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />Functions
+                                                    <ChevronRightIcon className='absolute right-2 w-4 h-4 top-3' />
+                                                </div>
+
+                                                <ul className='eqv-fn-sb absolute bg-white right-0 top-0'>
+                                                    {fnCols.map((value, index) => (
+                                                        <li key={index} className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs'>
+                                                            <Dropdown.Item className='w-full text-left'>
+                                                                <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
+                                                                {value.func_name}
+                                                            </Dropdown.Item>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </li>
+                                        </>}
+
                                         {/* Columns */}
                                         {columns.map((value, index) => (
                                             <li
                                                 key={index}
                                                 className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { setDisplayValue(value); }}
+                                                onClick={() => onClickDropdownColumn(value)}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
                                                     {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                     {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                     {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
-                                                    {value}
+                                                    {value.name}
                                                 </Dropdown.Item>
                                             </li>
                                         ))}
@@ -292,18 +356,29 @@ export const EqVariable = ({
 
                                     {/* Show filtered columns */}
                                     {searchString != '' && <>
-                                        {columns.filter(col => col.toLocaleLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
+                                        {columns.filter(col => col.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
                                             <li
                                                 key={index}
                                                 className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { setDisplayValue(value); }}
+                                                onClick={() => onClickDropdownColumn(value)}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
-                                                    {isNumeric && <NumberColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                                    {isText && <TextColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                                    {isDate && <DateColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                                    {isArray && <ArrayColumnSvg className='w-5.5 h-5.5 mr-2' />}
-                                                    {value}
+                                                    {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
+                                                    {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                    {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                    {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                    {value.name}
+                                                </Dropdown.Item>
+                                            </li>
+                                        ))}
+                                        {fnCols.filter(col => col.func_name?.toLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
+                                            <li
+                                                key={index}
+                                                className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
+                                            >
+                                                <Dropdown.Item className='w-full text-left'>
+                                                    <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
+                                                    {value.func_name}
                                                 </Dropdown.Item>
                                             </li>
                                         ))}
