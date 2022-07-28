@@ -15,15 +15,15 @@ const Template: ComponentStory<typeof EqVariable> = (args) => <EqVariable {...ar
 
 export const Numeric = Template.bind({});
 Numeric.args = {
-    type: 'numeric',
+    type: 'Number',
 };
 
 export const Text = Template.bind({});
 Text.args = {
-    type: 'text',
+    type: 'String',
 };
 
 export const Date = Template.bind({});
 Date.args = {
-    type: 'date',
+    type: 'Date',
 };

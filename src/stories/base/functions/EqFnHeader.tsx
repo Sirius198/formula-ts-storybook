@@ -140,7 +140,7 @@ export const EqFnHeader = ({ name, onChange }: EqFnHeaderProps) => {
                         {/* Filter only functions(not category) with name and description  */}
                         {searchStr != '' && fnItems.filter(t => filterFn(t)).map((leaf, index) => (
                             <li key={index} className='bg-zinc-600 hover:bg-zinc-700 px-4 py-2 text-white z-10 text-[13px]'>
-                                <Listbox.Option value='1' className='text-left w-[max-content]' onClick={() => switchFunc(leaf.id)}>
+                                <Listbox.Option value='1' className='text-left w-[max-content1]' onClick={() => switchFunc(leaf.id)}>
                                     <HighlightSpan text={leaf.name} filter={searchStr} /><br />
                                     <HighlightSpan text={leaf.desc} filter={searchStr} />
                                 </Listbox.Option>

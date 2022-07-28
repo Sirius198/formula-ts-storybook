@@ -21,7 +21,7 @@ const EqCase = ({ onRemove, index }: EqCaseProps) => {
             <ComparisionOperator />
             <EqVariable />
             <span className='mr-2 text-zinc-700 text-xs'>THEN</span>
-            <EqVariable type='text' />
+            <EqVariable type='String' />
 
             <button onClick={() => onRemove(index)} className='text-zinc-700 hover:text-zinc-400 h-full mx-2'>
                 <Trash0Icon className='mt-1.5' />
@@ -67,7 +67,7 @@ export const EqSwitchCase = ({
 
                 <div className='p-2'>
                     <span className='mr-1 text-xs'>ELSE</span>
-                    <EqVariable type='text' />
+                    <EqVariable type='String' />
                 </div>
             </div>
         </FormulaContainer>

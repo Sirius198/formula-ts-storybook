@@ -132,7 +132,7 @@ const EqIf = ({ isFirst = false, isLast = false, addSentence, removeSentence, st
             </>}
 
             <div className='text-center relative mt-5'>
-                <EqVariable type='text' />
+                <EqVariable type='String' />
             </div>
         </div>
     )

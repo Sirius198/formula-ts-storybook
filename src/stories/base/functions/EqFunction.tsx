@@ -8,6 +8,8 @@ import EqFnHeader from "./EqFnHeader";
 import EqFnNumber from "./EqFnNumber";
 import EqFnText from "./EqFnText";
 import EqFnArray from "./EqFnArray";
+import EqFnParam from "./EqFnParam";
+import { PlusIcon } from "@heroicons/react/solid";
 
 interface EqFunctionProps extends FormulaProps {
     func_id: number;
@@ -23,6 +25,7 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
     const [parameters, setParameters] = useState<FunctionParameter[]>([]);
     const [fnName, setFnName] = useState<string>('');
     const [formulaColor, setFormulaColor] = useState('blue');
+    const [variableParams, setVariableParams] = useState<number[]>([]);
 
     // Trying to get function data from server, this is just a mockup
     useEffect(() => {
@@ -43,13 +46,27 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
                         fx.return == 'Boolean' ? 'amber' :
                             'teal'
         );
+
+        let vp = [];
+        for (var i = 0; i < fx.params.length; i++) {
+            vp.push(0);
+            if (fx.params[i].variable == true) {
+                vp[i] = 1;
+            }
+        }
+        setVariableParams(vp);
     };
 
     const removeParam = (index: number) => {
-        setParameters([
-            ...parameters.slice(0, index),
-            ...parameters.slice(index + 1, parameters.length)
-        ]);
+        let t = [...variableParams];
+        t[index]--;
+        setVariableParams(t);
+    };
+
+    const addVariableParamCount = (index: number) => {
+        let t = [...variableParams];
+        t[index]++;
+        setVariableParams(t);
     };
 
     if (!loadedFuncParameters) return (<div>Loading...</div>);
@@ -57,11 +74,34 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
     return (
         <>
             <FormulaContainer name={name} color={formulaColor as any}>
-                <div className="inline-block">
+                <div className="inline-flex items-center">
                     <EqFnHeader name={fnName} onChange={loadFunction} />
 
                     {/* Map according to parameter type */}
                     {parameters.map((param, index) => {
+
+                        if (param.variable) {
+                            return (
+                                <>
+                                    {Array(variableParams[index]).fill(0).map((_, idx) => (
+                                        <EqFnParam key={idx} param={param} onRemove={() => removeParam(index)}
+                                            type={param.type} vary_idx={idx + 1}
+                                            showRemoveButton={variableParams[index] != 1} />
+                                    ))}
+
+                                    <button
+                                        className='bg-[#71717A] w-4 h-4 rounded-full'
+                                        onClick={() => addVariableParamCount(index)}
+                                    >
+                                        <PlusIcon className='w-3 h-3 text-white mt-[2px]' />
+                                    </button>
+                                </>
+                            );
+                        }
+
+                        return (
+                            <EqFnParam key={index} param={param} onRemove={() => removeParam(index)} type={param.type} />
+                        )
 
                         if (param.type === 'String') return <EqFnText key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
                         if (param.type === 'Number') return <EqFnNumber key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />

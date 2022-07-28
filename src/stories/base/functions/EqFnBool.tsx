@@ -6,11 +6,12 @@ interface EqFnBoolProps {
     paramName?: string;
     paramOptional?: string;
     onRemove?: () => void;
+    defaultvalue?: boolean;
 }
 
-export const EqFnBool = ({ paramName = 'BY EACH', paramOptional = '', onRemove }: EqFnBoolProps) => {
+export const EqFnBool = ({ paramName = 'BY EACH', paramOptional = '', onRemove, defaultvalue }: EqFnBoolProps) => {
 
-    const [isChecked, setChecked] = useState(false);
+    const [isChecked, setChecked] = useState(defaultvalue == true);
 
     return (
         <span className="p-0.5 pl-3 pr-1.5 bg-zinc-300 rounded-full inline-block mx-1 align-item-center">

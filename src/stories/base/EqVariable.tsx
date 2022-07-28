@@ -22,13 +22,18 @@ import { Dropdown, Modal } from '@restart/ui';
 interface EqVariableProps {
     type?: string;
     className?: string;
+    stringvalues?: string[];
+    numberfrom?: number;
+    numberend?: number;
+    defaultnumber?: number;
+    hidecol?: boolean;
 }
 
 const borderColors = {
-    'numeric': 'border-blue-200',
-    'text': 'border-fuchsia-200',
-    'date': 'border-orange-200',
-    'array': 'border-teal-200',
+    'Number': 'border-blue-200',
+    'String': 'border-fuchsia-200',
+    'Date': 'border-orange-200',
+    'Array': 'border-teal-200',
 };
 const fakeColumns = ['Homework', 'Participation', 'Midterm Exam', 'Final Exam'];
 
@@ -51,31 +56,57 @@ function ClickAwayListener(inputEl: RefObject<HTMLInputElement>) {
     return clickedAway;
 }
 export const EqVariable = ({
-    type = 'numeric',
-    className
+    type = 'Number',
+    className,
+    numberfrom,
+    numberend,
+    defaultnumber,
+    stringvalues,
+    hidecol
 }: EqVariableProps) => {
 
-    const columns = fakeColumns;
+    // let columns = fakeColumns;
 
     const [searchString, setSearchString] = useState<string>('');
     const [editing, setEditing] = useState<boolean>(false);
-    const [displayValue, setDisplayValue] = useState<string>(columns[0]);
+    const [displayValue, setDisplayValue] = useState<string>(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0]);
     const [editingValue, setEditingValue] = useState<string>('');
     const [isDatePickerModalOpen, setIsDatePickerModalOpen] = useState<boolean>(false);
     const [dateVal, setDateVal] = useState<Date>(new Date());
     const [timeVal, setTimeVal] = useState<Date>(new Date());
     const [inputKeyError, setInputKeyError] = useState<boolean>(false);
     const inputEl = useRef<HTMLInputElement>(null);
+    const [columns, setColumns] = useState(hidecol == true ? [] : fakeColumns);
 
     const clicked = ClickAwayListener(inputEl);
     useEffect(() => {
         clicked && finishEditing()
     }, [clicked]);
 
-    const isNumeric = type === 'numeric';
-    const isText = type === 'text';
-    const isDate = type === 'date';
-    const isArray = type === 'array';
+    const isNumeric = type == 'Number';
+    const isText = type == 'String';
+    const isDate = type == 'Date';
+    const isArray = type == 'Array';
+
+    useEffect(() => {
+
+        // Make dropdown items
+        if (isNumeric) {
+            if (numberfrom != undefined && numberend != undefined) {
+                var t = [];
+                for (var i = numberfrom; i <= numberend; i++)
+                    t.push(i.toString());
+                setColumns(t);
+            }
+        }
+        else if (isText) {
+            if (stringvalues != undefined) {
+                setColumns(stringvalues);
+                setDisplayValue(stringvalues[0]);
+            }
+        }
+    }, []);
+
 
     // Event handler when user enter custom number
     const onEnterCustomNumber = () => {
@@ -210,18 +241,18 @@ export const EqVariable = ({
 
                                         {isText && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber();}}
+                                                onClick={() => { onEnterCustomNumber(); }}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
                                                 </Dropdown.Item>
                                             </li>
                                         </>}
-                                        
+
                                         {/* Custom Array */}
                                         {isArray && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber();}}
+                                                onClick={() => { onEnterCustomNumber(); }}
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     <EnterCustomArraySvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />Enter Custom Text
@@ -330,67 +361,6 @@ export const EqVariable = ({
                         </div>
                     </div>
                 </Modal>
-                // <Transition appear show={isDatePickerModalOpen} as={Fragment}>
-                //     <Dialog as="div" className="relative z-10" onClose={() => setIsDatePickerModalOpen(false)}>
-                //         <Transition.Child
-                //             as={Fragment}
-                //             enter="ease-out duration-300"
-                //             enterFrom="opacity-0"
-                //             enterTo="opacity-100"
-                //             leave="ease-in duration-200"
-                //             leaveFrom="opacity-100"
-                //             leaveTo="opacity-0"
-                //         >
-                //             <div className="fixed inset-0 bg-black bg-opacity-25" />
-                //         </Transition.Child>
-
-                //         <div className="fixed inset-0 overflow-y-auto">
-                //             <div className="flex min-h-full items-center justify-center p-4 text-center">
-                //                 <Transition.Child
-                //                     as={Fragment}
-                //                     enter="ease-out duration-300"
-                //                     enterFrom="opacity-0 scale-95"
-                //                     enterTo="opacity-100 scale-100"
-                //                     leave="ease-in duration-200"
-                //                     leaveFrom="opacity-100 scale-100"
-                //                     leaveTo="opacity-0 scale-95"
-                //                 >
-                //                     <Dialog.Panel className="w-full max-w-md min-w-[650px] transform overflow-hidden bg-white p-0 text-left align-middle shadow-xl transition-all">
-                //                         <div className='grid grid-cols-2'>
-
-                //                             {/* DatePicker */}
-                //                             <div className='border-r-[1px] border-r-zinc-200'>
-                //                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                //                                     <StaticDatePicker
-                //                                         onChange={(v) => setDateVal(v!)}
-                //                                         value={dateVal}
-                //                                         displayStaticWrapperAs="desktop"
-                //                                         renderInput={() => (<></>)}
-                //                                     />
-                //                                 </LocalizationProvider>
-                //                             </div>
-
-                //                             {/* TimePicker */}
-                //                             <div className='border-r-[1px] border-r-zinc-200'>
-                //                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                //                                     <StaticTimePicker
-                //                                         onChange={(v: Date | null) => setTimeVal(v!)}
-                //                                         value={timeVal}
-                //                                         displayStaticWrapperAs="mobile"
-                //                                         renderInput={() => (<></>)}
-                //                                     />
-                //                                 </LocalizationProvider>
-                //                             </div>
-                //                         </div>
-                //                         <div className='p-2 border-t-[1px] border-t-zinc-200 text-right'>
-                //                             <button onClick={() => setDateAndTime()} className='p-2 bg-teal-700 text-white text-xs rounded-sm'>Set Date & Time</button>
-                //                         </div>
-                //                     </Dialog.Panel>
-                //                 </Transition.Child>
-                //             </div>
-                //         </div>
-                //     </Dialog>
-                // </Transition>
             }
         </>
     );

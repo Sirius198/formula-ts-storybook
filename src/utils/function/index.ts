@@ -9,7 +9,7 @@ export interface FunctionParameter {
 	name: string;
 	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "All";
 	optional?: string;  // determine whether parameter is optional or not.
-	default?: number;
+	default?: number | boolean;
 	min?: number; // for numeric
 	max?: number; // for numeric
 	values?: string[];
@@ -270,8 +270,8 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 221, name: 'DAYS', parent: 22, desc: 'Returns the number of days between two dates', return: 'Number', params: [
-			{ name: 'end date', type: 'Date' },
 			{ name: 'start date', type: 'Date' },
+			{ name: 'end date', type: 'Date' },
 		]
 	},
 	{
@@ -752,17 +752,23 @@ export const fnItems: FunctionItem[] = [
 	// Map
 	{
 		id: 720, name: 'DISTANCE', parent: 72, desc: 'Returns the distance in selected unit between two locations', return: 'Number', params: [
-			{ name: 'origin address', type: 'String' },
-			{ name: 'destination address', type: 'String' },
+			{ name: 'origin address', type: 'String', hideCol: true },
+			{ name: 'destination address', type: 'String', hideCol: true },
 			{ name: 'method', type: 'String', values: ['driving', 'walking', 'bicycling', 'ransit'] },
 		]
 	},
 	{
-		id: 721, name: 'TRAVELTIME', parent: 72, desc: 'Travel time between two points', return: 'Number', params: [
+		id: 721, name: 'DURATION', parent: 72, desc: 'Travel time between two points', return: 'Number', params: [
 			{ name: 'origin address', type: 'String' },
 			{ name: 'destination address', type: 'String' },
 			{ name: 'travel mode', type: 'String', values: ['driving', 'walking', 'bicycling', 'ransit'] },
 			{ name: 'unit', type: 'String', optional: "true", values: ['Minutes', 'Hours', 'Days'] },
+		]
+	},
+	{
+		id: 722, name: 'REVERSEGEOCODE', parent: 72, desc: 'REVERSEGEOCODE', return: 'Number', params: [
+			{ name: 'latitude', type: 'String' },
+			{ name: 'longitude', type: 'String' },
 		]
 	},
 
@@ -1005,7 +1011,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 811, name: 'AVERAGE', parent: 81, desc: 'Average', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	// { id: 812, name: 'AVERAGE.WEIGHTED', parent: 81, desc: 'Weighted Average', return: 'Number', params: [
@@ -1350,8 +1356,8 @@ export const fnItems: FunctionItem[] = [
 		id: 1073, name: 'SPLIT', parent: 107, desc: 'Divides text around a specified character or string, and puts each fragment into a separate cell in the row', return: 'Text', params: [
 			{ name: 'text', type: 'String' },
 			{ name: 'delimiter', type: 'String' },
-			{ name: 'split by each', type: 'Boolean' },
-			{ name: 'remove empty text', type: 'Boolean', optional: "true" },
+			{ name: 'split by each', type: 'Boolean', default: true },
+			{ name: 'remove empty text', type: 'Boolean', optional: "true", default: true },
 		]
 	},
 
