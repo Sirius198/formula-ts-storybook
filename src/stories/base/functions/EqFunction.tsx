@@ -87,7 +87,7 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
                                     {Array(variableParams[index]).fill(0).map((_, idx) => (
                                         <EqFnParam key={idx} param={param} onRemove={() => removeParam(index)}
                                             type={param.type} vary_idx={idx + 1}
-                                            showRemoveButton={variableParams[index] != 1} />
+                                            showRemoveButton={variableParams[index] != 1 && idx != 0} />
                                     ))}
 
                                     <button

@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof EqFunction> = (args) => <EqFunction {...ar
 
 export const Primary = Template.bind({});
 Primary.args = {
-    func_id: 120,
+    func_id: 424,
 };

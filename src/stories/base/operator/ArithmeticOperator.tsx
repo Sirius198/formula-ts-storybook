@@ -50,43 +50,45 @@ export const ArithmeticOperator = ({ op = '+' }: ArithmeticOperatorProps) => {
 
         //     </Popover.Panel>
         // </Popover>
-        <Dropdown>
-            <Dropdown.Toggle>
-                {(props) => (
-                    <button
-                        {...props}
-                        className="bg-[#A78BFA] hover:bg-[#8B5CF6] text-white border-0 outline-0 rounded-full text-[20px] w-11 h-8 flex pl-1 pt-1.5"
-                    >
-                        <HeroOperatorIcon op={operator} />
-                        <ChevronDownIcon
-                            className="text-white h-4 w-4 mt-[3px] transition duration-150 ease-in-out group-hover:text-opacity-80"
-                            aria-hidden="true"
-                        />
-                    </button>
-                )}
-            </Dropdown.Toggle>
+        <span>
+            <Dropdown>
+                <Dropdown.Toggle>
+                    {(props) => (
+                        <button
+                            {...props}
+                            className="bg-[#A78BFA] hover:bg-[#8B5CF6] text-white border-0 outline-0 rounded-full text-[20px] w-11 h-8 flex pl-1 pt-1.5"
+                        >
+                            <HeroOperatorIcon op={operator} />
+                            <ChevronDownIcon
+                                className="text-white h-4 w-4 mt-[3px] transition duration-150 ease-in-out group-hover:text-opacity-80"
+                                aria-hidden="true"
+                            />
+                        </button>
+                    )}
+                </Dropdown.Toggle>
 
-            <Dropdown.Menu flip offset={[0, 8]}>
-                {(menuProps, meta) => (
-                    <ul
-                        {...menuProps}
-                        className="absolute z-10 bg-white drop-shadow-lg p-3 rounded-full top-[3.2rem] left-0"
-                        style={{
-                            transition: "visibility 500ms, opacity 500ms",
-                            visibility: meta.show ? "visible" : "hidden",
-                            opacity: meta.show ? "1" : "0",
-                        }}
-                    >
-                        {OPERATORS.map((value, index) => (
-                            <Dropdown.Item key={index} className='bg-[#A78BFA] hover:bg-[#8B5CF6] text-white border-0 outline-0 w-6 h-6 rounded-full pt-[2px]'
-                                onClick={() => { setOperator(value); }}>
-                                <HeroOperatorIcon op={value} />
-                            </Dropdown.Item>
-                        ))}
-                    </ul>
-                )}
-            </Dropdown.Menu>
-        </Dropdown >
+                <Dropdown.Menu flip offset={[0, 8]}>
+                    {(menuProps, meta) => (
+                        <ul
+                            {...menuProps}
+                            className="absolute z-10 bg-white drop-shadow-lg p-3 rounded-full top-[3.2rem] left-0"
+                            style={{
+                                transition: "visibility 500ms, opacity 500ms",
+                                visibility: meta.show ? "visible" : "hidden",
+                                opacity: meta.show ? "1" : "0",
+                            }}
+                        >
+                            {OPERATORS.map((value, index) => (
+                                <Dropdown.Item key={index} className='bg-[#A78BFA] hover:bg-[#8B5CF6] text-white border-0 outline-0 w-6 h-6 rounded-full pt-[2px]'
+                                    onClick={() => { setOperator(value); }}>
+                                    <HeroOperatorIcon op={value} />
+                                </Dropdown.Item>
+                            ))}
+                        </ul>
+                    )}
+                </Dropdown.Menu>
+            </Dropdown >
+        </span>
     );
 };
 

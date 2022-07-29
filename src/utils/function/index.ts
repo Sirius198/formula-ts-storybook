@@ -7,7 +7,9 @@ export interface FunctionTree {
 
 export interface ColumnType {
 	name: string;
+	type: "Number" | "Date" | "String" | "Array";
 	action?: string;
+	suffix?: string;
 }
 
 export interface FunctionType {
@@ -35,12 +37,15 @@ export interface FunctionParameter {
 	min?: number; // for numeric
 	max?: number; // for numeric
 	values?: string[] | number[];
+	values_for_display?: string[];
 	variable?: boolean; // The number of this parameter can be increased or decreased
 	hideCol?: boolean;
 	columns?: ColumnType[];
 	functions?: FunctionType[];
 	validate?: ValidateType;
 	toggleVisible?: boolean;
+	customInput?: boolean;
+	onlyInput?: number; // 0 is default, 1: text box 2: text area
 }
 
 export interface FunctionItem {
@@ -156,7 +161,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 111, name: 'PROPER', parent: 11, desc: 'Capitalizes each word in a specified string', return: 'Text', params: [
-			{ name: 'text to capitalize', type: 'String' }
+			{ name: 'text', type: 'String' }
 		]
 	},
 	{
@@ -334,7 +339,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 240, name: 'EOMONTH', parent: 24, desc: 'Returns a date representing the last day of a month which falls a specified number of months before or after another date', return: 'Date', params: [
 			{ name: 'start date', type: 'Date' },
-			{ name: 'months', type: 'Number' },
+			{ name: 'months', type: 'Number', default: 2, validate: { integer: true }, onlyInput: 1 },
 		]
 	},
 
@@ -439,52 +444,52 @@ export const fnItems: FunctionItem[] = [
 	// Is
 	{
 		id: 410, name: 'ISBLANK', parent: 41, desc: 'Is Value Empty', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 411, name: 'ISDATE', parent: 41, desc: 'Is Value a Date', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 412, name: 'ISEMAIL', parent: 41, desc: 'Is Value an Email', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 413, name: 'ISLOGICAL', parent: 41, desc: 'Is Value TRUE or FALSE', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 414, name: 'ISNA', parent: 41, desc: 'Checks whether a value is the error `#N/A`', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 415, name: 'ISNONTEXT', parent: 41, desc: 'Checks whether a value is non-textual', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 416, name: 'ISNUMBER', parent: 41, desc: 'Checks whether a value is a number', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 417, name: 'ISTEXT', parent: 41, desc: '', return: 'Boolean', params: [
-			{ name: 'value', type: 'All' },
+			{ name: 'value', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 418, name: 'ISEVEN', parent: 41, desc: 'Is Even', return: 'Boolean', params: [
-			{ name: 'value', type: 'Number' },
+			{ name: 'value', type: 'Number', customInput: false },
 		]
 	},
 	{
 		id: 419, name: 'ISODD', parent: 41, desc: 'Checks whether the provided value is odd', return: 'Boolean', params: [
-			{ name: 'value', type: 'Number' },
+			{ name: 'value', type: 'Number', customInput: false },
 		]
 	},
 
@@ -509,11 +514,11 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'column', type: 'All' },
 			{
 				name: 'row', type: 'Number', columns: [
-					{ name: 'First' },
-					{ name: 'Last' },
-					{ name: 'x from first', action: 'edit' },
-					{ name: 'x from last', action: 'edit' },
-				]
+					{ name: 'First', type: 'Number' },
+					{ name: 'Last', type: "Number" },
+					{ name: 'x from first', action: 'edit', type: "Number", suffix: 'from first' },
+					{ name: 'x from last', action: 'edit', type: "Number", suffix: 'from last' },
+				], customInput: false
 			},
 		]
 	},
@@ -587,7 +592,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 532, name: 'REGEXMATCH', parent: 53, desc: 'Matches Regular Expression?', return: 'Boolean', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String' },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, },
 		]
 	},
 
@@ -643,11 +648,11 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'column', type: 'Number', default: 0, hideCol: true },
 		]
 	},
-	{
-		id: 621, name: 'ROW', parent: 62, desc: 'Row', return: 'Number', params: [
-			{ name: 'row reference', type: 'Number' },
-		]
-	},
+	// {
+	// 	id: 621, name: 'ROW', parent: 62, desc: 'Row', return: 'Number', params: [
+	// 		{ name: 'row reference', type: 'Number' },
+	// 	]
+	// },
 	{
 		id: 622, name: 'ROWS', parent: 62, desc: 'Number of Rows', return: 'Number', params: [
 			{ name: 'range', type: 'Array' },
@@ -657,7 +662,7 @@ export const fnItems: FunctionItem[] = [
 		id: 623, name: 'MATCH', parent: 62, desc: 'Returns the relative position of an item in a range that matches a specified value', return: 'Number', params: [
 			{ name: 'search key', type: 'String' },
 			{ name: 'range', type: 'Array' },
-			{ name: 'search type', type: 'Number', optional: "true", values: [1, 0, -1], default: 0 },
+			{ name: 'search type', type: 'Number', optional: "true", values: [1, 0, -1], values_for_display: ["1 (sorted)", "0 (not sorted)", "-1 (sorted in descending order)"], default: 0 },
 		]
 	},
 
@@ -786,8 +791,8 @@ export const fnItems: FunctionItem[] = [
 	// Map
 	{
 		id: 720, name: 'DISTANCE', parent: 72, desc: 'Returns the distance in selected unit between two locations', return: 'Number', params: [
-			{ name: 'origin address', type: 'String', hideCol: true },
-			{ name: 'destination address', type: 'String', hideCol: true },
+			{ name: 'origin address', type: 'String', },
+			{ name: 'destination address', type: 'String' },
 			{ name: 'method', type: 'String', values: ['driving', 'walking', 'bicycling', 'ransit'] },
 		]
 	},
@@ -847,11 +852,11 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'exponent', type: 'Number' },
 		]
 	},
-	{
-		id: 743, name: 'PRODUCT', parent: 74, desc: 'Returns the numerical average value in a dataset, ignoring text', return: 'Number', params: [
-			{ name: 'factor', type: 'Array' },
-		]
-	},
+	// {
+	// 	id: 743, name: 'PRODUCT', parent: 74, desc: 'Returns the numerical average value in a dataset, ignoring text', return: 'Number', params: [
+	// 		{ name: 'factor', type: 'Array' },
+	// 	]
+	// },
 	{
 		id: 744, name: 'QUOTIENT', parent: 74, desc: 'Returns one number divided by another', return: 'Number', params: [
 			{ name: 'dividend', type: 'Number' },
@@ -930,14 +935,14 @@ export const fnItems: FunctionItem[] = [
 		]
 	},
 	{ id: 778, name: 'PI', parent: 77, desc: 'Returns the value of Pi to 14 decimal places', return: 'Number', params: [] },
-	{
-		id: 779, name: 'SEQUENCE', parent: 77, desc: 'Returns an array of sequential numbers, such as 1, 2, 3, 4', return: 'Number', params: [
-			{ name: 'rows', type: 'Number' },
-			{ name: 'columns', type: 'Number' },
-			{ name: 'start', type: 'Number' },
-			{ name: 'step', type: 'Number' },
-		]
-	},
+	// {
+	// 	id: 779, name: 'SEQUENCE', parent: 77, desc: 'Returns an array of sequential numbers, such as 1, 2, 3, 4', return: 'Number', params: [
+	// 		{ name: 'rows', type: 'Number' },
+	// 		{ name: 'columns', type: 'Number' },
+	// 		{ name: 'start', type: 'Number' },
+	// 		{ name: 'step', type: 'Number' },
+	// 	]
+	// },
 
 	// Round
 	{
@@ -971,12 +976,12 @@ export const fnItems: FunctionItem[] = [
 	},
 
 	// Sum
-	{
-		id: 790, name: 'SUM', parent: 79, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
-			{ name: 'value1', type: 'Number' },
-			{ name: 'value2', type: 'Number', optional: "true" },
-		]
-	},
+	// {
+	// 	id: 790, name: 'SUM', parent: 79, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
+	// 		{ name: 'value1', type: 'Number' },
+	// 		{ name: 'value2', type: 'Number', optional: "true" },
+	// 	]
+	// },
 	{
 		id: 791, name: 'SUMIF', parent: 79, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
 			{ name: 'range', type: 'Array' },
@@ -1030,10 +1035,9 @@ export const fnItems: FunctionItem[] = [
 			{
 				name: 'function code', type: 'Number', functions: [
 					{ func_id: 811 }, { func_id: 930 }, { func_id: 920 }, { func_id: 743 }, { func_id: 790 },
-				]
+				], customInput: false, hideCol: true
 			},
-			{ name: 'range1', type: 'Array' },
-			{ name: 'range2', type: 'Array', optional: "true" },
+			{ name: 'range1', type: 'Array', variable: true },
 		]
 	},
 
@@ -1049,7 +1053,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 811, name: 'AVERAGE', parent: 81, desc: 'Average', return: 'Number', params: [
-			{ name: 'value', type: 'Number', variable: true },
+			{ name: 'value1', type: 'Number', variable: true },
 		]
 	},
 	// { id: 812, name: 'AVERAGE.WEIGHTED', parent: 81, desc: 'Weighted Average', return: 'Number', params: [
@@ -1107,12 +1111,12 @@ export const fnItems: FunctionItem[] = [
 	},
 
 	// Sum
-	{
-		id: 830, name: 'SUM', parent: 83, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
-			{ name: 'value1', type: 'Number' },
-			{ name: 'value2', type: 'Number', optional: "true" },
-		], duplicate: true
-	},
+	// {
+	// 	id: 830, name: 'SUM', parent: 83, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
+	// 		{ name: 'value1', type: 'Number' },
+	// 		{ name: 'value2', type: 'Number', optional: "true" },
+	// 	], duplicate: true
+	// },
 	{
 		id: 831, name: 'SUMIF', parent: 83, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
 			{ name: 'range', type: 'Array' },
@@ -1307,9 +1311,9 @@ export const fnItems: FunctionItem[] = [
 
 	// Find
 	{
-		id: 1040, name: 'FIND', parent: 104, desc: 'Find', return: 'Number', params: [
-			{ name: 'search for', type: 'String' },
-			{ name: 'text to search', type: 'String' },
+		id: 1040, name: 'FIND', parent: 104, desc: 'Find text', return: 'Number', params: [
+			{ name: 'search for', type: 'String', onlyInput: 1, default: 1 },
+			{ name: 'text to search', type: 'String', onlyInput: 1, default: 1 },
 			{
 				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, min: 1, validate: {
 					integer: true,
@@ -1320,8 +1324,8 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 1041, name: 'SEARCH', parent: 104, desc: 'Search', return: 'Number', params: [
-			{ name: 'search for', type: 'String' },
-			{ name: 'text to search', type: 'String' },
+			{ name: 'search for', type: 'String', onlyInput: 1, default: 1 },
+			{ name: 'text to search', type: 'String', onlyInput: 1, default: 1 },
 			{
 				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, validate: {
 					integer: true, min: 1
@@ -1351,7 +1355,7 @@ export const fnItems: FunctionItem[] = [
 	},
 
 	// Replace
-	{ id: 1060, name: 'TEMPLATE', parent: 106, desc: 'Template with variables', return: 'Text', params: [] },
+	// { id: 1060, name: 'TEMPLATE', parent: 106, desc: 'Template with variables', return: 'Text', params: [] },
 	{
 		id: 1061, name: 'REPLACE', parent: 106, desc: 'Replace', return: 'Text', params: [
 			{ name: 'text', type: 'String' },

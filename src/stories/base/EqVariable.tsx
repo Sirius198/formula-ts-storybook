@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useRef, KeyboardEvent, useEffect, RefObject } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react'
-import { ChevronDownIcon, ChevronRightIcon, SearchIcon } from '@heroicons/react/solid';
+import { CheckIcon, ChevronDownIcon, ChevronRightIcon, SearchIcon } from '@heroicons/react/solid';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
@@ -18,7 +18,7 @@ import { ReactComponent as DateColumnSvg } from '../assets/icons/date-column.svg
 import { ReactComponent as ArrayColumnSvg } from '../assets/icons/text-column0.svg';
 import { ReactComponent as FxSvg } from '../assets/icons/fx.svg';
 import { StaticTimePicker } from '@mui/x-date-pickers';
-import { Dropdown, Modal } from '@restart/ui';
+import { Dropdown, Modal, UseDropdownMenuMetadata } from '@restart/ui';
 import { ColumnType, fnItems, FunctionParameter, FunctionType, testVariableValidation } from '../../utils/function';
 
 interface EqVariableProps {
@@ -27,8 +27,9 @@ interface EqVariableProps {
     values?: string[] | number[];
     numberfrom?: number;
     numberend?: number;
-    defaultnumber?: number;
+    defaultnumber?: number | string;
     hidecol?: boolean;
+    updateSuffixText?: (x: string) => void;
     param?: FunctionParameter
 }
 
@@ -39,7 +40,18 @@ const borderColors = {
     'Array': 'border-teal-200',
     'All': 'border-gray-100',
 };
-const fakeColumns: ColumnType[] = [{ name: 'Homework' }, { name: 'Participation' }, { name: 'Midterm Exam' }, { name: 'Final Exam' }];
+const fakeColumns: ColumnType[] = [
+    { name: 'Homework', type: 'Number' },
+    { name: 'Participation', type: 'Number' },
+    { name: 'Midterm Exam', type: 'Number' },
+    { name: 'Final Exam', type: 'Number' },
+    { name: 'Email', type: 'String' },
+    { name: 'Gender', type: 'String' },
+    { name: 'Name', type: 'String' },
+    { name: 'Exam Date', type: 'Date' },
+    { name: 'Start Date', type: 'Date' },
+    { name: 'End Date', type: 'Date' },
+];
 
 // When the user input custom number or text, this function receives outside click event and let it finish editing
 function ClickAwayListener(inputEl: RefObject<HTMLInputElement>) {
@@ -67,7 +79,8 @@ export const EqVariable = ({
     defaultnumber,
     values,
     hidecol,
-    param
+    param,
+    updateSuffixText
 }: EqVariableProps) => {
 
     // let columns = fakeColumns;
@@ -83,8 +96,14 @@ export const EqVariable = ({
     const [timeVal, setTimeVal] = useState<Date>(new Date());
     const [inputKeyError, setInputKeyError] = useState<boolean>(false);
     const inputEl = useRef<HTMLInputElement>(null);
+    const inputOnlyEl = useRef<HTMLInputElement>(null);
     const [columns, setColumns] = useState(hidecol == true ? [] : fakeColumns);
+    const [columnsForDisplay, setColumnsForDisplay] = useState<string[]>([]);
     const [fnCols, setFunctionColumns] = useState<FunctionType[]>([]);
+    const [isSimpleDropdown, setIsSimpleDropdown] = useState(false);
+    const [enableCustomInput, setEnableCustomInput] = useState(true);
+    const [onlyInputValue, setOnlyInputValue] = useState('');
+    const [suffixTextToUpdate, setSuffixTextToUpdate] = useState('');
 
     const clicked = ClickAwayListener(inputEl);
     useEffect(() => {
@@ -99,10 +118,23 @@ export const EqVariable = ({
 
     useEffect(() => {
 
-        setDisplayValue(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0].name);
+        // setDisplayValue(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0].name);
+        if (defaultnumber != undefined)
+            setDisplayValue(defaultnumber.toString());
+        else {
+            for (var i = 0; i < fakeColumns.length; i++) {
+                if (fakeColumns[i].type == type) {
+                    setDisplayValue(fakeColumns[i].name);
+                    break;
+                }
+            }
+        }
         setColumns(hidecol == true ? [] : fakeColumns);
         setFunctionColumns([]);
-        
+        setIsSimpleDropdown(false);
+        setColumnsForDisplay([]);
+        setEnableCustomInput(true);
+
         // Make dropdown items
         if (param?.columns != undefined) {
             setColumns(param.columns);
@@ -110,43 +142,53 @@ export const EqVariable = ({
         }
         else if (isNumeric) {
             if (numberfrom != undefined && numberend != undefined) {
-                var t = [];
+                var t: ColumnType[] = [];
                 for (var i = numberfrom; i <= numberend; i++)
-                    t.push({ name: i.toString() });
+                    t.push({ name: i.toString(), type: 'Number' });
                 setColumns(t);
                 if (!defaultnumber) setDisplayValue(t[0].name);
+                setIsSimpleDropdown(true);
             }
             else if (values != undefined) {
-                var t = [];
+                var t: ColumnType[] = [];
                 for (var i = 0; i < values.length; i++)
-                    t.push({ name: values[i].toString() });
+                    t.push({ name: values[i].toString(), type: 'Number' });
                 setColumns(t);
                 if (!defaultnumber) setDisplayValue(t[0].name);
+                setIsSimpleDropdown(true);
             }
         }
         else if (isText) {
             if (values != undefined) {
-                var t = [];
+                var t: ColumnType[] = [];
                 for (var i = 0; i < values.length; i++)
-                    t.push({ name: values[i].toString() });
+                    t.push({ name: values[i].toString(), type: 'String' });
                 setColumns(t);
                 setDisplayValue(values[0] as string);
                 if (!defaultnumber) setDisplayValue(t[0].name);
+                setIsSimpleDropdown(true);
             }
         }
 
         // Make function columns
         if (param?.functions != undefined) {
-            var t = [];
+            var tt = [];
             for (var i = 0; i < param.functions.length; i++) {
                 const sf = fnItems.find(value => param.functions && value.id == param.functions[i].func_id);
                 if (sf != undefined) {
-                    t.push({ func_id: param.functions[i].func_id, func_name: sf.name });
+                    tt.push({ func_id: param.functions[i].func_id, func_name: sf.name });
                 }
             }
-            setFunctionColumns(t);
-            console.log(t);
+            setFunctionColumns(tt);
         }
+
+        // Make columns for display
+        if (param?.values_for_display)
+            setColumnsForDisplay(param.values_for_display);
+
+        // Custom Input
+        if (param?.customInput == false)
+            setEnableCustomInput(false);
     }, [param, hidecol, defaultnumber]);
 
     // Event handler when user enter custom number
@@ -163,8 +205,13 @@ export const EqVariable = ({
         setEditing(false);
         if (editingValue != '') {
 
-            if (param?.validate == undefined || testVariableValidation(Number(editingValue), param.validate))
+            if (param?.validate == undefined || testVariableValidation(Number(editingValue), param.validate)) {
                 setDisplayValue(editingValue);
+                if (updateSuffixText) {
+                    updateSuffixText(suffixTextToUpdate);
+                    setSuffixTextToUpdate('');
+                }
+            }
         }
     };
 
@@ -196,6 +243,24 @@ export const EqVariable = ({
         }
         else
             setDisplayValue(col.name);
+
+        if (updateSuffixText) {
+            updateSuffixText('');
+            if (col.suffix != undefined)
+                // updateSuffixText(col.suffix);
+                setSuffixTextToUpdate(col.suffix);
+            else
+                // updateSuffixText('');
+                setSuffixTextToUpdate('');
+        }
+    };
+
+    const onOnlyInputKeyDown = () => {
+        if (onlyInputValue != '') {
+            if (param?.validate == undefined || testVariableValidation(Number(onlyInputValue), param.validate))
+                setDisplayValue(onlyInputValue);
+            setOnlyInputValue('');
+        }
     };
 
     let tt = className + ' inline-block relative rounded-full bg-white text-xs px-2 py-1 pr-8 border-3 ';
@@ -264,136 +329,169 @@ export const EqVariable = ({
                                         opacity: meta.show ? "1" : "0",
                                     }}
                                 >
-                                    <li className='px-4 py-2 font-bold text-xs'>Select Data</li>
-                                    <li className='px-4 py-2 font-bold text-xs border-y-[1px] border-y-zinc-200'>
-                                        <MyZoomIcon className='w-3 h-4' />
-                                        <input
-                                            type='text'
-                                            className='outline-0 pl-2 font-light'
-                                            placeholder='Search'
-                                            value={searchString} onChange={(e) => setSearchString(e.target.value)}
-                                        />
-                                    </li>
+                                    {param?.onlyInput != undefined ?
+                                        <>
+                                            {/* Like Find function */}
+                                            <li className='px-4 py-2'>
+                                                <input
+                                                    type={'text'}
+                                                    className="hover:outline-0 outline-0 text-xs"
+                                                    placeholder='Enter custom text...'
+                                                    onChange={(e) => setOnlyInputValue(e.target.value)}
+                                                    value={onlyInputValue}
 
-                                    {/* Show normal dropdown menu */}
-                                    {searchString == '' && <>
-
-                                        {/* Other */}
-                                        <li className='pl-4 py-1 text-xs text-zinc-400'>Other</li>
-
-                                        {(isNumeric && values == undefined) && <>
-                                            <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber(); }}
-                                            >
-                                                <Dropdown.Item className='w-full text-left'>
-                                                    <EnterCustomNumberSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />Enter Custom Number
+                                                />
+                                                <Dropdown.Item className='p-1 bg-stone-200 rounded-full w-6 h-6' ref={inputOnlyEl} onClick={onOnlyInputKeyDown}>
+                                                    <CheckIcon className='w-4 h-4 fill-teal-700 mt-01 hover:bg-stone-200' />
                                                 </Dropdown.Item>
                                             </li>
-                                        </>}
+                                        </>
+                                        :
+                                        <>
+                                            {!isSimpleDropdown && <>
+                                                <li className='px-4 py-2 font-bold text-xs'>Select Data</li>
+                                                <li className='px-4 py-2 font-bold text-xs border-y-[1px] border-y-zinc-200'>
+                                                    <MyZoomIcon className='w-3 h-4' />
+                                                    <input
+                                                        type='text'
+                                                        className='outline-0 pl-2 font-light'
+                                                        placeholder='Search'
+                                                        value={searchString} onChange={(e) => setSearchString(e.target.value)}
+                                                    />
+                                                </li>
+                                            </>}
 
-                                        {((isText || isAll) && values == undefined) && <>
-                                            <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber(); }}
-                                            >
-                                                <Dropdown.Item className='w-full text-left'>
-                                                    <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
-                                                </Dropdown.Item>
-                                            </li>
-                                        </>}
+                                            {/* Show normal dropdown menu */}
+                                            {searchString == '' && <>
 
-                                        {/* Custom Array */}
-                                        {isArray && <>
-                                            <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { onEnterCustomNumber(); }}
-                                            >
-                                                <Dropdown.Item className='w-full text-left'>
-                                                    <EnterCustomArraySvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />Enter Custom Text
-                                                </Dropdown.Item>
-                                            </li>
-                                        </>}
+                                                {/* Other */}
+                                                {(!isSimpleDropdown && (enableCustomInput || fnCols.length > 0)) && <li className='pl-4 py-1 text-xs text-zinc-400'>Other</li>}
 
-                                        {isDate && <>
-                                            <li
-                                                className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => { setIsDatePickerModalOpen(true); }}
-                                            >
-                                                <Dropdown.Item className='w-full text-left'>
-                                                    <EnterCustomDateSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />Select Date
-                                                </Dropdown.Item>
-                                            </li>
-                                        </>}
+                                                {(isNumeric && values == undefined && !isSimpleDropdown && enableCustomInput) && <>
+                                                    <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                        onClick={() => { onEnterCustomNumber(); }}
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left'>
+                                                            <EnterCustomNumberSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />Enter Custom Number
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                </>}
 
-                                        {fnCols.length > 0 && <>
-                                            <li
-                                                className='relative px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer eqv-fn'
-                                            // onClick={() => { setIsDatePickerModalOpen(true); }}
-                                            >
-                                                <div className='w-full text-left'>
-                                                    <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />Functions
-                                                    <ChevronRightIcon className='absolute right-2 w-4 h-4 top-3' />
-                                                </div>
+                                                {((isText || isAll) && values == undefined && !isSimpleDropdown && enableCustomInput) && <>
+                                                    <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                        onClick={() => { onEnterCustomNumber(); }}
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left'>
+                                                            <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                </>}
 
-                                                <ul className='eqv-fn-sb absolute bg-white right-0 top-0'>
-                                                    {fnCols.map((value, index) => (
-                                                        <li key={index} className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs'>
-                                                            <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
-                                                                <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
-                                                                {value.func_name}
+                                                {/* Custom Array */}
+                                                {(isArray && enableCustomInput) && <>
+                                                    <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                        onClick={() => { onEnterCustomNumber(); }}
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left'>
+                                                            <EnterCustomArraySvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />Enter Custom Text
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                </>}
+
+                                                {(isDate && enableCustomInput) && <>
+                                                    <li
+                                                        className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                        onClick={() => { setIsDatePickerModalOpen(true); }}
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left'>
+                                                            <EnterCustomDateSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />Select Date
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                </>}
+
+                                                {fnCols.length > 0 && <>
+                                                    <li
+                                                        className='relative px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer eqv-fn'
+                                                    // onClick={() => { setIsDatePickerModalOpen(true); }}
+                                                    >
+                                                        <div className='w-full text-left'>
+                                                            <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />Functions
+                                                            <ChevronRightIcon className='absolute right-2 w-4 h-4 top-3' />
+                                                        </div>
+
+                                                        <ul className='eqv-fn-sb absolute bg-white right-0 top-0'>
+                                                            {fnCols.map((value, index) => (
+                                                                <li key={index} className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs'>
+                                                                    <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
+                                                                        <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
+                                                                        {index + 1} ({value.func_name})
+                                                                    </Dropdown.Item>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </li>
+                                                </>}
+
+                                                {/* Columns */}
+                                                {columns.filter(col => col.type == type || type == 'All').map((value, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className='hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer min-w-[100px]'
+                                                        onClick={() => onClickDropdownColumn(value)}
+                                                    >
+                                                        <Dropdown.Item className='px-4 py-2 w-full text-left'>
+                                                            {!isSimpleDropdown &&
+                                                                <>
+                                                                    {value.type == "Number" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
+                                                                    {value.type == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                                    {value.type == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                                    {value.type == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                                </>
+                                                            }
+                                                            {columnsForDisplay.length > 0 ? columnsForDisplay[index] : value.name}
+                                                            {/* {value.name} */}
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                ))}
+
+                                            </>}
+
+                                            {/* Show filtered columns */}
+                                            {searchString != '' && <>
+                                                {columns
+                                                    .filter(col => col.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1 && (col.type == type || type == 'All'))
+                                                    .map((value, index) => (
+                                                        <li
+                                                            key={index}
+                                                            className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
+                                                            onClick={() => onClickDropdownColumn(value)}
+                                                        >
+                                                            <Dropdown.Item className='w-full text-left'>
+                                                                {!isSimpleDropdown && <>
+                                                                    {value.type == "Number" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
+                                                                    {value.type == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                                    {value.type == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                                    {value.type == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                                </>}
+                                                                {value.name}
                                                             </Dropdown.Item>
                                                         </li>
                                                     ))}
-                                                </ul>
-                                            </li>
-                                        </>}
+                                                {fnCols.filter(col => col.func_name?.toLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
+                                                            <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
+                                                            {value.func_name}
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                ))}
+                                            </>}
+                                        </>
+                                    }
 
-                                        {/* Columns */}
-                                        {columns.map((value, index) => (
-                                            <li
-                                                key={index}
-                                                className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => onClickDropdownColumn(value)}
-                                            >
-                                                <Dropdown.Item className='w-full text-left'>
-                                                    {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                                    {(isText || isAll) && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
-                                                    {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
-                                                    {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
-                                                    {value.name}
-                                                </Dropdown.Item>
-                                            </li>
-                                        ))}
-
-                                    </>}
-
-                                    {/* Show filtered columns */}
-                                    {searchString != '' && <>
-                                        {columns.filter(col => col.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
-                                            <li
-                                                key={index}
-                                                className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                                onClick={() => onClickDropdownColumn(value)}
-                                            >
-                                                <Dropdown.Item className='w-full text-left'>
-                                                    {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                                    {(isText || isAll) && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
-                                                    {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
-                                                    {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
-                                                    {value.name}
-                                                </Dropdown.Item>
-                                            </li>
-                                        ))}
-                                        {fnCols.filter(col => col.func_name?.toLowerCase().indexOf(searchString.toLowerCase()) != -1).map((value, index) => (
-                                            <li
-                                                key={index}
-                                                className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
-                                            >
-                                                <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
-                                                    <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
-                                                    {value.func_name}
-                                                </Dropdown.Item>
-                                            </li>
-                                        ))}
-                                    </>}
                                 </ul>
                             )}
                         </Dropdown.Menu>

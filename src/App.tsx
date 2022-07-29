@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-// import { SimplePage } from './pages/test';
+import { SimplePage } from './pages/test';
 
 function App() {
   return (
@@ -21,8 +21,8 @@ function App() {
     //     </a>
     //   </header>
     // </div>
-    // <SimplePage></SimplePage>
-    <div></div>
+    <SimplePage></SimplePage>
+    // <div></div>
   );
 }
 

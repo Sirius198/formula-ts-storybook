@@ -21,11 +21,13 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
     }, [param]);
 
     const [toggleVisible, setToggleVisible] = useState(0);
+    const [suffixText, setSuffixText] = useState('');
 
     useEffect(() => {
         // If this is optional param, set toggleVisible to 1 or -1
         if (param?.toggleVisible)
             setToggleVisible(1);
+        setSuffixText('');
     }, [param]);
 
     const onClickRemoveButton = () => {
@@ -58,15 +60,15 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
     }
     return (
         <span className={`pl-3 ${bgColor} rounded-full inline-flex items-center mx-1`}>
-            {(vary_idx == undefined) ?
+            {/* {(vary_idx == undefined || vary_idx == 1) ?
                 <span className='text-xs'>{stateParam.name}</span>
                 :
                 <span className='text-xs relative'>
-                    {stateParam.name} {vary_idx}
-                    {/* <br /> */}
+                    {stateParam.name}
                     <span className='absolute top-[9px] left-0 text-[10px] w-full text-center'>optional</span>
                 </span>
-            }
+            } */}
+            <span className='text-xs'>{stateParam.name}</span>
             {/* <span className='text-xs'>{stateParam.name}{vary_idx && <>{vary_idx}</>}</span> */}
             <EqVariable
                 type={stateParam.type}
@@ -77,8 +79,12 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
                 values={stateParam.values}
                 hidecol={stateParam.hideCol}
                 param={stateParam}
+                updateSuffixText={(x) => setSuffixText(x)}
             />
             {/* {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />} */}
+
+            {/* Suffix Text */}
+            {suffixText != '' && <span className='text-xs mr-2'>{suffixText}</span>}
 
             {(showRemoveButton || toggleVisible != 0) && <button
                 className='bg-[#71717A] w-4 h-4 rounded-full mr-2'
