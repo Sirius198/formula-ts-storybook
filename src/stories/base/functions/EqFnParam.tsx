@@ -15,13 +15,18 @@ interface EqFnParamProps {
 
 export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnParamProps) => {
 
+    const [stateParam, setStateParam] = useState(param);
+    useEffect(() => {
+        setStateParam(param);
+    }, [param]);
+
     const [toggleVisible, setToggleVisible] = useState(0);
 
     useEffect(() => {
         // If this is optional param, set toggleVisible to 1 or -1
         if (param?.toggleVisible)
             setToggleVisible(1);
-    }, []);
+    }, [param]);
 
     const onClickRemoveButton = () => {
         if (toggleVisible == 0) {
@@ -32,14 +37,14 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
         }
     };
 
-    if (param.type == "Boolean")
-        return (<EqFnBool paramName={param.name} defaultvalue={param.default as boolean} />);
+    if (stateParam.type == "Boolean")
+        return (<EqFnBool paramName={stateParam.name} defaultvalue={stateParam.default as boolean} />);
 
-    const bgColor = param.type == "Number" ? "bg-blue-200" :
-        param.type == "String" ? "bg-fuchsia-200" :
-            param.type == "Date" ? "bg-orange-200" :
-                param.type == "Array" ? "bg-teal-200" :
-                    param.type == "All" ? "bg-white" : "";
+    const bgColor = stateParam.type == "Number" ? "bg-blue-200" :
+        stateParam.type == "String" ? "bg-fuchsia-200" :
+            stateParam.type == "Date" ? "bg-orange-200" :
+                stateParam.type == "Array" ? "bg-teal-200" :
+                    stateParam.type == "All" ? "bg-gray-100" : "";
 
     if (toggleVisible == -1) {
         return (
@@ -53,16 +58,25 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
     }
     return (
         <span className={`pl-3 ${bgColor} rounded-full inline-flex items-center mx-1`}>
-            <span className='text-xs'>{param.name}{vary_idx && <>{vary_idx}</>}</span>
+            {(vary_idx == undefined) ?
+                <span className='text-xs'>{stateParam.name}</span>
+                :
+                <span className='text-xs relative'>
+                    {stateParam.name} {vary_idx}
+                    {/* <br /> */}
+                    <span className='absolute top-[9px] left-0 text-[10px] w-full text-center'>optional</span>
+                </span>
+            }
+            {/* <span className='text-xs'>{stateParam.name}{vary_idx && <>{vary_idx}</>}</span> */}
             <EqVariable
-                type={param.type}
+                type={stateParam.type}
                 className='border-r-0 ml-2'
-                numberfrom={param.min}
-                numberend={param.max}
-                defaultnumber={param.default as number}
-                values={param.values}
-                hidecol={param.hideCol}
-                param={param}
+                numberfrom={stateParam.min}
+                numberend={stateParam.max}
+                defaultnumber={stateParam.default as number}
+                values={stateParam.values}
+                hidecol={stateParam.hideCol}
+                param={stateParam}
             />
             {/* {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />} */}
 

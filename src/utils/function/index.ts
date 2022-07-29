@@ -50,6 +50,7 @@ export interface FunctionItem {
 	desc: string;
 	return: string;
 	params: FunctionParameter[];
+	duplicate?: boolean;
 }
 
 export const fnTree: FunctionTree[] = [
@@ -304,14 +305,14 @@ export const fnItems: FunctionItem[] = [
 		id: 222, name: 'NETWORKDAYS', parent: 22, desc: 'Returns the number of net working days between two provided days', return: 'Number', params: [
 			{ name: 'start date', type: 'Date' },
 			{ name: 'end date', type: 'Date' },
-			{ name: 'holidays', type: 'Array', optional: "true" }
+			{ name: 'holidays', type: 'Array', optional: "true", toggleVisible: true }
 		]
 	},
 	{
 		id: 223, name: 'WORKDAY', parent: 22, desc: 'End Date After X Working Days', return: 'Date', params: [
 			{ name: 'start date', type: 'Date' },
 			{ name: 'num days', type: 'Number' },
-			{ name: 'holidays', type: 'Array', optional: "true" },
+			{ name: 'holidays', type: 'Array', optional: "true", toggleVisible: true },
 		]
 	},
 
@@ -400,7 +401,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 275, name: 'VALUE', parent: 27, desc: 'Date to Number', return: 'Number', params: [
 			{ name: 'text', type: 'String' },
-		]
+		], duplicate: true
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -814,12 +815,12 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 731, name: 'ISEVEN', parent: 73, desc: 'Checks whether the provided value is even', return: 'Boolean', params: [
 			{ name: 'value', type: 'Number' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 732, name: 'ISODD', parent: 73, desc: 'Checks whether the provided value is odd', return: 'Boolean', params: [
 			{ name: 'value', type: 'Number' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 733, name: 'ODD', parent: 73, desc: 'Round to Odd', return: 'Number', params: [
@@ -894,7 +895,7 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'value', type: 'Number' },
 			{ name: 'base', type: 'Number' },
 			{ name: 'min length', type: 'Number', optional: "true" },
-		]
+		], duplicate: true
 	},
 	{
 		id: 772, name: 'EXP', parent: 77, desc: 'Returns Euler\'s number, e (~2.718) raised to a power', return: 'Number', params: [
@@ -1028,7 +1029,7 @@ export const fnItems: FunctionItem[] = [
 		id: 799, name: 'SUBTOTAL', parent: 79, desc: 'Returns a subtotal for a vertical range of cells using a specified aggregation function', return: 'Number', params: [
 			{
 				name: 'function code', type: 'Number', functions: [
-					{ func_id: 811 }, { func_id: 810 },
+					{ func_id: 811 }, { func_id: 930 }, { func_id: 920 }, { func_id: 743 }, { func_id: 790 },
 				]
 			},
 			{ name: 'range1', type: 'Array' },
@@ -1110,14 +1111,14 @@ export const fnItems: FunctionItem[] = [
 		id: 830, name: 'SUM', parent: 83, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
 			{ name: 'value1', type: 'Number' },
 			{ name: 'value2', type: 'Number', optional: "true" },
-		]
+		], duplicate: true
 	},
 	{
 		id: 831, name: 'SUMIF', parent: 83, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
 			{ name: 'range', type: 'Array' },
 			{ name: 'criterion', type: 'String' },
 			{ name: 'sum range', type: 'Array' },
-		]
+		], duplicate: true
 	},
 	// { id: 832, name: 'SUMIFS', parent: 83, desc: 'Returns the sum of a range depending on multiple criteria', return: 'Number', params: [
 	//   {name: 'sum range', type: 'Array'},
@@ -1127,30 +1128,30 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 833, name: 'SUMSQ', parent: 83, desc: 'Returns the sum of the squares of a series of numbers and/or cells', return: 'Number', params: [
 			{ name: 'value', type: 'Array' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 834, name: 'SUMX2MY2', parent: 83, desc: 'Calculates the sum of the differences of the squares of values in two arrays', return: 'Number', params: [
 			{ name: 'array x', type: 'Array' },
 			{ name: 'array y', type: 'Array' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 835, name: 'SUMX2PY2', parent: 83, desc: 'Calculates the sum of the sums of the squares of values in two arrays', return: 'Number', params: [
 			{ name: 'array x', type: 'Array' },
 			{ name: 'array y', type: 'Array' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 836, name: 'SUMXMY2', parent: 83, desc: 'Calculates the sum of the squares of differences of values in two arrays', return: 'Number', params: [
 			{ name: 'array x', type: 'Array' },
 			{ name: 'array y', type: 'Array' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 837, name: 'MULTINOMIAL', parent: 83, desc: 'Returns the factorial of the sum of values divided by the product of the values\' factorials', return: 'Number', params: [
 			{ name: 'value', type: 'Array' },
-		]
+		], duplicate: true
 	},
 	// { id: 838, name: 'SERIESSUM', parent: 83, desc: 'Given parameters x, n, m, and a, returns the power series sum', return: 'Number', params: [
 	//   {name: 'x', type: 'Number'},
@@ -1160,10 +1161,14 @@ export const fnItems: FunctionItem[] = [
 	// ]},
 	{
 		id: 839, name: 'SUBTOTAL', parent: 83, desc: 'Returns a subtotal for a vertical range of cells using a specified aggregation function', return: 'Number', params: [
-			{ name: 'function code', type: 'Number' },
+			{
+				name: 'function code', type: 'Number', functions: [
+					{ func_id: 811 }, { func_id: 810 },
+				]
+			},
 			{ name: 'range1', type: 'Array' },
 			{ name: 'range2', type: 'Array', optional: "true" },
-		]
+		], duplicate: true
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1175,13 +1180,12 @@ export const fnItems: FunctionItem[] = [
 		id: 910, name: 'AVEDEV', parent: 91, desc: 'Calculates the average of the magnitudes of deviations of data from a dataset\'s mean', return: 'Number', params: [
 			{ name: 'value1', type: 'Array' },
 			{ name: 'value2', type: 'Array', optional: "true" },
-		]
+		], duplicate: true
 	},
 	{
 		id: 911, name: 'AVERAGE', parent: 91, desc: 'Average', return: 'Number', params: [
-			{ name: 'value1', type: 'Array' },
-			{ name: 'value2', type: 'Array', optional: "true" },
-		]
+			{ name: 'value1', type: 'Array', variable: true },
+		], duplicate: true
 	},
 	// { id: 912, name: 'AVERAGE.WEIGHTED', parent: 91, desc: 'Weighted Average', return: 'Number', params: [
 	//   {name: 'values', type: 'Array'},
@@ -1191,7 +1195,7 @@ export const fnItems: FunctionItem[] = [
 		id: 913, name: 'AVERAGEA', parent: 91, desc: 'Average Value In Dataset', return: 'Number', params: [
 			{ name: 'value1', type: 'Array' },
 			{ name: 'value2', type: 'Array', optional: "true" },
-		]
+		], duplicate: true
 	},
 	// { id: 914, name: 'AVERAGEIF', parent: 91, desc: 'Average, Single criteria', return: 'Number', params: [
 	//   {name: 'criteria range', type: 'Array'},
@@ -1248,39 +1252,39 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1010, name: 'LOWER', parent: 101, desc: 'Convert a specified string to lowercase', return: 'Text', params: [
 			{ name: 'text', type: 'String' }
-		]
+		], duplicate: true
 	},
 	{
 		id: 1011, name: 'PROPER', parent: 101, desc: 'Capitalizes each word in a specified string', return: 'Text', params: [
 			{ name: 'text', type: 'String' }
-		]
+		], duplicate: true
 	},
 	{
 		id: 1012, name: 'TRUECASE', parent: 101, desc: 'Truecasing is proper capitalization of words', return: 'Text', params: [
 			{ name: 'text', type: 'String' }
-		]
+		], duplicate: true
 	},
 	{
 		id: 1013, name: 'UPPER', parent: 101, desc: 'Uppercase', return: 'Text', params: [
 			{ name: 'text', type: 'String' }
-		]
+		], duplicate: true,
 	},
 
 	// Convert
 	{
 		id: 1020, name: 'CHAR', parent: 102, desc: 'Convert a number into a character according to the current Unicode table', return: 'Text', params: [
 			{ name: 'table number', type: 'Number' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 1021, name: 'CODE', parent: 102, desc: 'Returns the numeric Unicode map value of the first character in the string provided', return: 'Number', params: [
 			{ name: 'string', type: 'String' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 1022, name: 'ROMAN', parent: 102, desc: 'Formats a number in Roman numerals', return: 'Text', params: [
 			{ name: 'number', type: 'Number' },
-		]
+		], duplicate: true
 	},
 	{
 		id: 1023, name: 'TEXT', parent: 102, desc: 'Convert a number into text according to a specified format', return: 'Text', params: [

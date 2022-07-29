@@ -37,6 +37,7 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
 
     const loadFunction = (fid: number) => {
         const fx = fnItems.find(t => t.id === fid)!;
+        setParameters([]);
         setParameters([...fx.params]);
         setFnName(fx.name);
         setFormulaColor(

@@ -37,6 +37,7 @@ const borderColors = {
     'String': 'border-fuchsia-200',
     'Date': 'border-orange-200',
     'Array': 'border-teal-200',
+    'All': 'border-gray-100',
 };
 const fakeColumns: ColumnType[] = [{ name: 'Homework' }, { name: 'Participation' }, { name: 'Midterm Exam' }, { name: 'Final Exam' }];
 
@@ -71,6 +72,8 @@ export const EqVariable = ({
 
     // let columns = fakeColumns;
 
+    // const []
+
     const [searchString, setSearchString] = useState<string>('');
     const [editing, setEditing] = useState<boolean>(false);
     const [displayValue, setDisplayValue] = useState<string>(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0].name);
@@ -92,9 +95,14 @@ export const EqVariable = ({
     const isText = type == 'String';
     const isDate = type == 'Date';
     const isArray = type == 'Array';
+    const isAll = type == 'All';
 
     useEffect(() => {
 
+        setDisplayValue(defaultnumber != undefined ? defaultnumber.toString() : fakeColumns[0].name);
+        setColumns(hidecol == true ? [] : fakeColumns);
+        setFunctionColumns([]);
+        
         // Make dropdown items
         if (param?.columns != undefined) {
             setColumns(param.columns);
@@ -106,12 +114,14 @@ export const EqVariable = ({
                 for (var i = numberfrom; i <= numberend; i++)
                     t.push({ name: i.toString() });
                 setColumns(t);
+                if (!defaultnumber) setDisplayValue(t[0].name);
             }
             else if (values != undefined) {
                 var t = [];
                 for (var i = 0; i < values.length; i++)
                     t.push({ name: values[i].toString() });
                 setColumns(t);
+                if (!defaultnumber) setDisplayValue(t[0].name);
             }
         }
         else if (isText) {
@@ -121,6 +131,7 @@ export const EqVariable = ({
                     t.push({ name: values[i].toString() });
                 setColumns(t);
                 setDisplayValue(values[0] as string);
+                if (!defaultnumber) setDisplayValue(t[0].name);
             }
         }
 
@@ -136,7 +147,7 @@ export const EqVariable = ({
             setFunctionColumns(t);
             console.log(t);
         }
-    }, []);
+    }, [param, hidecol, defaultnumber]);
 
     // Event handler when user enter custom number
     const onEnterCustomNumber = () => {
@@ -152,7 +163,7 @@ export const EqVariable = ({
         setEditing(false);
         if (editingValue != '') {
 
-            if (param?.validate && testVariableValidation(Number(editingValue), param.validate))
+            if (param?.validate == undefined || testVariableValidation(Number(editingValue), param.validate))
                 setDisplayValue(editingValue);
         }
     };
@@ -280,7 +291,7 @@ export const EqVariable = ({
                                             </li>
                                         </>}
 
-                                        {(isText && values == undefined) && <>
+                                        {((isText || isAll) && values == undefined) && <>
                                             <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
                                                 onClick={() => { onEnterCustomNumber(); }}
                                             >
@@ -325,7 +336,7 @@ export const EqVariable = ({
                                                 <ul className='eqv-fn-sb absolute bg-white right-0 top-0'>
                                                     {fnCols.map((value, index) => (
                                                         <li key={index} className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs'>
-                                                            <Dropdown.Item className='w-full text-left'>
+                                                            <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
                                                                 <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
                                                                 {value.func_name}
                                                             </Dropdown.Item>
@@ -344,7 +355,7 @@ export const EqVariable = ({
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                                    {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                    {(isText || isAll) && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                     {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                     {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                     {value.name}
@@ -364,7 +375,7 @@ export const EqVariable = ({
                                             >
                                                 <Dropdown.Item className='w-full text-left'>
                                                     {isNumeric && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                                    {isText && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                    {(isText || isAll) && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                     {isDate && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                     {isArray && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                     {value.name}
@@ -376,7 +387,7 @@ export const EqVariable = ({
                                                 key={index}
                                                 className='px-4 py-2 hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer'
                                             >
-                                                <Dropdown.Item className='w-full text-left'>
+                                                <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
                                                     <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
                                                     {value.func_name}
                                                 </Dropdown.Item>

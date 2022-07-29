@@ -98,7 +98,9 @@ export const EqFnHeader = ({ name, onChange }: EqFnHeaderProps) => {
 
     const [searchStr, setSearchStr] = useState<string>('');
 
-    const filterFn = ({ name, desc }: FunctionItem) => {
+    const filterFn = ({ name, desc, duplicate }: FunctionItem) => {
+        if (duplicate)
+            return false;
         if (name.toLowerCase().indexOf(searchStr.toLowerCase()) != -1 || desc.toLowerCase().indexOf(searchStr.toLowerCase()) != -1)
             return true;
         return false;
