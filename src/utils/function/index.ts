@@ -48,6 +48,8 @@ export interface FunctionParameter {
 	customInput?: boolean;
 	onlyInput?: number; // 0 is default, 1: text box 2: text area
 	showFilter?: boolean;
+	supportedColumnTypes?: string[];
+	isRegEx?: boolean;
 }
 
 export interface FunctionItem {
@@ -594,7 +596,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 532, name: 'REGEXMATCH', parent: 53, desc: 'Matches Regular Expression?', return: 'Boolean', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true},
 		]
 	},
 
@@ -645,7 +647,7 @@ export const fnItems: FunctionItem[] = [
 	// Return
 	{
 		id: 620, name: 'INDEX', parent: 62, desc: 'Content', return: 'Number', params: [
-			{ name: 'reference', type: 'Array' },
+			{ name: 'reference', type: 'All' },
 			{ name: 'row', type: 'Number', default: 0, hideCol: true, showFilter: false, onlyInput: 1 },
 			{ name: 'column', type: 'Number', default: 0, hideCol: true, showFilter: false, onlyInput: 1 },
 		]
@@ -1051,7 +1053,7 @@ export const fnItems: FunctionItem[] = [
 	// Average
 	{
 		id: 810, name: 'AVEDEV', parent: 81, desc: 'Calculates the average of the magnitudes of deviations of data from a dataset\'s mean', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	{
@@ -1108,7 +1110,7 @@ export const fnItems: FunctionItem[] = [
 	// ]},
 	{
 		id: 825, name: 'COUNTUNIQUE', parent: 82, desc: 'Number of Unique Values', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'All', variable: true },
 		]
 	},
 
@@ -1217,7 +1219,7 @@ export const fnItems: FunctionItem[] = [
 	// Min 
 	{
 		id: 920, name: 'MIN', parent: 92, desc: 'Minimum value', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	// { id: 921, name: 'MINIFS', parent: 92, desc: 'Minimum value with criteria', return: 'Number', params: [
@@ -1229,7 +1231,7 @@ export const fnItems: FunctionItem[] = [
 	// Max 
 	{
 		id: 930, name: 'MAX', parent: 93, desc: 'Maximum value in a numeric dataset', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	// { id: 931, name: 'MAXIFS', parent: 93, desc: 'Maximum value with criteria', return: 'Number', params: [
@@ -1241,12 +1243,12 @@ export const fnItems: FunctionItem[] = [
 	// Value 
 	{
 		id: 940, name: 'MODE', parent: 94, desc: 'Most commonly occurring value', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'All', variable: true },
 		]
 	},
 	{
 		id: 941, name: 'MEDIAN', parent: 94, desc: 'Median value', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 
@@ -1340,14 +1342,14 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1050, name: 'JOIN', parent: 105, desc: 'Join', return: 'Text', params: [
 			{ name: 'delimiter', type: 'String' },
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'All', variable: true, supportedColumnTypes: ['String', 'Number'] },
 		]
 	},
 	{
 		id: 1051, name: 'TEXTJOIN', parent: 105, desc: 'Join Text', return: 'Text', params: [
 			{ name: 'delimiter', type: 'String' },
 			{ name: 'ignore empty', type: 'Boolean' },
-			{ name: 'text', type: 'Array', variable: true },
+			{ name: 'text', type: 'All', variable: true, supportedColumnTypes: ['Number', 'String'] },
 		]
 	},
 	{
@@ -1377,13 +1379,13 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1063, name: 'REGEXEXTRACT', parent: 106, desc: 'Extract Regular Expression', return: 'Text', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String' },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true },
 		]
 	},
 	{
 		id: 1064, name: 'REGEXREPLACE', parent: 106, desc: 'Replace Regular Expression', return: 'Text', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String' },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true },
 			{ name: 'replacement', type: 'String' },
 		]
 	},

@@ -164,7 +164,7 @@ export const EqVariable = ({
             if (values != undefined) {
                 var t: ColumnType[] = [];
                 for (var i = 0; i < values.length; i++)
-                    t.push({ name: values[i].toString(), type: 'String', icon:'String' });
+                    t.push({ name: values[i].toString(), type: 'String', icon: 'String' });
                 setColumns(t);
                 setDisplayValue(values[0] as string);
                 if (!defaultnumber) setDisplayValue(t[0].name);
@@ -266,6 +266,20 @@ export const EqVariable = ({
             setOnlyInputValue('');
         }
     };
+
+    const columnFilter = (col_type: string): boolean => {
+        if (col_type == type)
+            return true;
+        if (type == 'All') {
+            if (param?.supportedColumnTypes == undefined)
+                return true;
+            else {
+                if (param.supportedColumnTypes.findIndex(sct => sct == col_type) != -1)
+                return true;
+            }
+        }
+        return false;
+    }
 
     let tt = className + ' inline-block relative rounded-full bg-white text-xs px-2 py-1 pr-8 border-3 ';
     tt += borderColors[type as keyof typeof borderColors];
@@ -448,7 +462,7 @@ export const EqVariable = ({
                                                 </>} */}
 
                                                 {/* Columns */}
-                                                {columns.filter(col => col.type == type || type == 'All').map((value, index) => (
+                                                {columns.filter(col => columnFilter(col.type)).map((value, index) => (
                                                     <li
                                                         key={index}
                                                         className='hover:bg-teal-50 text-xs leading-6 hover:cursor-pointer min-w-[100px]'
@@ -475,7 +489,7 @@ export const EqVariable = ({
                                             {/* Show filtered columns */}
                                             {searchString != '' && <>
                                                 {columns
-                                                    .filter(col => col.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1 && (col.type == type || type == 'All'))
+                                                    .filter(col => col.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1 && columnFilter(col.type))
                                                     .map((value, index) => (
                                                         <li
                                                             key={index}

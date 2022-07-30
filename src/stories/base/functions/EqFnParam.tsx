@@ -1,4 +1,5 @@
 import { PlusIcon, XIcon } from '@heroicons/react/solid';
+import { bgcolor } from '@mui/system';
 import React, { useState, Fragment, useEffect } from 'react';
 import { FunctionParameter } from '../../../utils/function';
 import EqVariable from '../EqVariable';
@@ -43,11 +44,14 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
     if (stateParam.type == "Boolean")
         return (<EqFnBool paramName={stateParam.name} defaultvalue={stateParam.default as boolean} />);
 
-    const bgColor = stateParam.type == "Number" ? "bg-blue-200" :
+    let bgColor = stateParam.type == "Number" ? "bg-blue-200" :
         stateParam.type == "String" ? "bg-fuchsia-200" :
             stateParam.type == "Date" ? "bg-orange-200" :
                 stateParam.type == "Array" ? "bg-teal-200" :
                     stateParam.type == "All" ? "bg-gray-100" : "";
+    // stateParam.isRegEx == true ? "bg-red-400" : "";
+    if (stateParam.isRegEx == true)
+        bgColor = "bg-[#d4d4d8]";
 
     if (toggleVisible == -1) {
         return (
