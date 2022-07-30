@@ -16,6 +16,7 @@ import { ReactComponent as NumberColumnSvg } from '../assets/icons/number-column
 import { ReactComponent as TextColumnSvg } from '../assets/icons/text-column0.svg';
 import { ReactComponent as DateColumnSvg } from '../assets/icons/date-column.svg';
 import { ReactComponent as ArrayColumnSvg } from '../assets/icons/text-column0.svg';
+import { ReactComponent as AtSvg } from '../assets/icons/at.svg';
 import { ReactComponent as FxSvg } from '../assets/icons/fx.svg';
 import { StaticTimePicker } from '@mui/x-date-pickers';
 import { Dropdown, Modal, UseDropdownMenuMetadata } from '@restart/ui';
@@ -458,6 +459,7 @@ export const EqVariable = ({
                                                                     {value.icon == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                                     {value.icon == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                                     {value.icon == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                                    {value.icon == "Email" && <AtSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                                 </>
                                                             }
                                                             {columnsForDisplay.length > 0 ? columnsForDisplay[index] : value.name}
@@ -484,6 +486,7 @@ export const EqVariable = ({
                                                                     {value.icon == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                                     {value.icon == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                                     {value.icon == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                                    {value.icon == "Email" && <AtSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
                                                                 </>}
                                                                 {value.name}
                                                             </Dropdown.Item>
