@@ -8,6 +8,7 @@ export interface FunctionTree {
 export interface ColumnType {
 	name: string;
 	type: "Number" | "Date" | "String" | "Array";
+	icon: string;
 	action?: string;
 	suffix?: string;
 }
@@ -46,6 +47,7 @@ export interface FunctionParameter {
 	toggleVisible?: boolean;
 	customInput?: boolean;
 	onlyInput?: number; // 0 is default, 1: text box 2: text area
+	showFilter?: boolean;
 }
 
 export interface FunctionItem {
@@ -514,11 +516,11 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'column', type: 'All' },
 			{
 				name: 'row', type: 'Number', columns: [
-					{ name: 'First', type: 'Number' },
-					{ name: 'Last', type: "Number" },
-					{ name: 'x from first', action: 'edit', type: "Number", suffix: 'from first' },
-					{ name: 'x from last', action: 'edit', type: "Number", suffix: 'from last' },
-				], customInput: false
+					{ name: 'First', type: 'Number', icon: 'Number' },
+					{ name: 'Last', type: "Number", icon: 'Number' },
+					{ name: 'x from first', action: 'edit', type: "Number", suffix: 'from first', icon: 'Number' },
+					{ name: 'x from last', action: 'edit', type: "Number", suffix: 'from last', icon: 'Number' },
+				], customInput: false, showFilter: false,
 			},
 		]
 	},
@@ -644,8 +646,8 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 620, name: 'INDEX', parent: 62, desc: 'Content', return: 'Number', params: [
 			{ name: 'reference', type: 'Array' },
-			{ name: 'row', type: 'Number', default: 0, hideCol: true },
-			{ name: 'column', type: 'Number', default: 0, hideCol: true },
+			{ name: 'row', type: 'Number', default: 0, hideCol: true, showFilter: false },
+			{ name: 'column', type: 'Number', default: 0, hideCol: true, showFilter: false },
 		]
 	},
 	// {
@@ -1035,9 +1037,9 @@ export const fnItems: FunctionItem[] = [
 			{
 				name: 'function code', type: 'Number', functions: [
 					{ func_id: 811 }, { func_id: 930 }, { func_id: 920 }, { func_id: 743 }, { func_id: 790 },
-				], customInput: false, hideCol: true
+				], customInput: false, hideCol: true,
 			},
-			{ name: 'range1', type: 'Array', variable: true },
+			{ name: 'range1', type: 'Array', variable: true, showFilter: false },
 		]
 	},
 
@@ -1318,7 +1320,7 @@ export const fnItems: FunctionItem[] = [
 				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, min: 1, validate: {
 					integer: true,
 					min: 1
-				}
+				}, showFilter: false
 			},
 		]
 	},
@@ -1359,8 +1361,8 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1061, name: 'REPLACE', parent: 106, desc: 'Replace', return: 'Text', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'position', type: 'Number', hideCol: true, default: 1, validate: { integer: true, min: 1 } },
-			{ name: 'length', type: 'Number', hideCol: true, default: 1, validate: { integer: true, min: 1 } },
+			{ name: 'position', type: 'Number', hideCol: true, default: 1, validate: { integer: true, min: 1 }, onlyInput: 1 },
+			{ name: 'length', type: 'Number', hideCol: true, default: 1, validate: { integer: true, min: 1 }, onlyInput: 1 },
 			{ name: 'new text', type: 'String' },
 		]
 	},
@@ -1369,7 +1371,7 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'text to search', type: 'String' },
 			{ name: 'search for', type: 'String' },
 			{ name: 'replace with', type: 'String' },
-			{ name: 'occurrence number', type: 'Number', optional: "true", toggleVisible: true },
+			{ name: 'occurrence number', type: 'Number', optional: "true", toggleVisible: true, onlyInput: 1, default: 1 },
 		]
 	},
 	{
@@ -1391,9 +1393,9 @@ export const fnItems: FunctionItem[] = [
 		id: 1070, name: 'LEFT', parent: 107, desc: 'Extract Left Part', return: 'Text', params: [
 			{ name: 'string', type: 'String' },
 			{
-				name: 'number of characters', type: 'Number', optional: "true", default: 5, hideCol: true, validate: {
+				name: 'number of characters', type: 'Number', optional: "true", default: 1, hideCol: true, validate: {
 					integer: true, min: 1
-				}
+				}, onlyInput: 1,
 			},
 		]
 	},
@@ -1402,9 +1404,9 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'string', type: 'String' },
 			{ name: 'starting at', type: 'Number' },
 			{
-				name: 'extract length', type: 'Number', default: 5, hideCol: true, validate: {
+				name: 'extract length', type: 'Number', default: 1, hideCol: true, validate: {
 					integer: true, min: 1
-				}
+				}, onlyInput: 1,
 			},
 		]
 	},
@@ -1412,9 +1414,9 @@ export const fnItems: FunctionItem[] = [
 		id: 1072, name: 'RIGHT', parent: 107, desc: 'Extract Right Part', return: 'Text', params: [
 			{ name: 'string', type: 'String' },
 			{
-				name: 'number of characters', type: 'Number', optional: "true", default: 5, hideCol: true, validate: {
+				name: 'number of characters', type: 'Number', optional: "true", default: 1, hideCol: true, validate: {
 					integer: true, min: 1
-				}
+				}, onlyInput: 1,
 			},
 		]
 	},

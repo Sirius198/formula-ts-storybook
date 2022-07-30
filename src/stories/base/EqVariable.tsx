@@ -41,16 +41,16 @@ const borderColors = {
     'All': 'border-gray-100',
 };
 const fakeColumns: ColumnType[] = [
-    { name: 'Homework', type: 'Number' },
-    { name: 'Participation', type: 'Number' },
-    { name: 'Midterm Exam', type: 'Number' },
-    { name: 'Final Exam', type: 'Number' },
-    { name: 'Email', type: 'String' },
-    { name: 'Gender', type: 'String' },
-    { name: 'Name', type: 'String' },
-    { name: 'Exam Date', type: 'Date' },
-    { name: 'Start Date', type: 'Date' },
-    { name: 'End Date', type: 'Date' },
+    { name: 'Homework', type: 'Number', icon: 'Number' },
+    { name: 'Participation', type: 'Number', icon: 'Number' },
+    { name: 'Midterm Exam', type: 'Number', icon: 'Number' },
+    { name: 'Final Exam', type: 'Number', icon: 'Number' },
+    { name: 'Email', type: 'String', icon: 'Email' },
+    { name: 'Gender', type: 'String', icon: 'String' },
+    { name: 'Name', type: 'String', icon: 'String' },
+    { name: 'Exam Date', type: 'Date', icon: 'Date' },
+    { name: 'Start Date', type: 'Date', icon: 'Date' },
+    { name: 'End Date', type: 'Date', icon: 'Date' },
 ];
 
 // When the user input custom number or text, this function receives outside click event and let it finish editing
@@ -144,7 +144,7 @@ export const EqVariable = ({
             if (numberfrom != undefined && numberend != undefined) {
                 var t: ColumnType[] = [];
                 for (var i = numberfrom; i <= numberend; i++)
-                    t.push({ name: i.toString(), type: 'Number' });
+                    t.push({ name: i.toString(), type: 'Number', icon: "Number" });
                 setColumns(t);
                 if (!defaultnumber) setDisplayValue(t[0].name);
                 setIsSimpleDropdown(true);
@@ -152,7 +152,7 @@ export const EqVariable = ({
             else if (values != undefined) {
                 var t: ColumnType[] = [];
                 for (var i = 0; i < values.length; i++)
-                    t.push({ name: values[i].toString(), type: 'Number' });
+                    t.push({ name: values[i].toString(), type: 'Number', icon: 'Number' });
                 setColumns(t);
                 if (!defaultnumber) setDisplayValue(t[0].name);
                 setIsSimpleDropdown(true);
@@ -162,7 +162,7 @@ export const EqVariable = ({
             if (values != undefined) {
                 var t: ColumnType[] = [];
                 for (var i = 0; i < values.length; i++)
-                    t.push({ name: values[i].toString(), type: 'String' });
+                    t.push({ name: values[i].toString(), type: 'String', icon:'String' });
                 setColumns(t);
                 setDisplayValue(values[0] as string);
                 if (!defaultnumber) setDisplayValue(t[0].name);
@@ -179,6 +179,7 @@ export const EqVariable = ({
                     tt.push({ func_id: param.functions[i].func_id, func_name: sf.name });
                 }
             }
+            setIsSimpleDropdown(true);
             setFunctionColumns(tt);
         }
 
@@ -348,7 +349,7 @@ export const EqVariable = ({
                                         </>
                                         :
                                         <>
-                                            {!isSimpleDropdown && <>
+                                            {(!isSimpleDropdown && param?.showFilter != false) && <>
                                                 <li className='px-4 py-2 font-bold text-xs'>Select Data</li>
                                                 <li className='px-4 py-2 font-bold text-xs border-y-[1px] border-y-zinc-200'>
                                                     <MyZoomIcon className='w-3 h-4' />
@@ -359,6 +360,17 @@ export const EqVariable = ({
                                                         value={searchString} onChange={(e) => setSearchString(e.target.value)}
                                                     />
                                                 </li>
+                                            </>}
+
+                                            {fnCols.length > 0 && <>
+                                                {fnCols.map((value, index) => (
+                                                    <li key={index} className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs'>
+                                                        <Dropdown.Item className='w-full text-left' onClick={() => setDisplayValue(value.func_name!)}>
+                                                            <FxSvg className='w-6 h-6 mr-2 bg-stone-700 rounded-full p-1 fill-white' />
+                                                            {index + 1} ({value.func_name})
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                ))}
                                             </>}
 
                                             {/* Show normal dropdown menu */}
@@ -409,7 +421,7 @@ export const EqVariable = ({
                                                     </li>
                                                 </>}
 
-                                                {fnCols.length > 0 && <>
+                                                {/* {fnCols.length > 0 && <>
                                                     <li
                                                         className='relative px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer eqv-fn'
                                                     // onClick={() => { setIsDatePickerModalOpen(true); }}
@@ -430,7 +442,7 @@ export const EqVariable = ({
                                                             ))}
                                                         </ul>
                                                     </li>
-                                                </>}
+                                                </>} */}
 
                                                 {/* Columns */}
                                                 {columns.filter(col => col.type == type || type == 'All').map((value, index) => (
@@ -442,10 +454,10 @@ export const EqVariable = ({
                                                         <Dropdown.Item className='px-4 py-2 w-full text-left'>
                                                             {!isSimpleDropdown &&
                                                                 <>
-                                                                    {value.type == "Number" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                                                    {value.type == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
-                                                                    {value.type == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
-                                                                    {value.type == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                                    {value.icon == "Number" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
+                                                                    {value.icon == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                                    {value.icon == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                                    {value.icon == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                                 </>
                                                             }
                                                             {columnsForDisplay.length > 0 ? columnsForDisplay[index] : value.name}
@@ -468,10 +480,10 @@ export const EqVariable = ({
                                                         >
                                                             <Dropdown.Item className='w-full text-left'>
                                                                 {!isSimpleDropdown && <>
-                                                                    {value.type == "Number" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
-                                                                    {value.type == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
-                                                                    {value.type == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
-                                                                    {value.type == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
+                                                                    {value.icon == "Number" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-blue-200 rounded-full p-1' />}
+                                                                    {value.icon == "String" && <TextColumnSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                                    {value.icon == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
+                                                                    {value.icon == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                                 </>}
                                                                 {value.name}
                                                             </Dropdown.Item>
