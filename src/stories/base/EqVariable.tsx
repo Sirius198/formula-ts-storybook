@@ -139,7 +139,8 @@ export const EqVariable = ({
         // Make dropdown items
         if (param?.columns != undefined) {
             setColumns(param.columns);
-            setDisplayValue(param.columns[0].name)
+            setDisplayValue(param.columns[0].name);
+            setIsSimpleDropdown(true);
         }
         else if (isNumeric) {
             if (numberfrom != undefined && numberend != undefined) {
@@ -180,6 +181,7 @@ export const EqVariable = ({
                     tt.push({ func_id: param.functions[i].func_id, func_name: sf.name });
                 }
             }
+            setDisplayValue(tt[0].func_name);
             setIsSimpleDropdown(true);
             setFunctionColumns(tt);
         }

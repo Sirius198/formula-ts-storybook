@@ -3,6 +3,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 import { FunctionParameter } from '../../../utils/function';
 import EqVariable from '../EqVariable';
 import EqFnBool from './EqFnBool';
+import EqFnInputParam from './EqFnInputParam';
 import { OptionalParamRemoveButton } from './OptionalParamRemoveButton';
 
 interface EqFnParamProps {
@@ -68,19 +69,22 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
                     <span className='absolute top-[9px] left-0 text-[10px] w-full text-center'>optional</span>
                 </span>
             } */}
-            <span className='text-xs'>{stateParam.name}</span>
-            {/* <span className='text-xs'>{stateParam.name}{vary_idx && <>{vary_idx}</>}</span> */}
-            <EqVariable
-                type={stateParam.type}
-                className='border-r-0 ml-2'
-                numberfrom={stateParam.min}
-                numberend={stateParam.max}
-                defaultnumber={stateParam.default as number}
-                values={stateParam.values}
-                hidecol={stateParam.hideCol}
-                param={stateParam}
-                updateSuffixText={(x) => setSuffixText(x)}
-            />
+            {/* <span className='text-xs'>{stateParam.name}</span> */}
+            <span className='text-xs'>{stateParam.name}{vary_idx && <>{vary_idx}</>}</span>
+            {stateParam.onlyInput ?
+                <EqFnInputParam param={stateParam} /> :
+                <EqVariable
+                    type={stateParam.type}
+                    className='border-r-0 ml-2'
+                    numberfrom={stateParam.min}
+                    numberend={stateParam.max}
+                    defaultnumber={stateParam.default as number}
+                    values={stateParam.values}
+                    hidecol={stateParam.hideCol}
+                    param={stateParam}
+                    updateSuffixText={(x) => setSuffixText(x)}
+                />
+            }
             {/* {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />} */}
 
             {/* Suffix Text */}

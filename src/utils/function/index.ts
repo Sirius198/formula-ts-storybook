@@ -32,7 +32,7 @@ export const testVariableValidation = (value: number, validate: ValidateType): b
 
 export interface FunctionParameter {
 	name: string;
-	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "All";
+	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "Input" | "All";
 	optional?: string;  // determine whether parameter is optional or not.
 	default?: number | boolean;
 	min?: number; // for numeric
@@ -630,7 +630,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 612, name: 'VLOOKUP', parent: 61, desc: 'Vertical Lookup', return: 'Text', params: [
 			{ name: 'search key', type: 'All' },
-			{ name: 'search range', type: 'Array' },
+			{ name: 'search range', type: 'All' },
 			{ name: 'is sorted', type: 'Boolean', optional: "true" },
 		]
 	},
@@ -646,8 +646,8 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 620, name: 'INDEX', parent: 62, desc: 'Content', return: 'Number', params: [
 			{ name: 'reference', type: 'Array' },
-			{ name: 'row', type: 'Number', default: 0, hideCol: true, showFilter: false },
-			{ name: 'column', type: 'Number', default: 0, hideCol: true, showFilter: false },
+			{ name: 'row', type: 'Number', default: 0, hideCol: true, showFilter: false, onlyInput: 1 },
+			{ name: 'column', type: 'Number', default: 0, hideCol: true, showFilter: false, onlyInput: 1 },
 		]
 	},
 	// {
@@ -854,11 +854,11 @@ export const fnItems: FunctionItem[] = [
 			{ name: 'exponent', type: 'Number' },
 		]
 	},
-	// {
-	// 	id: 743, name: 'PRODUCT', parent: 74, desc: 'Returns the numerical average value in a dataset, ignoring text', return: 'Number', params: [
-	// 		{ name: 'factor', type: 'Array' },
-	// 	]
-	// },
+	{
+		id: 743, name: 'PRODUCT', parent: 74, desc: 'Returns the numerical average value in a dataset, ignoring text', return: 'Number', params: [
+			{ name: 'factor', type: 'Array' },
+		]
+	},
 	{
 		id: 744, name: 'QUOTIENT', parent: 74, desc: 'Returns one number divided by another', return: 'Number', params: [
 			{ name: 'dividend', type: 'Number' },
@@ -922,7 +922,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 775, name: 'LCM', parent: 77, desc: 'Returns the least common multiple of one or more integers', return: 'Number', params: [
-			{ name: 'value1', type: 'Number', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	{
@@ -978,12 +978,11 @@ export const fnItems: FunctionItem[] = [
 	},
 
 	// Sum
-	// {
-	// 	id: 790, name: 'SUM', parent: 79, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
-	// 		{ name: 'value1', type: 'Number' },
-	// 		{ name: 'value2', type: 'Number', optional: "true" },
-	// 	]
-	// },
+	{
+		id: 790, name: 'SUM', parent: 79, desc: 'Returns the sum of a series of numbers and/or cells', return: 'Number', params: [
+			{ name: 'value1', type: 'Number' },
+		]
+	},
 	{
 		id: 791, name: 'SUMIF', parent: 79, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
 			{ name: 'range', type: 'Array' },
@@ -1037,9 +1036,11 @@ export const fnItems: FunctionItem[] = [
 			{
 				name: 'function code', type: 'Number', functions: [
 					{ func_id: 811 }, { func_id: 930 }, { func_id: 920 }, { func_id: 743 }, { func_id: 790 },
+					{ func_id: 100000 }, { func_id: 100001 }, { func_id: 100002 }, { func_id: 100003 }, { func_id: 100004 }, { func_id: 100005 },
+
 				], customInput: false, hideCol: true,
 			},
-			{ name: 'range1', type: 'Array', variable: true, showFilter: false },
+			{ name: 'range', type: 'Number', variable: true, showFilter: false },
 		]
 	},
 
@@ -1050,12 +1051,12 @@ export const fnItems: FunctionItem[] = [
 	// Average
 	{
 		id: 810, name: 'AVEDEV', parent: 81, desc: 'Calculates the average of the magnitudes of deviations of data from a dataset\'s mean', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 	{
 		id: 811, name: 'AVERAGE', parent: 81, desc: 'Average', return: 'Number', params: [
-			{ name: 'value1', type: 'Number', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	// { id: 812, name: 'AVERAGE.WEIGHTED', parent: 81, desc: 'Weighted Average', return: 'Number', params: [
@@ -1064,8 +1065,7 @@ export const fnItems: FunctionItem[] = [
 	// ]},
 	{
 		id: 813, name: 'AVERAGEA', parent: 81, desc: 'Average Value In Dataset', return: 'Number', params: [
-			{ name: 'value1', type: 'Array' },
-			{ name: 'value2', type: 'Array', optional: "true" },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 	// { id: 814, name: 'AVERAGEIF', parent: 81, desc: 'Average, Single criteria', return: 'Number', params: [
@@ -1108,7 +1108,7 @@ export const fnItems: FunctionItem[] = [
 	// ]},
 	{
 		id: 825, name: 'COUNTUNIQUE', parent: 82, desc: 'Number of Unique Values', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 
@@ -1190,7 +1190,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 911, name: 'AVERAGE', parent: 91, desc: 'Average', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		], duplicate: true
 	},
 	// { id: 912, name: 'AVERAGE.WEIGHTED', parent: 91, desc: 'Weighted Average', return: 'Number', params: [
@@ -1217,7 +1217,7 @@ export const fnItems: FunctionItem[] = [
 	// Min 
 	{
 		id: 920, name: 'MIN', parent: 92, desc: 'Minimum value', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 	// { id: 921, name: 'MINIFS', parent: 92, desc: 'Minimum value with criteria', return: 'Number', params: [
@@ -1229,7 +1229,7 @@ export const fnItems: FunctionItem[] = [
 	// Max 
 	{
 		id: 930, name: 'MAX', parent: 93, desc: 'Maximum value in a numeric dataset', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 	// { id: 931, name: 'MAXIFS', parent: 93, desc: 'Maximum value with criteria', return: 'Number', params: [
@@ -1241,12 +1241,12 @@ export const fnItems: FunctionItem[] = [
 	// Value 
 	{
 		id: 940, name: 'MODE', parent: 94, desc: 'Most commonly occurring value', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 	{
 		id: 941, name: 'MEDIAN', parent: 94, desc: 'Median value', return: 'Number', params: [
-			{ name: 'value1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 
@@ -1314,10 +1314,10 @@ export const fnItems: FunctionItem[] = [
 	// Find
 	{
 		id: 1040, name: 'FIND', parent: 104, desc: 'Find text', return: 'Number', params: [
-			{ name: 'search for', type: 'String', onlyInput: 1, default: 1 },
-			{ name: 'text to search', type: 'String', onlyInput: 1, default: 1 },
+			{ name: 'search for', type: 'String', },
+			{ name: 'text to search', type: 'String', },
 			{
-				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, min: 1, validate: {
+				name: 'starting at', type: 'Number', optional: "true", onlyInput: 1, hideCol: true, default: 1, min: 1, validate: {
 					integer: true,
 					min: 1
 				}, showFilter: false
@@ -1326,10 +1326,10 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 1041, name: 'SEARCH', parent: 104, desc: 'Search', return: 'Number', params: [
-			{ name: 'search for', type: 'String', onlyInput: 1, default: 1 },
-			{ name: 'text to search', type: 'String', onlyInput: 1, default: 1 },
+			{ name: 'search for', type: 'String', },
+			{ name: 'text to search', type: 'String', },
 			{
-				name: 'starting at', type: 'Number', optional: "true", hideCol: true, default: 1, validate: {
+				name: 'starting at', type: 'Number', optional: "true", hideCol: true, onlyInput: 1, default: 1, validate: {
 					integer: true, min: 1
 				}
 			},
@@ -1340,19 +1340,19 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1050, name: 'JOIN', parent: 105, desc: 'Join', return: 'Text', params: [
 			{ name: 'delimiter', type: 'String' },
-			{ name: 'value or array1', type: 'Array', variable: true },
+			{ name: 'value', type: 'Array', variable: true },
 		]
 	},
 	{
 		id: 1051, name: 'TEXTJOIN', parent: 105, desc: 'Join Text', return: 'Text', params: [
 			{ name: 'delimiter', type: 'String' },
 			{ name: 'ignore empty', type: 'Boolean' },
-			{ name: 'text1', type: 'Array', variable: true },
+			{ name: 'text', type: 'Array', variable: true },
 		]
 	},
 	{
 		id: 1052, name: 'CONCATENATE', parent: 105, desc: 'Combine', return: 'Text', params: [
-			{ name: 'string1', type: 'String', variable: true },
+			{ name: 'string', type: 'String', variable: true },
 		]
 	},
 
@@ -1402,7 +1402,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 1071, name: 'MID', parent: 107, desc: 'String Sagment', return: 'Text', params: [
 			{ name: 'string', type: 'String' },
-			{ name: 'starting at', type: 'Number' },
+			{ name: 'starting at', type: 'Number', onlyInput: 1, default: 1 },
 			{
 				name: 'extract length', type: 'Number', default: 1, hideCol: true, validate: {
 					integer: true, min: 1
@@ -1437,6 +1437,38 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 1081, name: 'TRIM', parent: 108, desc: 'Removes leading and trailing spaces in a specified string', return: 'Text', params: [
+			{ name: 'text', type: 'String' },
+		]
+	},
+
+	// Fake just for subtotal func
+	{
+		id: 100000, name: 'COUNT', parent: -1, desc: 'VAR', return: 'Text', params: [
+			{ name: 'text', type: 'String' },
+		]
+	},
+	{
+		id: 100001, name: 'COUNTA', parent: -1, desc: 'VARP', return: 'Text', params: [
+			{ name: 'text', type: 'String' },
+		]
+	},
+	{
+		id: 100002, name: 'STDEV', parent: -1, desc: 'STDEV', return: 'Text', params: [
+			{ name: 'text', type: 'String' },
+		]
+	},
+	{
+		id: 100003, name: 'STDEVP', parent: -1, desc: 'STDEVP', return: 'Text', params: [
+			{ name: 'text', type: 'String' },
+		]
+	},
+	{
+		id: 100004, name: 'VAR', parent: -1, desc: 'VAR', return: 'Text', params: [
+			{ name: 'text', type: 'String' },
+		]
+	},
+	{
+		id: 100005, name: 'VARP', parent: -1, desc: 'VARP', return: 'Text', params: [
 			{ name: 'text', type: 'String' },
 		]
 	},
