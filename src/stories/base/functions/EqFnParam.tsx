@@ -31,6 +31,8 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx, onChang
         param.type == "File" ? "bg-lime-200" :
         param.type == "All" ? "bg-gray-100" :
         param.type == "Boolean" ? "bg-amber-200" : "";
+        if (param.bgColor)
+            t = param.bgColor;
         // stateParam.isRegEx == true ? "bg-red-400" : "";
         if (stateParam.isRegEx == true) t = "bg-[#d4d4d8]";
 

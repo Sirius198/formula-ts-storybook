@@ -34,7 +34,7 @@ export interface FunctionParameter {
 	name: string;
 	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "Input" | "All" | "File";
 	optional?: string;  // determine whether parameter is optional or not.
-	default?: number | boolean;
+	default?: number | boolean | string;
 	min?: number; // for numeric
 	max?: number; // for numeric
 	values?: string[] | number[];
@@ -51,6 +51,8 @@ export interface FunctionParameter {
 	supportedColumnTypes?: string[];
 	isRegEx?: boolean;
 	categoryDropdown?: any;
+	bgColor?: string;
+	borderColor?: string;
 }
 
 export interface FunctionItem {
@@ -331,14 +333,14 @@ export const fnItems: FunctionItem[] = [
 		id: 222, name: 'NETWORKDAYS', parent: 22, desc: 'Returns the number of net working days between two provided days', return: 'Number', params: [
 			{ name: 'start date', type: 'Date' },
 			{ name: 'end date', type: 'Date' },
-			{ name: 'holidays', type: 'Date', optional: "true", toggleVisible: true }
+			{ name: 'holidays', type: 'Date', optional: "true", toggleVisible: true, bgColor: 'bg-teal-200', borderColor: 'border-teal-200' }
 		]
 	},
 	{
 		id: 223, name: 'WORKDAY', parent: 22, desc: 'End Date After X Working Days', return: 'Date', params: [
 			{ name: 'start date', type: 'Date' },
 			{ name: 'num days', type: 'Number' },
-			{ name: 'holidays', type: 'Date', optional: "true", toggleVisible: true },
+			{ name: 'holidays', type: 'Date', optional: "true", toggleVisible: true, bgColor: 'bg-teal-200', borderColor: 'border-teal-200' },
 		]
 	},
 
@@ -610,8 +612,8 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 532, name: 'REGEXMATCH', parent: 53, desc: 'Matches Regular Expression?', return: 'Boolean', params: [
-			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true },
+			{ name: 'text', type: 'All', customInput: false },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: '/^[a-zA-Z0-9]*$/', isRegEx: true },
 		]
 	},
 
@@ -1109,7 +1111,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 822, name: 'COUNTBLANK', parent: 82, desc: 'Count Empty Cells', return: 'Number', params: [
-			{ name: 'range', type: 'All', variable: true },
+			{ name: 'range', type: 'All', variable: true, customInput: false },
 		]
 	},
 	{
@@ -1393,14 +1395,14 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 1063, name: 'REGEXEXTRACT', parent: 106, desc: 'Extract Regular Expression', return: 'Text', params: [
-			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true },
+			{ name: 'text', type: 'All', customInput: false },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: '/^[a-zA-Z0-9]*$/', isRegEx: true },
 		]
 	},
 	{
 		id: 1064, name: 'REGEXREPLACE', parent: 106, desc: 'Replace Regular Expression', return: 'Text', params: [
-			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true },
+			{ name: 'text', type: 'All', customInput: false },
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: '/^[a-zA-Z0-9]*$/', isRegEx: true },
 			{ name: 'replacement', type: 'String' },
 		]
 	},

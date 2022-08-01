@@ -34,7 +34,7 @@ interface EqVariableProps {
     updateSuffixText?: (x: string) => void;
     param?: FunctionParameter;
     dependentParam?: string;
-    onChange?: (v:string) => void;
+    onChange?: (v: string) => void;
 }
 
 const borderColors = {
@@ -309,7 +309,10 @@ export const EqVariable = ({
     }
 
     let tt = className + ' inline-block relative rounded-full bg-white text-xs px-2 py-1 pr-8 border-3 ';
-    tt += borderColors[type as keyof typeof borderColors];
+    if (param?.borderColor)
+        tt += param.borderColor;
+    else
+        tt += borderColors[type as keyof typeof borderColors];
     let normalStateStyle = tt;
     tt += ' mr-1';
 
