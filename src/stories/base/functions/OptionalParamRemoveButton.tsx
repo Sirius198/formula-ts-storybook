@@ -1,5 +1,11 @@
 import { XIcon } from "@heroicons/react/solid"
 
+/**
+ * This component is optional for this stage.(Not used)
+ * @param param0 
+ * @returns 
+ */
+
 export const OptionalParamRemoveButton = ({...rest}) => {
     return (
         <button {...rest}>

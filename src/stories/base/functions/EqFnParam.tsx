@@ -16,6 +16,12 @@ interface EqFnParamProps {
     onChange?: (x:string) => void;
 }
 
+/**
+ * Variable container for all types of params
+ * @param param0 
+ * @returns 
+ */
+
 export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx, onChange }: EqFnParamProps) => {
 
     const [stateParam, setStateParam] = useState(param);
@@ -23,6 +29,8 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx, onChang
     console.log(param);
     useEffect(() => {
         setStateParam(param);
+
+        // Set the background color of component according to param type
 
         let t = param.type == "Number" ? "bg-blue-200" :
         param.type == "String" ? "bg-fuchsia-200" :
@@ -39,6 +47,7 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx, onChang
         setBgColor(t);
     }, [param]);
 
+    // toggleVisible is essential for optional params(1: Show, 0: Non Optional, -1: Hide)
     const [toggleVisible, setToggleVisible] = useState(0);
     const [suffixText, setSuffixText] = useState('');
 

@@ -7,6 +7,12 @@ interface EqFnInputParamProps {
     param: FunctionParameter
 }
 
+/**
+ * This param component only accepts simple text input like RegExp
+ * @param param0 
+ * @returns 
+ */
+
 export const EqFnInputParam = ({ param }: EqFnInputParamProps) => {
 
     // const [isChecked, setChecked] = useState(defaultvalue == true);

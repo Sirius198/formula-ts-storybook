@@ -79,6 +79,7 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
                 <div className="inline-flex items-center">
                     <EqFnHeader name={fnName} onChange={loadFunction} />
 
+                    {/* 'Convert' function is exception */}
                     {fnName == 'CONVERT' ? <EqFnCustomConvert params={parameters} /> :
                         parameters.map((param, index) => {
 

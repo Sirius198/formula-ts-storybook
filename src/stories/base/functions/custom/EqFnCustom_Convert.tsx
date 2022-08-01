@@ -23,11 +23,17 @@ const CONVERT_UNITS = {
     'Speed': ['m/hr', 'mph', 'kn', 'admkn', 'm/s'],
 };
 
+/**
+ * Special component for 'CONVERT' function
+ * @param param0 
+ * @returns 
+ */
 export const EqFnCustomConvert = ({ params }: EqFnCustomProps) => {
 
     const [unitType, setUnitType] = useState('');
     const [unitArray, setUnitArray] = useState<string[]>(CONVERT_UNITS['Weight']);
 
+    // When the type changes, it changes the dropdown list of units
     useEffect(() => {
         setUnitArray(CONVERT_UNITS[unitType as keyof typeof CONVERT_UNITS]);
     }, [unitType]);
@@ -39,7 +45,7 @@ export const EqFnCustomConvert = ({ params }: EqFnCustomProps) => {
     return (<>
         <EqFnParam param={params[0]} />
         <EqFnParam param={params[1]} onChange={onTypeChange} />
-        <EqFnParam param={{values: unitArray, ...params[2], }} />
+        <EqFnParam param={{...params[2], values: unitArray}} />
         <EqFnParam param={{...params[3], values: unitArray}} />
     </>);
 };
