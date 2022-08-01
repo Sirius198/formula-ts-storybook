@@ -7,7 +7,7 @@ export interface FunctionTree {
 
 export interface ColumnType {
 	name: string;
-	type: "Number" | "Date" | "String" | "Array";
+	type: "Number" | "Date" | "String" | "Array" | "File" | "Boolean";
 	icon: string;
 	action?: string;
 	suffix?: string;
@@ -32,7 +32,7 @@ export const testVariableValidation = (value: number, validate: ValidateType): b
 
 export interface FunctionParameter {
 	name: string;
-	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "Input" | "All";
+	type: "Number" | "Date" | "String" | "Boolean" | "Array" | "Input" | "All" | "File";
 	optional?: string;  // determine whether parameter is optional or not.
 	default?: number | boolean;
 	min?: number; // for numeric
@@ -50,6 +50,7 @@ export interface FunctionParameter {
 	showFilter?: boolean;
 	supportedColumnTypes?: string[];
 	isRegEx?: boolean;
+	categoryDropdown?: any;
 }
 
 export interface FunctionItem {
@@ -223,14 +224,30 @@ export const fnItems: FunctionItem[] = [
 	// Type
 	{
 		id: 150, name: 'CHAR', parent: 15, desc: 'Convert a number into a character according to the current Unicode table', return: 'Text', params: [
-			{ name: 'number', type: 'Number' },
-			{ name: 'repeat', type: 'Number' },
+			{ name: 'table number', type: 'Number' },
 		]
 	},
 	{
 		id: 151, name: 'CONVERT', parent: 15, desc: 'Convert a numeric value to a different unit of measure', return: 'Number', params: [
 			{ name: 'value', type: 'Number' },
-			{ name: 'start unit', type: 'Number' },
+			{ name: 'type', type: 'Number', values:['Weight', 'Distance', 'Time', 'Pressure', 'Force', 'Energy', 'Power', 'Magnetism', 'Temperature', 'Volume', 'Area', 'Information', 'Speed']},
+			{
+				name: 'start unit', type: 'Number', categoryDropdown: {
+					Weight: ['u', 'grain', 'g', 'ozm', 'lbm', 'stone', 'sg', 'cwt', 'ton', 'uk_ton'],
+					Distance: ['ang', 'Picapt', 'pica', 'in', 'ft', 'yd', 'm', 'ell', 'mi', 'survey_mi Nmi', 'ly', 'parsec'],
+					Time: ['sec', 'min', 'hr', 'day', 'yr'],
+					Pressure: ['Pa', 'mmHg', 'Torr', 'psi', 'atm'],
+					Force: ['dyn', 'pond', 'N', 'lbf'],
+					Energy: ['eV', 'e', 'J', 'flb', 'c', 'cal', 'BTU', 'Wh', 'HPh'],
+					Power: ['W', 'PS', 'HP'],
+					Magnetism: ['ga', 'T'],
+					Temperature: ['C', 'F', 'K', 'Rank', 'Reau'],
+					Volume: ['ang^3', 'Picapt^3', 'tsp', 'tspm', 'tbs', 'in^3', 'oz', 'cup', 'pt', 'uk_pt', 'qt', 'l', 'uk_qt', 'gal', 'uk_gal', 'ft^3', 'bushel', 'barrel', 'yd^3', 'm^3', 'MTON', 'GRT', 'mi^3', 'Nmi^3', 'ly^3'],
+					Area: ['ang^2', 'Picapt^2', 'in^2', 'ft^2', 'yd^2', 'm^2','ar', 'Morgen','uk_acre', 'us_acre', 'ha', 'mi^2', 'Nmi^2', 'ly^2'],
+					Information: ['bit', 'byte'],
+					Speed: ['m/hr', 'mph', 'kn', 'admkn', 'm/s'],
+				}
+			},
 			{ name: 'end unit', type: 'Number' },
 		]
 	},
@@ -247,7 +264,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 154, name: 'TO PURE NUMBER', parent: 15, desc: 'Converts a provided date/time, percentage, currency or other formatted numeric value to a pure number without formatting', return: 'Number', params: [
-			{ name: 'value', type: 'String' }
+			{ name: 'value', type: 'All', supportedColumnTypes: ['Date', 'Number'] }
 		]
 	},
 	{
@@ -258,12 +275,12 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 156, name: 'TEXT', parent: 15, desc: 'Converts a number into text according to a specified format', return: 'Text', params: [
 			{ name: 'number', type: 'Number' },
-			{ name: 'format', type: 'String' },
+			{ name: 'format', type: 'String', onlyInput: 1 },
 		]
 	},
 	{
 		id: 157, name: 'VALUE', parent: 15, desc: 'Converts a string in any of the date, time or number formats that Google Sheets understands into a number', return: 'Number', params: [
-			{ name: 'text', type: 'String' }
+			{ name: 'text', type: 'All', supportedColumnTypes: ['Date', 'String', 'Number'], customInput: false }
 		]
 	},
 
@@ -294,7 +311,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 213, name: 'EDATE', parent: 21, desc: 'Returns a date a specified number of months before or after another date', return: 'Date', params: [
 			{ name: 'start date', type: 'Date' },
-			{ name: 'months', type: 'Number' },
+			{ name: 'months', type: 'Number', onlyInput: 1, default: 1 },
 		]
 	},
 
@@ -314,14 +331,14 @@ export const fnItems: FunctionItem[] = [
 		id: 222, name: 'NETWORKDAYS', parent: 22, desc: 'Returns the number of net working days between two provided days', return: 'Number', params: [
 			{ name: 'start date', type: 'Date' },
 			{ name: 'end date', type: 'Date' },
-			{ name: 'holidays', type: 'Array', optional: "true", toggleVisible: true }
+			{ name: 'holidays', type: 'Date', optional: "true", toggleVisible: true }
 		]
 	},
 	{
 		id: 223, name: 'WORKDAY', parent: 22, desc: 'End Date After X Working Days', return: 'Date', params: [
 			{ name: 'start date', type: 'Date' },
 			{ name: 'num days', type: 'Number' },
-			{ name: 'holidays', type: 'Array', optional: "true", toggleVisible: true },
+			{ name: 'holidays', type: 'Date', optional: "true", toggleVisible: true },
 		]
 	},
 
@@ -349,7 +366,7 @@ export const fnItems: FunctionItem[] = [
 
 	// Year
 	{
-		id: 250, name: 'Year', parent: 25, desc: '	Returns the year specified by a given date', return: 'Number', params: [
+		id: 250, name: 'YEAR', parent: 25, desc: '	Returns the year specified by a given date', return: 'Number', params: [
 			{ name: 'date', type: 'Date' },
 		]
 	},
@@ -505,7 +522,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 421, name: 'FILESIZE', parent: 42, desc: 'Returns file size', return: 'Number', params: [
-			{ name: 'value', type: 'Number' },
+			{ name: 'value', type: 'File' },
 			{ name: 'unit', type: 'String', values: ['Bit', 'Byte', 'Kilobyte', 'Megabyte', 'Gigabyte', 'Terabyte'] },
 		]
 	},
@@ -558,8 +575,7 @@ export const fnItems: FunctionItem[] = [
 	// Operator
 	{
 		id: 520, name: 'AND', parent: 52, desc: 'If all the provided arguments are logically true, returns true, otherwise returns false', return: 'Boolean', params: [
-			{ name: 'logical expression1', type: 'Boolean' },
-			{ name: 'logical expression2', type: 'Boolean', optional: "true" }
+			{ name: 'logical expression', type: 'Boolean', variable: true },
 		]
 	},
 	{
@@ -569,8 +585,7 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 522, name: 'OR', parent: 52, desc: 'Returns true if any of the provided arguments are logically true, and false if all of the provided arguments are logically false', return: 'Boolean', params: [
-			{ name: 'logical expression1', type: 'Boolean' },
-			{ name: 'logical expression2', type: 'Boolean', optional: "true" },
+			{ name: 'logical expression1', type: 'Boolean', variable: true },
 		]
 	},
 	{
@@ -596,7 +611,7 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 532, name: 'REGEXMATCH', parent: 53, desc: 'Matches Regular Expression?', return: 'Boolean', params: [
 			{ name: 'text', type: 'String' },
-			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true},
+			{ name: 'regular expression', type: 'String', onlyInput: 1, default: 1, isRegEx: true },
 		]
 	},
 
@@ -648,8 +663,8 @@ export const fnItems: FunctionItem[] = [
 	{
 		id: 620, name: 'INDEX', parent: 62, desc: 'Content', return: 'Number', params: [
 			{ name: 'reference', type: 'All' },
-			{ name: 'row', type: 'Number', default: 0, hideCol: true, showFilter: false, onlyInput: 1 },
-			{ name: 'column', type: 'Number', default: 0, hideCol: true, showFilter: false, onlyInput: 1 },
+			{ name: 'row', type: 'Number', default: 1, hideCol: true, showFilter: false, onlyInput: 1 },
+			{ name: 'column', type: 'Number', default: 1, hideCol: true, showFilter: false, onlyInput: 1 },
 		]
 	},
 	// {
@@ -659,13 +674,13 @@ export const fnItems: FunctionItem[] = [
 	// },
 	{
 		id: 622, name: 'ROWS', parent: 62, desc: 'Number of Rows', return: 'Number', params: [
-			{ name: 'range', type: 'Array' },
+			{ name: 'range', type: 'All', customInput: false },
 		]
 	},
 	{
 		id: 623, name: 'MATCH', parent: 62, desc: 'Returns the relative position of an item in a range that matches a specified value', return: 'Number', params: [
-			{ name: 'search key', type: 'String' },
-			{ name: 'range', type: 'Array' },
+			{ name: 'search key', type: 'All' },
+			{ name: 'range', type: 'All' },
 			{ name: 'search type', type: 'Number', optional: "true", values: [1, 0, -1], values_for_display: ["1 (sorted)", "0 (not sorted)", "-1 (sorted in descending order)"], default: 0 },
 		]
 	},
@@ -842,7 +857,7 @@ export const fnItems: FunctionItem[] = [
 		id: 740, name: 'AND', parent: 74, desc: 'If all the provided arguments are logically true, returns true, otherwise returns false', return: 'Boolean', params: [
 			{ name: 'logical expression1', type: 'Boolean' },
 			{ name: 'logical expression2', type: 'Boolean', optional: "true" }
-		]
+		], duplicate: true
 	},
 	{
 		id: 741, name: 'DIVIDE', parent: 74, desc: 'Returns one number divided by another. Equivalent to the `/` operator', return: 'Number', params: [
@@ -987,9 +1002,9 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 791, name: 'SUMIF', parent: 79, desc: 'Returns a conditional sum across a range', return: 'Number', params: [
-			{ name: 'range', type: 'Array' },
+			{ name: 'range', type: 'All' },
 			{ name: 'criterion', type: 'All' },
-			{ name: 'sum range', type: 'Array' },
+			{ name: 'sum range', type: 'All' },
 		]
 	},
 	// { id: 792, name: 'SUMIFS', parent: 79, desc: 'Returns the sum of a range depending on multiple criteria', return: 'Number', params: [
@@ -999,30 +1014,30 @@ export const fnItems: FunctionItem[] = [
 	// ]},
 	{
 		id: 793, name: 'SUMSQ', parent: 79, desc: 'Returns the sum of the squares of a series of numbers and/or cells', return: 'Number', params: [
-			{ name: 'value', type: 'Array' },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	{
 		id: 794, name: 'SUMX2MY2', parent: 79, desc: 'Calculates the sum of the differences of the squares of values in two arrays', return: 'Number', params: [
-			{ name: 'array x', type: 'Array' },
-			{ name: 'array y', type: 'Array' },
+			{ name: 'array x', type: 'Number' },
+			{ name: 'array y', type: 'Number' },
 		]
 	},
 	{
 		id: 795, name: 'SUMX2PY2', parent: 79, desc: 'Calculates the sum of the sums of the squares of values in two arrays', return: 'Number', params: [
-			{ name: 'array x', type: 'Array' },
-			{ name: 'array y', type: 'Array' },
+			{ name: 'array x', type: 'Number' },
+			{ name: 'array y', type: 'Number' },
 		]
 	},
 	{
 		id: 796, name: 'SUMXMY2', parent: 79, desc: 'Calculates the sum of the squares of differences of values in two arrays', return: 'Number', params: [
-			{ name: 'array x', type: 'Array' },
-			{ name: 'array y', type: 'Array' },
+			{ name: 'array x', type: 'Number' },
+			{ name: 'array y', type: 'Number' },
 		]
 	},
 	{
 		id: 797, name: 'MULTINOMIAL', parent: 79, desc: 'Returns the factorial of the sum of values divided by the product of the values\' factorials', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	{
@@ -1067,7 +1082,7 @@ export const fnItems: FunctionItem[] = [
 	// ]},
 	{
 		id: 813, name: 'AVERAGEA', parent: 81, desc: 'Average Value In Dataset', return: 'Number', params: [
-			{ name: 'value', type: 'Array', variable: true },
+			{ name: 'value', type: 'Number', variable: true },
 		]
 	},
 	// { id: 814, name: 'AVERAGEIF', parent: 81, desc: 'Average, Single criteria', return: 'Number', params: [
@@ -1083,24 +1098,24 @@ export const fnItems: FunctionItem[] = [
 
 	// Count
 	{
-		id: 820, name: 'COUNTTRUE', parent: 82, desc: 'Count all TRUE values', return: 'Boolean', params: [
-			{ name: 'array x', type: 'Array' },
+		id: 820, name: 'COUNTTRUE', parent: 82, desc: 'Count all TRUE values', return: 'Number', params: [
+			{ name: 'array x', type: 'Boolean' },
 		]
 	},
 	{
-		id: 821, name: 'COUNTFALSE', parent: 82, desc: 'Count all FALSE values', return: 'Boolean', params: [
-			{ name: 'array x', type: 'Array' },
+		id: 821, name: 'COUNTFALSE', parent: 82, desc: 'Count all FALSE values', return: 'Number', params: [
+			{ name: 'array x', type: 'Boolean' },
 		]
 	},
 	{
 		id: 822, name: 'COUNTBLANK', parent: 82, desc: 'Count Empty Cells', return: 'Number', params: [
-			{ name: 'range', type: 'Array' },
+			{ name: 'range', type: 'All', variable: true },
 		]
 	},
 	{
 		id: 823, name: 'COUNTIF', parent: 82, desc: 'Count, Single criteria', return: 'Number', params: [
-			{ name: 'range', type: 'Array' },
-			{ name: 'criterion', type: 'String' },
+			{ name: 'range', type: 'All' },
+			{ name: 'criterion', type: 'All' },
 		]
 	},
 	// { id: 824, name: 'COUNTIFS', parent: 82, desc: 'Count, Multiple criteria', return: 'Number', params: [
@@ -1140,25 +1155,25 @@ export const fnItems: FunctionItem[] = [
 	},
 	{
 		id: 834, name: 'SUMX2MY2', parent: 83, desc: 'Calculates the sum of the differences of the squares of values in two arrays', return: 'Number', params: [
-			{ name: 'array x', type: 'Array' },
-			{ name: 'array y', type: 'Array' },
+			{ name: 'array x', type: 'Number' },
+			{ name: 'array y', type: 'Number' },
 		], duplicate: true
 	},
 	{
 		id: 835, name: 'SUMX2PY2', parent: 83, desc: 'Calculates the sum of the sums of the squares of values in two arrays', return: 'Number', params: [
-			{ name: 'array x', type: 'Array' },
-			{ name: 'array y', type: 'Array' },
+			{ name: 'array x', type: 'Number' },
+			{ name: 'array y', type: 'Number' },
 		], duplicate: true
 	},
 	{
 		id: 836, name: 'SUMXMY2', parent: 83, desc: 'Calculates the sum of the squares of differences of values in two arrays', return: 'Number', params: [
-			{ name: 'array x', type: 'Array' },
-			{ name: 'array y', type: 'Array' },
+			{ name: 'array x', type: 'Number' },
+			{ name: 'array y', type: 'Number' },
 		], duplicate: true
 	},
 	{
 		id: 837, name: 'MULTINOMIAL', parent: 83, desc: 'Returns the factorial of the sum of values divided by the product of the values\' factorials', return: 'Number', params: [
-			{ name: 'value', type: 'Array' },
+			{ name: 'value', type: 'Number' },
 		], duplicate: true
 	},
 	// { id: 838, name: 'SERIESSUM', parent: 83, desc: 'Given parameters x, n, m, and a, returns the power series sum', return: 'Number', params: [
@@ -1298,7 +1313,7 @@ export const fnItems: FunctionItem[] = [
 		id: 1023, name: 'TEXT', parent: 102, desc: 'Convert a number into text according to a specified format', return: 'Text', params: [
 			{ name: 'number', type: 'Number' },
 			{ name: 'format', type: 'String' },
-		]
+		], duplicate: true
 	},
 
 	// Info

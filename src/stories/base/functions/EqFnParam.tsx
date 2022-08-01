@@ -8,18 +8,33 @@ import EqFnInputParam from './EqFnInputParam';
 import { OptionalParamRemoveButton } from './OptionalParamRemoveButton';
 
 interface EqFnParamProps {
-    type: string;
+    // type: string;
     param: FunctionParameter;
     onRemove?: () => void;
     showRemoveButton?: boolean;
     vary_idx?: number;
+    onChange?: (x:string) => void;
 }
 
-export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnParamProps) => {
+export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx, onChange }: EqFnParamProps) => {
 
     const [stateParam, setStateParam] = useState(param);
+    const [bgColor, setBgColor] = useState('');
+    console.log(param);
     useEffect(() => {
         setStateParam(param);
+
+        let t = param.type == "Number" ? "bg-blue-200" :
+        param.type == "String" ? "bg-fuchsia-200" :
+        param.type == "Date" ? "bg-orange-200" :
+        param.type == "Array" ? "bg-teal-200" :
+        param.type == "File" ? "bg-lime-200" :
+        param.type == "All" ? "bg-gray-100" :
+        param.type == "Boolean" ? "bg-amber-200" : "";
+        // stateParam.isRegEx == true ? "bg-red-400" : "";
+        if (stateParam.isRegEx == true) t = "bg-[#d4d4d8]";
+
+        setBgColor(t);
     }, [param]);
 
     const [toggleVisible, setToggleVisible] = useState(0);
@@ -41,17 +56,8 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
         }
     };
 
-    if (stateParam.type == "Boolean")
-        return (<EqFnBool paramName={stateParam.name} defaultvalue={stateParam.default as boolean} />);
-
-    let bgColor = stateParam.type == "Number" ? "bg-blue-200" :
-        stateParam.type == "String" ? "bg-fuchsia-200" :
-            stateParam.type == "Date" ? "bg-orange-200" :
-                stateParam.type == "Array" ? "bg-teal-200" :
-                    stateParam.type == "All" ? "bg-gray-100" : "";
-    // stateParam.isRegEx == true ? "bg-red-400" : "";
-    if (stateParam.isRegEx == true)
-        bgColor = "bg-[#d4d4d8]";
+    // if (stateParam.type == "Boolean")
+    //     return (<EqFnBool paramName={stateParam.name} defaultvalue={stateParam.default as boolean} />);
 
     if (toggleVisible == -1) {
         return (
@@ -74,7 +80,7 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
                 </span>
             } */}
             {/* <span className='text-xs'>{stateParam.name}</span> */}
-            <span className='text-xs'>{stateParam.name}{vary_idx && <>{vary_idx}</>}</span>
+            <span className='text-xs w-[max-content]'>{stateParam.name}{vary_idx && <>{vary_idx}</>}</span>
             {stateParam.onlyInput ?
                 <EqFnInputParam param={stateParam} /> :
                 <EqVariable
@@ -87,6 +93,7 @@ export const EqFnParam = ({ param, onRemove, showRemoveButton, vary_idx }: EqFnP
                     hidecol={stateParam.hideCol}
                     param={stateParam}
                     updateSuffixText={(x) => setSuffixText(x)}
+                    onChange={onChange}
                 />
             }
             {/* {paramOptional === 'true' && <OptionalParamRemoveButton onClick={() => onRemove && onRemove()} />} */}

@@ -10,6 +10,7 @@ import EqFnText from "./EqFnText";
 import EqFnArray from "./EqFnArray";
 import EqFnParam from "./EqFnParam";
 import { PlusIcon } from "@heroicons/react/solid";
+import EqFnCustomConvert from "./custom/EqFnCustom_Convert";
 
 interface EqFunctionProps extends FormulaProps {
     func_id: number;
@@ -78,38 +79,38 @@ export const EqFunction = ({ func_id, name = 'function' }: EqFunctionProps) => {
                 <div className="inline-flex items-center">
                     <EqFnHeader name={fnName} onChange={loadFunction} />
 
-                    {/* Map according to parameter type */}
-                    {parameters.map((param, index) => {
+                    {fnName == 'CONVERT' ? <EqFnCustomConvert params={parameters} /> :
+                        parameters.map((param, index) => {
 
-                        if (param.variable) {
+                            if (param.variable) {
+                                return (
+                                    <>
+                                        {Array(variableParams[index]).fill(0).map((_, idx) => (
+                                            <EqFnParam key={idx} param={param} onRemove={() => removeParam(index)}
+                                                vary_idx={idx + 1}
+                                                showRemoveButton={variableParams[index] != 1 && idx != 0} />
+                                        ))}
+
+                                        <button
+                                            className='bg-[#71717A] w-4 h-4 rounded-full'
+                                            onClick={() => addVariableParamCount(index)}
+                                        >
+                                            <PlusIcon className='w-3 h-3 text-white mt-[2px]' />
+                                        </button>
+                                    </>
+                                );
+                            }
+
                             return (
-                                <>
-                                    {Array(variableParams[index]).fill(0).map((_, idx) => (
-                                        <EqFnParam key={idx} param={param} onRemove={() => removeParam(index)}
-                                            type={param.type} vary_idx={idx + 1}
-                                            showRemoveButton={variableParams[index] != 1 && idx != 0} />
-                                    ))}
+                                <EqFnParam key={index} param={param} onRemove={() => removeParam(index)} />
+                            )
 
-                                    <button
-                                        className='bg-[#71717A] w-4 h-4 rounded-full'
-                                        onClick={() => addVariableParamCount(index)}
-                                    >
-                                        <PlusIcon className='w-3 h-3 text-white mt-[2px]' />
-                                    </button>
-                                </>
-                            );
-                        }
-
-                        return (
-                            <EqFnParam key={index} param={param} onRemove={() => removeParam(index)} type={param.type} />
-                        )
-
-                        if (param.type === 'String') return <EqFnText key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
-                        if (param.type === 'Number') return <EqFnNumber key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
-                        if (param.type === 'Boolean') return <EqFnBool key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
-                        if (param.type === 'Date') return <EqFnDate key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
-                        if (param.type === 'Array') return <EqFnArray key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
-                    })}
+                            if (param.type === 'String') return <EqFnText key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                            if (param.type === 'Number') return <EqFnNumber key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                            if (param.type === 'Boolean') return <EqFnBool key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                            if (param.type === 'Date') return <EqFnDate key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                            if (param.type === 'Array') return <EqFnArray key={index} paramName={param.name} paramOptional={param.optional} onRemove={() => removeParam(index)} />
+                        })}
                 </div>
             </FormulaContainer>
         </>

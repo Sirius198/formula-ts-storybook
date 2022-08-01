@@ -18,6 +18,7 @@ import { ReactComponent as DateColumnSvg } from '../assets/icons/date-column.svg
 import { ReactComponent as ArrayColumnSvg } from '../assets/icons/text-column0.svg';
 import { ReactComponent as AtSvg } from '../assets/icons/at.svg';
 import { ReactComponent as FxSvg } from '../assets/icons/fx.svg';
+import { ReactComponent as CaretSvg } from '../assets/icons/caret.svg';
 import { StaticTimePicker } from '@mui/x-date-pickers';
 import { Dropdown, Modal, UseDropdownMenuMetadata } from '@restart/ui';
 import { ColumnType, fnItems, FunctionParameter, FunctionType, testVariableValidation } from '../../utils/function';
@@ -31,7 +32,9 @@ interface EqVariableProps {
     defaultnumber?: number | string;
     hidecol?: boolean;
     updateSuffixText?: (x: string) => void;
-    param?: FunctionParameter
+    param?: FunctionParameter;
+    dependentParam?: string;
+    onChange?: (v:string) => void;
 }
 
 const borderColors = {
@@ -40,6 +43,8 @@ const borderColors = {
     'Date': 'border-orange-200',
     'Array': 'border-teal-200',
     'All': 'border-gray-100',
+    'File': 'border-lime-200',
+    'Boolean': 'border-amber-200',
 };
 const fakeColumns: ColumnType[] = [
     { name: 'Homework', type: 'Number', icon: 'Number' },
@@ -52,6 +57,11 @@ const fakeColumns: ColumnType[] = [
     { name: 'Exam Date', type: 'Date', icon: 'Date' },
     { name: 'Start Date', type: 'Date', icon: 'Date' },
     { name: 'End Date', type: 'Date', icon: 'Date' },
+    { name: 'Image', type: 'File', icon: 'File' },
+    { name: 'Avatar', type: 'File', icon: 'File' },
+    { name: 'Approved', type: 'Boolean', icon: 'Boolean' },
+    { name: 'Disabled', type: 'Boolean', icon: 'Boolean' },
+    { name: 'Active', type: 'Boolean', icon: 'Boolean' },
 ];
 
 // When the user input custom number or text, this function receives outside click event and let it finish editing
@@ -81,12 +91,10 @@ export const EqVariable = ({
     values,
     hidecol,
     param,
-    updateSuffixText
+    updateSuffixText,
+    dependentParam,
+    onChange
 }: EqVariableProps) => {
-
-    // let columns = fakeColumns;
-
-    // const []
 
     const [searchString, setSearchString] = useState<string>('');
     const [editing, setEditing] = useState<boolean>(false);
@@ -111,11 +119,28 @@ export const EqVariable = ({
         clicked && finishEditing()
     }, [clicked]);
 
+    // if (dependentParam) {
+    //     useEffect(() => {
+    //         var t: ColumnType[] = [];
+    //         var unit_list: String[] = param?.categoryDropdown[dependentParam];
+    //         for (var i = 0; i < unit_list.length; i++)
+    //             t.push({ name: unit_list[i].toString(), type: 'String', icon: 'String' });
+    //         setColumns(t);
+    //         setDisplayValue(unit_list[0] as string);
+    //         setIsSimpleDropdown(true);
+    //     }, [dependentParam]);
+    // }
+
     const isNumeric = type == 'Number';
     const isText = type == 'String';
     const isDate = type == 'Date';
     const isArray = type == 'Array';
     const isAll = type == 'All';
+    const isBoolean = type == 'Boolean';
+
+    useEffect(() => {
+        onChange && onChange(displayValue);
+    }, [displayValue]);
 
     useEffect(() => {
 
@@ -271,11 +296,13 @@ export const EqVariable = ({
         if (col_type == type)
             return true;
         if (type == 'All') {
+            if (col_type == 'File')
+                return false;
             if (param?.supportedColumnTypes == undefined)
                 return true;
             else {
                 if (param.supportedColumnTypes.findIndex(sct => sct == col_type) != -1)
-                return true;
+                    return true;
             }
         }
         return false;
@@ -327,8 +354,8 @@ export const EqVariable = ({
                                 <button {...props} className={normalStateStyle}>
                                     <span className='text-zinc-700'>{displayValue}</span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <ChevronDownIcon
-                                            className="h-5 w-5 text-gray-400"
+                                        <CaretSvg
+                                            className="h-2 w-2 text-gray-400"
                                             aria-hidden="true"
                                         />
                                     </span>
@@ -340,7 +367,7 @@ export const EqVariable = ({
                             {(menuProps, meta) => (
                                 <ul
                                     {...menuProps}
-                                    className="absolute z-10 top-8 bg-white shadow-lg w-[max-content] max-w-100 text-left"
+                                    className="absolute z-10 top-8 left-3.5 bg-white shadow-lg w-[max-content] max-w-100 text-left"
                                     style={{
                                         transition: "visibility 500ms, opacity 500ms",
                                         visibility: meta.show ? "visible" : "hidden",
@@ -406,12 +433,22 @@ export const EqVariable = ({
                                                     </li>
                                                 </>}
 
-                                                {((isText || isAll) && values == undefined && !isSimpleDropdown && enableCustomInput) && <>
+                                                {(isText && values == undefined && !isSimpleDropdown && enableCustomInput) && <>
                                                     <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
                                                         onClick={() => { onEnterCustomNumber(); }}
                                                     >
                                                         <Dropdown.Item className='w-full text-left'>
                                                             <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Text
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                </>}
+
+                                                {(isAll && values == undefined && !isSimpleDropdown && enableCustomInput) && <>
+                                                    <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                        onClick={() => { onEnterCustomNumber(); }}
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left'>
+                                                            <EnterCustomTextSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />Enter Custom Value
                                                         </Dropdown.Item>
                                                     </li>
                                                 </>}
@@ -437,6 +474,17 @@ export const EqVariable = ({
                                                         </Dropdown.Item>
                                                     </li>
                                                 </>}
+
+                                                {/* Boolean custom value */}
+                                                {/* {(isBoolean && values == undefined && !isSimpleDropdown && enableCustomInput) && <>
+                                                    <li className='px-4 py-2 hover:bg-teal-50 border-b-[1px] border-b-zinc-200 text-xs leading-6 hover:cursor-pointer'
+                                                        onClick={() => { }}
+                                                    >
+                                                        <Dropdown.Item className='w-full text-left'>
+                                                            <EnterCustomNumberSvg className='w-6 h-6 mr-2 bg-amber-200 rounded-full p-1' />Enter Custom Value
+                                                        </Dropdown.Item>
+                                                    </li>
+                                                </>} */}
 
                                                 {/* {fnCols.length > 0 && <>
                                                     <li
@@ -476,6 +524,8 @@ export const EqVariable = ({
                                                                     {value.icon == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                                     {value.icon == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                                     {value.icon == "Email" && <AtSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                                    {value.icon == "File" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-lime-200 rounded-full p-1' />}
+                                                                    {value.icon == "Boolean" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-amber-200 rounded-full p-1' />}
                                                                 </>
                                                             }
                                                             {columnsForDisplay.length > 0 ? columnsForDisplay[index] : value.name}
@@ -503,6 +553,8 @@ export const EqVariable = ({
                                                                     {value.icon == "Date" && <DateColumnSvg className='w-6 h-6 mr-2 bg-orange-200 rounded-full p-1' />}
                                                                     {value.icon == "Array" && <ArrayColumnSvg className='w-6 h-6 mr-2 bg-teal-200 rounded-full p-1' />}
                                                                     {value.icon == "Email" && <AtSvg className='w-6 h-6 mr-2 bg-fuchsia-200 rounded-full p-1' />}
+                                                                    {value.icon == "File" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-lime-200 rounded-full p-1' />}
+                                                                    {value.icon == "Boolean" && <NumberColumnSvg className='w-6 h-6 mr-2 bg-amber-200 rounded-full p-1' />}
                                                                 </>}
                                                                 {value.name}
                                                             </Dropdown.Item>
